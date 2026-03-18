@@ -42,7 +42,7 @@ jobs:
           echo "$COMMITS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: 'Bump version'
+      - name: 'Bump version with NPM'
         id: version-bump
         env:
           COMMIT_LIST: ${{ steps.commits.outputs.list }}
@@ -56,7 +56,7 @@ jobs:
               PROCESSED_COMMITS+="$line"$'\n'
             else
               # Append ", by @ACTOR" to other commits (including the fallback)
-              PROCESSED_COMMITS+="$line, by [@${ACTOR}](https://github.com/${ACTOR})"$'\n'
+              PROCESSED_COMMITS+="$line, by @${ACTOR}"$'\n'
             fi
           done <<< "$COMMIT_LIST"
 
@@ -71,13 +71,8 @@ jobs:
           # 4. Stage both package.json and package-lock.json
           git add package.json package-lock.json
 
-          # 5. Create commit message using the processed list – no trailing actor line
-          cat > .commit_msg <<EOF
-          ci: version bump to ${TAG} [skip ci]
-
-          Changes:
-          ${PROCESSED_COMMITS}
-          EOF
+          # 5. Create commit message using the processed list
+          printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
 
           # 6. Commit and tag
           git commit -F .commit_msg
