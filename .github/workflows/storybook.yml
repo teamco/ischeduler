@@ -3,8 +3,6 @@ name: Deploy Storybook
 on:
   push:
     branches: [main]
-    paths:
-      - 'ischeduler/**'
 
 permissions:
   contents: read
@@ -18,22 +16,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
-
-      - name: Enable Corepack
-        run: corepack enable
+          node-version: 20
+          cache: 'npm'
 
       - name: Install dependencies
-        working-directory: npm/ischeduler
-        run: npm install --immutable
+        run: npm ci
 
       - name: Build Storybook
-        working-directory: npm/ischeduler
         run: npm run build-storybook
 
       - name: Setup Pages
@@ -42,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: npm/ischeduler/storybook-static
+          path: storybook-static
 
       - name: Deploy to GitHub Pages
         id: deployment
