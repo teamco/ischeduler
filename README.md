@@ -10,6 +10,8 @@ Provides a complete scheduler form with weekly/monthly/yearly behaviors, a table
 [![npm version](https://img.shields.io/npm/v/@teamco/ischeduler.svg)](https://www.npmjs.com/package/ischeduler)
 [![license](https://img.shields.io/npm/l/@teamco/ischeduler.svg)](./LICENSE)
 
+## Demo sandbox: [https://teamco.github.io/ischeduler/](https://teamco.github.io/ischeduler/)
+
 ## Installation
 
 ```bash
