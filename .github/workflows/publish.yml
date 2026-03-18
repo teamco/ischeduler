@@ -1,8 +1,12 @@
 name: Publish to npm
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   publish:
@@ -13,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
