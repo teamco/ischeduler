@@ -1,10 +1,13 @@
 {
-  "name": "ischeduler",
+  "name": "@teamco/ischeduler",
   "version": "0.1.7",
   "description": "Recurring event scheduler UI components for React + Ant Design",
   "license": "MIT",
-  "repository": "https://github.com/ischeduler/ischeduler",
+  "repository": "https://github.com/teamco/ischeduler",
   "author": "Vladimir Tkach",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "react",
     "antd",
