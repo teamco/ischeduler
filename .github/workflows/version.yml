@@ -61,7 +61,7 @@ jobs:
           done <<< "$COMMIT_LIST"
 
           # 2. Bump patch version immediately
-          node version patch
+          npm version patch
 
           # 3. Read the new version
           NEW_V=$(node -p "require('./package.json').version")
