@@ -14,11 +14,11 @@
     "date picker"
   ],
   "type": "module",
-  "main": "dist/iScheduler.cjs.js",
-  "module": "dist/iScheduler.es.js",
-  "types": "dist/index.d.ts",
+  "main": "storybook-static/iScheduler.cjs.js",
+  "module": "storybook-static/iScheduler.es.js",
+  "types": "storybook-static/index.d.ts",
   "files": [
-    "dist"
+    "storybook-static"
   ],
   "sideEffects": [
     "**/*.css",

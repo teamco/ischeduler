@@ -7,6 +7,8 @@ export default defineConfig({
     dts({
       tsconfigPath: './tsconfig.build.json',
       rollupTypes: true,
+      exclude: ['src/vite-env.d.ts'],
+      insertTypesEntry: true,
     }),
   ],
   build: {
