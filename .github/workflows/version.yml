@@ -56,7 +56,7 @@ jobs:
               PROCESSED_COMMITS+="$line"$'\n'
             else
               # Append ", by @ACTOR" to other commits (including the fallback)
-              PROCESSED_COMMITS+="$line, by @${ACTOR}"$'\n'
+              PROCESSED_COMMITS+="$line, by [@${ACTOR}](https://github.com/${ACTOR})"$'\n'
             fi
           done <<< "$COMMIT_LIST"
 
