@@ -1,3 +1,5 @@
+[![Bump Version](https://github.com/teamco/ischeduler/actions/workflows/version.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/version.yml)
+
 # iScheduler
 
 Recurring event scheduler UI components for React + Ant Design.
