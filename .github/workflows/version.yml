@@ -42,7 +42,7 @@ jobs:
           echo "$COMMITS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: 'Bump version with NPM'
+      - name: 'Bump version'
         id: version-bump
         env:
           COMMIT_LIST: ${{ steps.commits.outputs.list }}
