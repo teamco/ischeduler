@@ -7,15 +7,15 @@ Recurring event scheduler UI components for React + Ant Design.
 
 Provides a complete scheduler form with weekly/monthly/yearly behaviors, a table list with CRUD actions, and a drawer-based creation flow — all driven by a simple provider pattern.
 
-[![npm version](https://img.shields.io/npm/v/ischeduler.svg)](https://www.npmjs.com/package/ischeduler)
-[![license](https://img.shields.io/npm/l/ischeduler.svg)](./LICENSE)
+[![npm version](https://img.shields.io/npm/v/@teamco/ischeduler.svg)](https://www.npmjs.com/package/ischeduler)
+[![license](https://img.shields.io/npm/l/@teamco/ischeduler.svg)](./LICENSE)
 
 ## Installation
 
 ```bash
-npm install ischeduler
+npm install @teamco/ischeduler
 # or
-npm install ischeduler
+yarn install @teamco/ischeduler
 ```
 
 ### Peer Dependencies
@@ -258,7 +258,7 @@ console.log(Object.keys(defaultTranslations));
 ```bash
 # Clone the repo and install dependencies
 git clone <repo-url>
-cd npm/ischeduler
+cd ischeduler
 npm install
 
 # Start Storybook dev server
@@ -293,7 +293,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'npm/ischeduler/**'
+      - 'ischeduler/**'
 
 permissions:
   contents: read
@@ -318,11 +318,11 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        working-directory: npm/ischeduler
+        working-directory: ischeduler
         run: npm install --immutable
 
       - name: Build Storybook
-        working-directory: npm/ischeduler
+        working-directory: ischeduler
         run: npm run build-storybook
 
       - name: Setup Pages
@@ -331,7 +331,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: npm/ischeduler/storybook-static
+          path: ischeduler/storybook-static
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -368,7 +368,7 @@ npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
 ### Publish
 
 ```bash
-cd npm/ischeduler
+cd ischeduler
 
 # Run tests and build
 npm run test
@@ -405,19 +405,19 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        working-directory: npm/ischeduler
+        working-directory: ischeduler
         run: npm install --immutable
 
       - name: Test
-        working-directory: npm/ischeduler
+        working-directory: ischeduler
         run: npm run test
 
       - name: Build
-        working-directory: npm/ischeduler
+        working-directory: ischeduler
         run: npm run build
 
       - name: Publish
-        working-directory: npm/ischeduler
+        working-directory: ischeduler
         run: npm run publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -454,7 +454,7 @@ npm run build-storybook # Static Storybook build
 ### Project structure
 
 ```
-npm/ischeduler/
+ischeduler/
 ├── src/
 │   ├── index.ts                    # Public API
 │   ├── provider/                   # SchedulerProvider + context
