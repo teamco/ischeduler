@@ -16,23 +16,16 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Install dependencies
-        working-directory: ischeduler
-        run: npm install --immutable
+        run: npm ci
 
       - name: Test
-        working-directory: ischeduler
         run: npm run test
 
       - name: Build
-        working-directory: ischeduler
         run: npm run build
 
       - name: Publish
-        working-directory: ischeduler
-        run: npm run publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
