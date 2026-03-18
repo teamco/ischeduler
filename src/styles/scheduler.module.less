@@ -1,0 +1,128 @@
+@main-margin: 16px;
+
+.scheduler {
+  width: 100%;
+
+  & * {
+    transition: all 0.5s ease-in-out;
+  }
+}
+
+.result {
+  strong {
+    font-size: 14px;
+  }
+
+  font-size: 14px;
+}
+
+.drawerContent {
+  padding: 0;
+}
+
+.chipLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.monthlyGridDay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
+  margin-bottom: @main-margin;
+}
+
+.monthlyGridWeek {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  row-gap: 8px;
+
+  button:last-child {
+    width: 100%;
+  }
+
+  :global(.ant-radio-group) {
+    display: flex;
+  }
+}
+
+.monthsSeparator {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-bottom: 20px;
+
+  button {
+    margin-top: -1px;
+  }
+}
+
+.monthWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+
+  .monthComponents {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+  }
+
+  :global(.ant-spin-container) {
+    display: flex;
+  }
+
+  :global(.ant-space-vertical) {
+    gap: 16px !important;
+    padding-top: 5px;
+  }
+}
+
+.weekWrapper {
+  margin-bottom: @main-margin;
+
+  :global(label) {
+    &.ant-checkbox-wrapper-checked {
+      color: #fff;
+      border-color: #1890ff;
+      background: #1890ff;
+      text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+      box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
+    }
+  }
+
+  :global(.ant-checkbox-group) {
+    display: flex;
+    column-gap: 3px;
+    row-gap: 3px;
+  }
+
+  :global(.ant-checkbox-inner) {
+    display: none;
+  }
+}
+
+.weekDaysWrap {
+  :global(.ant-checkbox-group) {
+    flex-wrap: wrap;
+  }
+}
+
+.yearWrapper {
+  .monthsWrapper {
+    label {
+      flex: 0 0 calc(100% / 6 - 10px);
+      border-radius: 3px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 4px;
+    row-gap: 4px;
+    margin-bottom: 20px;
+  }
+}
