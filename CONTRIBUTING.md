@@ -17,13 +17,13 @@ Thank you for your interest in contributing! We welcome contributions from every
 ## Development
 
 ```bash
-npm dev          # Start dev server
-npm storybook    # Launch Storybook
-npm test         # Run tests
-npm test:watch   # Run tests in watch mode
-npm lint         # Run linter
-npm format       # Format code
-npm build        # Production build
+npm run dev          # Start dev server
+npm run storybook    # Launch Storybook
+npm run test         # Run tests
+npm run test:watch   # Run tests in watch mode
+npm run lint         # Run linter
+npm run format       # Format code
+npm run build        # Production build
 ```
 
 ## Code Standards
@@ -40,13 +40,13 @@ All changes must include tests:
 
 - Unit tests for utilities and handlers
 - Component tests for UI components
-- Run `npm test` to verify all tests pass before submitting
+- Run `npm run test` to verify all tests pass before submitting
 
 ## Pull Request Process
 
 1. Update tests and ensure they pass
-2. Run `npm lint` and fix any issues
-3. Run `npm build` to verify the build succeeds
+2. Run `npm run lint` and fix any issues
+3. Run `npm run build` to verify the build succeeds
 4. Write a clear PR description explaining what and why
 5. Reference any related issues
 

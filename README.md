@@ -12,7 +12,7 @@ Provides a complete scheduler form with weekly/monthly/yearly behaviors, a table
 ```bash
 npm install ischeduler
 # or
-npm add ischeduler
+npm install ischeduler
 ```
 
 ### Peer Dependencies
@@ -20,7 +20,7 @@ npm add ischeduler
 Make sure your project has these installed:
 
 ```bash
-npm add react react-dom antd dayjs @ant-design/icons
+npm install react react-dom antd dayjs @ant-design/icons
 ```
 
 | Package | Version |
@@ -259,7 +259,7 @@ cd npm/ischeduler
 npm install
 
 # Start Storybook dev server
-npm storybook
+npm run storybook
 ```
 
 Storybook will open at [http://localhost:6006](http://localhost:6006) with:
@@ -269,10 +269,10 @@ Storybook will open at [http://localhost:6006](http://localhost:6006) with:
 - **Components/SchedulerDrawerButton** — Sale, discount, disabled
 - **Playground/FullDemo** — Interactive demo with all 3 scheduler types and working CRUD
 
-### Build static Storybook
+### Build a static Storybook
 
 ```bash
-npm build-storybook
+npm run build-storybook
 ```
 
 This outputs a static site to `storybook-static/` that can be hosted anywhere.
@@ -320,7 +320,7 @@ jobs:
 
       - name: Build Storybook
         working-directory: npm/ischeduler
-        run: npm build-storybook
+        run: npm run build-storybook
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -343,8 +343,8 @@ Your Storybook will be live at `https://<username>.github.io/<repo>/`.
 
 ```bash
 # Build the static storybook
-cd npm/ischeduler
-npm build-storybook
+cd ischeduler
+npm run build-storybook
 
 # Deploy to gh-pages branch using any static hosting tool
 npx gh-pages -d storybook-static
@@ -368,11 +368,11 @@ npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
 cd npm/ischeduler
 
 # Run tests and build
-npm test
-npm build
+npm run test
+npm run build
 
 # Publish to npm
-npm publish
+npm run publish
 ```
 
 ### Publish via GitHub Actions
@@ -407,15 +407,15 @@ jobs:
 
       - name: Test
         working-directory: npm/ischeduler
-        run: npm test
+        run: npm run test
 
       - name: Build
         working-directory: npm/ischeduler
-        run: npm build
+        run: npm run build
 
       - name: Publish
         working-directory: npm/ischeduler
-        run: npm publish
+        run: npm run publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
@@ -438,14 +438,14 @@ npm version major
 ## Development
 
 ```bash
-npm dev            # Vite dev server
-npm build          # Production build (TypeScript check + Vite)
-npm test           # Run all tests
-npm test:watch     # Tests in watch mode
-npm lint           # ESLint
-npm format         # Prettier
-npm storybook      # Storybook dev server on port 6006
-npm build-storybook # Static Storybook build
+npm run dev            # Vite dev server
+npm run build          # Production build (TypeScript check + Vite)
+npm run test           # Run all tests
+npm run test:watch     # Tests in watch mode
+npm run lint           # ESLint
+npm run format         # Prettier
+npm run storybook      # Storybook dev server on port 6006
+npm run build-storybook # Static Storybook build
 ```
 
 ### Project structure
