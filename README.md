@@ -1,4 +1,5 @@
 [![Bump Version](https://github.com/teamco/ischeduler/actions/workflows/version.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/version.yml)
+[![Deploy Storybook](https://github.com/teamco/ischeduler/actions/workflows/storybook.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/storybook.yml)
 
 # iScheduler
 
