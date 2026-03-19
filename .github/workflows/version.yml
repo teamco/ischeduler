@@ -78,7 +78,8 @@ jobs:
           git commit -F .commit_msg
           git tag -a "$TAG" -F .commit_msg
 
-          # 7. Push
+          # 7. Push using PAT to trigger other workflows
+          git remote set-url origin https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin main
           git push origin "$TAG"
 
