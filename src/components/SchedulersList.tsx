@@ -167,7 +167,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
             {title ?? t('scheduler')}
           </div>
         }
-        width={600}
+        size={600}
         open={editDrawerOpen}
         onClose={() => {
           setEditDrawerOpen(false);
