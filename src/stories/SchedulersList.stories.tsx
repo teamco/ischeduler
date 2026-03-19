@@ -12,7 +12,15 @@ import {
 const meta: Meta<typeof SchedulersList> = {
   title: 'Components/SchedulersList',
   component: SchedulersList,
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component:
+          'Table of schedulers with edit/delete actions, column visibility toggle, and a create button in the toolbar. Wrap with `SchedulerProvider` to supply data, callbacks, and permissions.',
+      },
+    },
+  },
 };
 
 export default meta;
@@ -27,6 +35,13 @@ export const Empty: Story = {
       </SchedulerProvider>
     ),
   ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Empty state — no schedulers exist yet. The create button is available in the toolbar.',
+      },
+    },
+  },
 };
 
 export const WithSaleSchedulers: Story = {
@@ -38,6 +53,13 @@ export const WithSaleSchedulers: Story = {
       </SchedulerProvider>
     ),
   ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Populated with sale schedulers. Click a row\'s edit action to open the edit drawer.',
+      },
+    },
+  },
 };
 
 export const WithDiscountSchedulers: Story = {
@@ -49,6 +71,13 @@ export const WithDiscountSchedulers: Story = {
       </SchedulerProvider>
     ),
   ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Discount schedulers with USD currency display. The discount column shows type and value.',
+      },
+    },
+  },
 };
 
 export const ReadOnly: Story = {
@@ -64,4 +93,11 @@ export const ReadOnly: Story = {
       </SchedulerProvider>
     ),
   ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Read-only mode — all permissions disabled, no create/edit/delete actions shown.',
+      },
+    },
+  },
 };

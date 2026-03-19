@@ -1,0 +1,158 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/i18n & Translations" />
+
+# i18n & Translations
+
+iScheduler ships with English translations built in. Override any key via the `translations` prop on `SchedulerProvider`.
+
+## How It Works
+
+1. Pass a `translations` object to `SchedulerProvider`
+2. Your overrides are merged with the built-in English defaults
+3. Components call `t('key')` to resolve translations at render time
+
+```tsx
+<SchedulerProvider
+  translations={{
+    'scheduler': 'Planificador',
+    'scheduler.startedAt': 'Fecha de inicio',
+    'scheduler.duration': 'Repetir cada',
+    'scheduler.weekdays.monday': 'Lunes',
+    // ... override as many keys as needed
+  }}
+>
+  {/* components use translated strings */}
+</SchedulerProvider>
+```
+
+## Variable Interpolation
+
+Translation values support `{'{{variable}}'}` interpolation:
+
+```
+"scheduler.header.title": "{{entity}} Scheduler ({{count}})"
+"scheduler.result": "Occurs <strong>{{occurs}}</strong>, starting {{startAt}}."
+"scheduler.limited": "The Scheduler is limited to: {{limit}}"
+```
+
+Usage in code: `t('scheduler.header.title', { entity: 'Product', count: 3 })`
+
+## Accessing All Keys
+
+Import `defaultTranslations` to see every available key:
+
+```tsx
+import { defaultTranslations } from '@teamco/ischeduler';
+console.log(Object.keys(defaultTranslations));
+```
+
+## All Translation Keys
+
+### General
+
+```
+scheduler                → Scheduler
+scheduler.info           → Scheduler Info
+scheduler.info.helper    → Set the scheduler to set a sale period.
+scheduler.header.title   → {{entity}} Scheduler ({{count}})
+scheduler.result         → Occurs <strong>{{occurs}}</strong>, starting {{startAt}}.
+scheduler.limited        → The Scheduler is limited to: {{limit}}
+```
+
+### Form Fields
+
+```
+scheduler.startedAt      → Started at
+scheduler.duration       → Repeat Every
+scheduler.duration.end   → End Reason
+scheduler.duration.endDate → End Date
+scheduler.duration.end.day   → On this day
+scheduler.duration.end.after → After
+scheduler.duration.end.no    → No end day
+scheduler.occurrences    → Occurrences
+```
+
+### Weekdays
+
+```
+scheduler.weekdays.sunday    → Sunday      scheduler.weekdays.short.sunday    → Sun
+scheduler.weekdays.monday    → Monday      scheduler.weekdays.short.monday    → Mon
+scheduler.weekdays.tuesday   → Tuesday     scheduler.weekdays.short.tuesday   → Tue
+scheduler.weekdays.wednesday → Wednesday   scheduler.weekdays.short.wednesday → Wed
+scheduler.weekdays.thursday  → Thursday    scheduler.weekdays.short.thursday  → Thu
+scheduler.weekdays.friday    → Friday      scheduler.weekdays.short.friday    → Fri
+scheduler.weekdays.saturday  → Saturday    scheduler.weekdays.short.saturday  → Sat
+```
+
+### Months
+
+```
+scheduler.months.january   → January     scheduler.months.short.january   → Jan
+scheduler.months.february  → February    scheduler.months.short.february  → Feb
+scheduler.months.march     → March       scheduler.months.short.march     → Mar
+scheduler.months.april     → April       scheduler.months.short.april     → Apr
+scheduler.months.may       → May         scheduler.months.short.may       → May
+scheduler.months.june      → June        scheduler.months.short.june      → Jun
+scheduler.months.july      → July        scheduler.months.short.july      → Jul
+scheduler.months.august    → August      scheduler.months.short.august    → Aug
+scheduler.months.september → September   scheduler.months.short.september → Sep
+scheduler.months.october   → October     scheduler.months.short.october   → Oct
+scheduler.months.november  → November    scheduler.months.short.november  → Nov
+scheduler.months.december  → December    scheduler.months.short.december  → Dec
+```
+
+### Duration & Time Units
+
+```
+scheduler.day       → Day        scheduler.days   → Days
+scheduler.week      → Week       scheduler.weeks  → Weeks
+scheduler.month     → Month      scheduler.months → Months
+scheduler.year      → Year       scheduler.years  → Years
+scheduler.monthDay  → Month Day
+scheduler.weekday   → Weekday
+scheduler.weekend   → Weekend Day
+```
+
+### Ordinal Positions
+
+```
+scheduler.day.first  → First
+scheduler.day.second → Second
+scheduler.day.third  → Third
+scheduler.day.fourth → Fourth
+scheduler.day.last   → Last
+```
+
+### Separators
+
+```
+scheduler.separator.and   →  and
+scheduler.separator.on    → on
+scheduler.separator.day   → day
+scheduler.separator.every → every
+scheduler.separator.of    → of
+scheduler.separator.the   → the
+```
+
+### Metadata
+
+```
+scheduler.actions.manage   → Manage Scheduler
+scheduler.meta.assignedTo  → Assigned To
+scheduler.meta.duration    → Duration
+scheduler.meta.period      → Period
+```
+
+### Actions & Table
+
+```
+table.actions          → Actions
+actions.edit           → Edit
+actions.delete         → Delete
+actions.save           → Save
+actions.cancel         → Cancel
+actions.confirm.delete → Are you sure you want to delete this scheduler?
+table.hideColumns      → Hide Columns
+toolbar.refresh        → Refresh
+```

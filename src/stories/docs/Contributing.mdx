@@ -1,0 +1,69 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Contributing" />
+
+# Contributing
+
+## Getting Started
+
+```bash
+# Clone the repo
+git clone https://github.com/teamco/ischeduler.git
+cd ischeduler
+
+# Install dependencies
+npm install
+
+# Start Storybook dev server
+npm run storybook
+```
+
+## Development Commands
+
+```
+npm run dev              Vite dev server
+npm run build            Production build (TypeScript check + Vite)
+npm run test             Run all tests
+npm run test:watch       Tests in watch mode
+npm run lint             ESLint
+npm run format           Prettier
+npm run storybook        Storybook dev server on port 6006
+npm run build-storybook  Static Storybook build
+```
+
+## Code Standards
+
+- **TypeScript** with strict mode enabled
+- **React** functional components with hooks
+- **Ant Design** 6+ for all UI components
+- **Less** CSS modules for styling (`.module.less`)
+- Follow existing patterns in the codebase
+
+## Testing
+
+All changes must include tests:
+
+- Unit tests for utilities and handlers
+- Component tests for UI components
+- Run `npm run test` to verify all tests pass before submitting
+
+## Commit Messages
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat:      New features
+fix:       Bug fixes
+docs:      Documentation changes
+test:      Test changes
+refactor:  Code restructuring
+chore:     Maintenance tasks
+```
+
+## Pull Request Process
+
+1. Update tests and ensure they pass
+2. Run `npm run lint` and fix any issues
+3. Run `npm run build` to verify the build succeeds
+4. Write a clear PR description explaining what and why
+5. Reference any related issues

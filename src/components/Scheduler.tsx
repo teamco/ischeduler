@@ -25,14 +25,23 @@ import { isReadOnlyField, mergeNames, requiredField } from '@iScheduler/utils/fo
 import { DEFAULT_DATE_TIME_FORMAT, getDisabledDate } from '@iScheduler/utils/format.util';
 
 type TSchedulerProps = {
+  /** Ant Design form instance for managing form state */
   formRef: FormInstance;
+  /** Form field name prefix (e.g. `['scheduler', 'sale']`) */
   prefix: string[];
+  /** Existing scheduler data for edit mode. Pass `null` for create mode. */
   entity?: IScheduler | null;
+  /** Called when the form is submitted */
   onFinish?: (values: unknown) => void;
+  /** Disable all form fields. @default false */
   disabled?: boolean;
+  /** Field names that should be read-only (e.g. `['discount.value']`). @default [] */
   readOnlyFields?: string[];
+  /** Scheduler type — determines which fields are shown (e.g. discount fields for DISCOUNT/TRIAL_DISCOUNT) */
   schedulerType: ESchedulerPrefix;
+  /** Available discount type options. Only used when `schedulerType` is DISCOUNT or TRIAL_DISCOUNT. @default [] */
   discountTypes?: (keyof typeof EDiscountType)[];
+  /** Available duration type options (HOUR, DAY, WEEK, MONTH, YEAR, FOREVER). @default [] */
   durationTypes?: (keyof typeof EDurationTypes)[];
 };
 

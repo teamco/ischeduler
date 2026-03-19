@@ -6,6 +6,26 @@ const preview: Preview = {
   parameters: {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     layout: 'padded',
+    docs: {
+      source: { type: 'auto' },
+    },
+    options: {
+      storySort: {
+        order: [
+          'Guides',
+          [
+            'Getting Started',
+            'Firebase Integration',
+            'TanStack Query',
+            'i18n & Translations',
+            'Types Reference',
+            'Contributing',
+          ],
+          'Components',
+          'Playground',
+        ],
+      },
+    },
   },
   decorators: [
     (Story) => (
