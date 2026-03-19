@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { SchedulerContext } from './SchedulerContext';
 import { createTranslationFn, defaultTranslations } from '../i18n';
 import type { SchedulerTranslations } from '../i18n';
