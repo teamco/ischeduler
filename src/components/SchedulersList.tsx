@@ -27,11 +27,17 @@ import { indexable } from '@iScheduler/utils/table.util';
 import type { ItemType } from 'antd/es/menu/interface';
 
 export type SchedulersListProps = {
+  /** Which scheduler type to display (SALE, DISCOUNT, or TRIAL_DISCOUNT) */
   type: ESchedulerPrefix;
+  /** Section title shown in the edit drawer header */
   title?: string;
+  /** Override provider-level disabled state */
   disabled?: boolean;
+  /** Field names that should be read-only in the edit form. @default [] */
   readOnlyFields?: string[];
+  /** Currency for discount value display (e.g. `"USD"`). Only relevant for DISCOUNT types. */
   currency?: keyof typeof ECurrency;
+  /** Called after any CRUD operation completes (create, update, or delete) */
   onRefresh?: () => void;
 };
 

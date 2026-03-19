@@ -5,19 +5,29 @@ import type { SchedulerTranslations } from '../i18n';
 import type { ESchedulerPrefix, IScheduler } from '../types';
 
 export interface SchedulerProviderProps {
+  /** Scheduler data grouped by type (SALE, DISCOUNT, TRIAL_DISCOUNT) */
   schedulers: Record<ESchedulerPrefix, IScheduler[]>;
+  /** Show a global loading state across all child components. @default false */
   loading?: boolean;
+  /** Disable all interactions in child components. @default false */
   disabled?: boolean;
+  /** Locale code passed to child components (e.g. `"en-US"`) */
   locale?: string;
+  /** Called when a new scheduler is created via the drawer form */
   onCreate?: (type: ESchedulerPrefix, scheduler: IScheduler) => Promise<void>;
+  /** Called when an existing scheduler is updated via the edit drawer */
   onUpdate?: (type: ESchedulerPrefix, scheduler: IScheduler) => Promise<void>;
+  /** Called when a scheduler is deleted from the list */
   onDelete?: (type: ESchedulerPrefix, schedulerId: string) => Promise<void>;
+  /** Permission flags controlling which CRUD actions are available. All default to `true`. */
   permissions?: {
     canCreate?: boolean;
     canUpdate?: boolean;
     canDelete?: boolean;
   };
+  /** Override default English translations. Merged with built-in defaults. */
   translations?: Partial<SchedulerTranslations>;
+  /** Child components that consume the scheduler context */
   children: React.ReactNode;
 }
 

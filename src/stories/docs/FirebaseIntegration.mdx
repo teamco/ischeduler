@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Firebase Integration" />
+
+# Firebase / Firestore Integration
+
+iScheduler uses `dayjs` for all date values. If your backend uses Firebase Timestamps, you need to convert between the two formats.
+
+## Conversion Helpers
+
+```tsx
+import dayjs from 'dayjs';
+import { Timestamp } from 'firebase/firestore';
+
+// Firestore Timestamp → dayjs (when reading from Firestore)
+const toDayjs = (ts: Timestamp) => dayjs(ts.toDate());
+
+// dayjs → Firestore Timestamp (when writing to Firestore)
+const toTimestamp = (d: dayjs.Dayjs) => Timestamp.fromDate(d.toDate());
+```
+
+## Converting Scheduler Data
+
+Convert scheduler date fields before passing data to the provider:
+
+```tsx
+import type { IScheduler } from '@teamco/ischeduler';
+
+// Raw Firestore document → IScheduler
+const convertScheduler = (raw: FirestoreScheduler): IScheduler => ({
+  ...raw,
+  range: {
+    startedAt: toDayjs(raw.range.startedAt),
+    endReason: {
+      ...raw.range.endReason,
+      expiredAt: raw.range.endReason.expiredAt
+        ? toDayjs(raw.range.endReason.expiredAt)
+        : null,
+    },
+  },
+});
+```
+
+## Writing Back to Firestore
+
+When saving, convert dayjs values back to Timestamps in your `onCreate` / `onUpdate` callbacks:
+
+```tsx
+const toFirestoreScheduler = (scheduler: IScheduler) => ({
+  ...scheduler,
+  range: {
+    startedAt: toTimestamp(scheduler.range.startedAt as dayjs.Dayjs),
+    endReason: {
+      ...scheduler.range.endReason,
+      expiredAt: scheduler.range.endReason.expiredAt
+        ? toTimestamp(scheduler.range.endReason.expiredAt as dayjs.Dayjs)
+        : null,
+    },
+  },
+});
+
+// In your SchedulerProvider callbacks:
+const onCreate = async (type, scheduler) => {
+  const doc = toFirestoreScheduler(scheduler);
+  await addDoc(collection(db, 'schedulers'), doc);
+};
+```

@@ -16,8 +16,11 @@ import {
 } from '@iScheduler/types';
 
 export type SchedulerDrawerButtonProps = {
+  /** Scheduler type — determines form fields and default values */
   schedulerType: ESchedulerPrefix;
+  /** Disable the create button. Shows a tooltip with the limit message when disabled. */
   disabled?: boolean;
+  /** Called after a scheduler is successfully created via the drawer form */
   onSuccess?: (scheduler: IScheduler) => void;
 };
 

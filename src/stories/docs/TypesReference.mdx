@@ -1,0 +1,216 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Types Reference" />
+
+# Types Reference
+
+All public types are exported from `@teamco/ischeduler`. Only consumer-facing types are documented here; internal utility types are intentionally omitted.
+
+## Enums
+
+### ESchedulerPrefix
+
+The three scheduler categories:
+
+```ts
+enum ESchedulerPrefix {
+  SALE = 'sale',
+  DISCOUNT = 'discount',
+  TRIAL_DISCOUNT = 'trialDiscount',
+}
+```
+
+### EDurationTypes
+
+Repeat interval units:
+
+```ts
+enum EDurationTypes {
+  HOUR = 'Hour',
+  DAY = 'Day',
+  WEEK = 'Week',
+  MONTH = 'Month',
+  YEAR = 'Year',
+  FOREVER = 'Forever',
+}
+```
+
+### EDiscountType
+
+Discount calculation method:
+
+```ts
+enum EDiscountType {
+  PERCENT = 'Percent',
+  FIXED = 'Fixed',
+}
+```
+
+### ECurrency
+
+Supported currencies:
+
+```ts
+enum ECurrency {
+  USD = 'USD',
+  EUR = 'EUR',
+}
+```
+
+### EEndReasonType
+
+How a scheduler's range ends:
+
+```ts
+enum EEndReasonType {
+  DATE = 'Date',     // Ends on a specific date
+  NUMBER = 'Number', // Ends after N occurrences
+  FOREVER = 'Forever', // Never ends
+}
+```
+
+### EStatus
+
+Scheduler lifecycle status:
+
+```ts
+enum EStatus {
+  ACTIVE = 'ACTIVE',
+  DEACTIVATED = 'DEACTIVATED',
+  DELETED = 'DELETED',
+  PROCESSING = 'PROCESSING',
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  PUBLISHED = 'PUBLISHED',
+}
+```
+
+### EDays
+
+Days of the week:
+
+```ts
+enum EDays {
+  SUNDAY = 'Sunday',
+  MONDAY = 'Monday',
+  TUESDAY = 'Tuesday',
+  WEDNESDAY = 'Wednesday',
+  THURSDAY = 'Thursday',
+  FRIDAY = 'Friday',
+  SATURDAY = 'Saturday',
+}
+```
+
+### EMonths
+
+Months of the year:
+
+```ts
+enum EMonths {
+  JANUARY = 'January',   FEBRUARY = 'February',
+  MARCH = 'March',       APRIL = 'April',
+  MAY = 'May',           JUNE = 'June',
+  JULY = 'July',         AUGUST = 'August',
+  SEPTEMBER = 'September', OCTOBER = 'October',
+  NOVEMBER = 'November', DECEMBER = 'December',
+}
+```
+
+### EWeekDays
+
+Ordinal week day positions (for monthly repeat rules):
+
+```ts
+enum EWeekDays {
+  FIRST = 'First',
+  SECOND = 'Second',
+  THIRD = 'Third',
+  FOURTH = 'Fourth',
+  LAST = 'Last',
+}
+```
+
+## Interfaces
+
+### IScheduler
+
+The main scheduler object:
+
+```ts
+interface IScheduler {
+  id?: string;
+  type: ESchedulerPrefix;
+  duration: TSchedulerDuration;
+  repeat: TSchedulerRepeat;
+  range: TSchedulerRange;
+  discount?: TDiscount | null;
+  status?: EStatus;
+  metadata?: ISchedulerMetadata;
+}
+```
+
+### TSchedulerDuration
+
+How often the scheduler repeats:
+
+```ts
+type TSchedulerDuration = {
+  type: keyof typeof EDurationTypes; // e.g. 'WEEK', 'MONTH'
+  period: number;                     // e.g. 2 (every 2 weeks)
+};
+```
+
+### TSchedulerRange
+
+Start and end configuration:
+
+```ts
+type TSchedulerRange = {
+  startedAt: dayjs.Dayjs | string;
+  endReason: {
+    type: EEndReasonType;
+    expiredAt: dayjs.Dayjs | string | null;
+  };
+};
+```
+
+### TSchedulerRepeat
+
+Repeat rules for weekly, monthly, and yearly patterns:
+
+```ts
+type TSchedulerRepeat = {
+  weekly: {
+    days: (keyof typeof EDays)[];  // e.g. ['MONDAY', 'WEDNESDAY', 'FRIDAY']
+  };
+  monthly: {
+    weekDay?: keyof typeof EWeekDays; // e.g. 'FIRST'
+    monthDay?: number;                 // e.g. 15
+    type: 'DAY' | 'PERIOD';
+  };
+  yearly: {
+    months?: (keyof typeof EMonths)[]; // e.g. ['JANUARY', 'JULY']
+  };
+};
+```
+
+### TDiscount
+
+Discount configuration (for DISCOUNT and TRIAL_DISCOUNT types):
+
+```ts
+type TDiscount = {
+  type: TDiscountType; // 'PERCENT' | 'FIXED'
+  value: number;        // e.g. 15 (meaning 15% or $15)
+};
+```
+
+## Default Objects
+
+### DEFAULT_SALE_SCHEDULER
+
+Template used when creating a new sale scheduler. Includes sensible defaults for duration, repeat rules, and range.
+
+### DEFAULT_DISCOUNT_SCHEDULER
+
+Template used when creating a new discount scheduler. Same as sale but includes a default discount of 1%.

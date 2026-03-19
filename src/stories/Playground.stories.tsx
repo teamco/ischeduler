@@ -83,7 +83,15 @@ const PlaygroundDemo = () => {
 
 const meta: Meta = {
   title: 'Playground',
-  parameters: { layout: 'fullscreen' },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component:
+          'Interactive playground with all three scheduler types (Sale, Discount, Trial Discount) and working CRUD operations. State is managed locally — open the browser console to see callback logs.',
+      },
+    },
+  },
 };
 
 export default meta;
@@ -91,4 +99,12 @@ type Story = StoryObj;
 
 export const FullDemo: Story = {
   render: () => <PlaygroundDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Full interactive demo with Sale, Discount, and Trial Discount schedulers. Create, edit, and delete schedulers — state updates in real time. Check the browser console for callback logs.',
+      },
+    },
+  },
 };
