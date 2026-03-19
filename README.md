@@ -18,7 +18,7 @@ Provides a complete scheduler form with weekly/monthly/yearly behaviors, a table
 ```bash
 npm install @teamco/ischeduler
 # or
-yarn install @teamco/ischeduler
+yarn add @teamco/ischeduler
 ```
 
 ### Peer Dependencies
