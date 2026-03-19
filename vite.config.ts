@@ -9,9 +9,11 @@ export default defineConfig({
       rollupTypes: true,
       exclude: ['src/vite-env.d.ts'],
       insertTypesEntry: true,
+      outDir: 'storybook-static',
     }),
   ],
   build: {
+    outDir: 'storybook-static',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'iScheduler',

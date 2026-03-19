@@ -1,4 +1,13 @@
-.idea
-node_modules
+/.idea
+/node_modules
 /debug-storybook.log
-storybook-static
+/storybook-static
+/dist
+/coverage
+/.vscode
+/.DS_Store
+/.env
+/.env.local
+/.env.development
+/.env.test
+/.env.production
