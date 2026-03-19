@@ -1,6 +1,9 @@
 [![Bump Version](https://github.com/teamco/ischeduler/actions/workflows/version.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/version.yml)
 [![Deploy Storybook](https://github.com/teamco/ischeduler/actions/workflows/storybook.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/storybook.yml)
 [![Publish to npm](https://github.com/teamco/ischeduler/actions/workflows/publish.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/publish.yml)
+[![CodeQL Advanced](https://github.com/teamco/ischeduler/actions/workflows/codeql.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/codeql.yml)
+[![Codacy Security Scan](https://github.com/teamco/ischeduler/actions/workflows/codacy.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/codacy.yml)
+[![ESLint](https://github.com/teamco/ischeduler/actions/workflows/eslint.yml/badge.svg)](https://github.com/teamco/ischeduler/actions/workflows/eslint.yml)
 
 # iScheduler
 
