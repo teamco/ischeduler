@@ -74,7 +74,9 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
           setOpen(true);
         }}
       >
-        <Tooltip title={disabled ? t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT }) : undefined}>
+        <Tooltip
+          title={disabled ? t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT }) : undefined}
+        >
           {t('scheduler')}
         </Tooltip>
       </Button>
@@ -85,16 +87,11 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
             {t('scheduler')}
           </div>
         }
-        width={600}
+        size={600}
         open={open}
         onClose={() => setOpen(false)}
         extra={
-          <SaveButton
-            size="small"
-            loading={loading}
-            disabled={disabled}
-            onClick={handleSave}
-          />
+          <SaveButton size="small" loading={loading} disabled={disabled} onClick={handleSave} />
         }
       >
         <Scheduler
