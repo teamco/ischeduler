@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/teamco/ischeduler"
+    "url": "git+https://github.com/teamco/ischeduler.git"
   },
   "author": "Vladimir Tkach",
   "publishConfig": {
