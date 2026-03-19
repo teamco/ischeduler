@@ -13,6 +13,10 @@ Provides a complete scheduler form with weekly/monthly/yearly behaviors, a table
 
 ## Demo sandbox: [https://teamco.github.io/ischeduler/](https://teamco.github.io/ischeduler/)
 
+<img width="1024" height="480" alt="Screenshot 2026-03-19 at 8 06 36" src="https://github.com/user-attachments/assets/38efdd68-fb5b-4c9c-9532-5848931605cf" />
+<img width="1024" height="582" alt="Screenshot 2026-03-19 at 8 07 03" src="https://github.com/user-attachments/assets/ae0ede0f-a4ee-40a6-8c4a-fa34f0996bff" />
+
+
 ## Installation
 
 ```bash
