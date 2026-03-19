@@ -8,6 +8,10 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  id-token: write  # Required for OIDC authentication
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -19,8 +23,7 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # ⚠️ Do NOT set NODE_AUTH_TOKEN here or in env!
 
       - name: Install dependencies
         run: npm ci
@@ -31,5 +34,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish
-        run: npm publish
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        # Note: No env section with NODE_AUTH_TOKEN!
