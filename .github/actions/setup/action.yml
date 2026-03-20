@@ -1,0 +1,27 @@
+name: 'Setup Node & Install'
+description: 'Checkouts, sets up Node 24, and installs dependencies with npm ci'
+
+inputs:
+  token:
+    description: 'GitHub token for checkout'
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.token }}
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: 'npm'
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
