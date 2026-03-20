@@ -93,7 +93,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - name: Build Storybook
         run: npm run build-storybook
@@ -116,17 +116,17 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
-      - uses: ./.github/actions/setup
-      - name: Setup NPM Registry
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          registry-url: https://registry.npmjs.org
+      - name: Install dependencies
+        run: npm ci
       - name: Setup Git config
         run: |
           git config --global user.name 'github-actions[bot]'
