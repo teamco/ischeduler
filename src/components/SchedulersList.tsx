@@ -197,7 +197,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
         extra={
           <SaveButton
             size="small"
-            isEdit
+            isEdit={!!editingEntity}
             loading={loading}
             disabled={disabled}
             onClick={handleEditSave}

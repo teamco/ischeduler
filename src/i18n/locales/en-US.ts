@@ -83,6 +83,7 @@ const enUS: SchedulerTranslations = {
   'actions.edit': 'Edit',
   'actions.delete': 'Delete',
   'actions.save': 'Save',
+  'actions.update': 'Update',
   'actions.cancel': 'Cancel',
   'actions.confirm.delete': 'Are you sure you want to delete this scheduler?',
   'table.hideColumns': 'Hide Columns',
