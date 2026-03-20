@@ -58,6 +58,8 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
   const entitySchedulers = schedulers[schedulerType] ?? [];
 
   const [removedNewIds, setRemovedNewIds] = useState<Set<string>>(new Set());
+  const [dirty, setDirty] = useState<boolean>(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   const visibleSchedulers = useMemo(() => {
     if (removedNewIds.size === 0) return entitySchedulers;
@@ -70,9 +72,15 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
   const [editingEntity, setEditingEntity] = useState<IScheduler | null>(null);
 
-  const prefix = [CScheduler, schedulerType];
-  const durationTypes = Object.keys(EDurationTypes) as (keyof typeof EDurationTypes)[];
-  const discountTypes = Object.keys(EDiscountType) as (keyof typeof EDiscountType)[];
+  const prefix = useMemo(() => [CScheduler, schedulerType], [schedulerType]);
+  const durationTypes = useMemo(
+    () => Object.keys(EDurationTypes) as (keyof typeof EDurationTypes)[],
+    [],
+  );
+  const discountTypes = useMemo(
+    () => Object.keys(EDiscountType) as (keyof typeof EDiscountType)[],
+    [],
+  );
 
   const handleEdit = (entity: IScheduler) => {
     setEditingEntity(entity);
@@ -97,6 +105,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
 
       setEditDrawerOpen(false);
       setEditingEntity(null);
+      setDirty(false);
       editFormRef.resetFields();
       onRefresh?.();
     } catch {
@@ -154,8 +163,12 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
                   {
                     label: (
                       <SchedulerDrawerButton
+                        setDirty={setDirty}
+                        dirty={dirty}
+                        isCreating={isCreating}
+                        setIsCreating={setIsCreating}
                         schedulerType={schedulerType}
-                        disabled={disabled || loading || limited}
+                        disabled={disabled || loading || limited || isCreating}
                         onSuccess={() => onRefresh?.()}
                       />
                     ),
@@ -199,13 +212,14 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
             size="small"
             isEdit={!!editingEntity}
             loading={loading}
-            disabled={disabled}
+            disabled={disabled || !dirty || isCreating}
             onClick={handleEditSave}
           />
         }
       >
         {editDrawerOpen && (
           <Scheduler
+            setDirty={setDirty}
             formRef={editFormRef}
             prefix={prefix}
             entity={editingEntity}
