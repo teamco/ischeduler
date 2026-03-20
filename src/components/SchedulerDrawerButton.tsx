@@ -32,6 +32,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   const { t, loading, permissions, onCreate } = useSchedulerContext();
   const [formRef] = Form.useForm();
   const [open, setOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   if (!permissions.canCreate) return null;
 
@@ -42,14 +43,15 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
 
   const handleSave = async () => {
     try {
+      setIsCreating(true);
       await formRef.validateFields();
       const formValue = formRef.getFieldValue(prefix);
 
       const newScheduler: IScheduler = {
+        id: `new-${Date.now()}`,
         ...formValue,
         type: schedulerType,
-        [CNsDiscount]:
-          schedulerType === ESchedulerPrefix.SALE ? null : formValue?.[CNsDiscount],
+        [CNsDiscount]: schedulerType === ESchedulerPrefix.SALE ? null : formValue?.[CNsDiscount],
       };
 
       if (onCreate) {
@@ -61,6 +63,8 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
       formRef.resetFields();
     } catch {
       // Form validation handles errors
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -94,7 +98,12 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         open={open}
         onClose={() => setOpen(false)}
         extra={
-          <SaveButton size="small" loading={loading} disabled={disabled} onClick={handleSave} />
+          <SaveButton
+            size="small"
+            loading={loading || isCreating}
+            disabled={disabled}
+            onClick={handleSave}
+          />
         }
       >
         <Scheduler

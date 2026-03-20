@@ -18,7 +18,7 @@ export interface SchedulerProviderProps {
   /** Called when an existing scheduler is updated via the edit drawer */
   onUpdate?: (type: ESchedulerPrefix, scheduler: IScheduler) => Promise<void>;
   /** Called when a scheduler is deleted from the list */
-  onDelete?: (type: ESchedulerPrefix, schedulerId: IScheduler['id']) => Promise<void>;
+  onDelete?: (type: ESchedulerPrefix, schedulerId: string) => Promise<void>;
   /** Permission flags controlling which CRUD actions are available. All default to `true`. */
   permissions?: {
     canCreate?: boolean;
@@ -49,7 +49,7 @@ export const SchedulerProvider = (props: SchedulerProviderProps) => {
   const [drawerConfig, setDrawerConfig] = useState<Record<string, unknown>>({});
 
   const mergedTranslations = useMemo(
-    () => ({ ...defaultTranslations, ...(customTranslations ?? {}) } as Record<string, string>),
+    () => ({ ...defaultTranslations, ...(customTranslations ?? {}) }) as Record<string, string>,
     [customTranslations],
   );
 

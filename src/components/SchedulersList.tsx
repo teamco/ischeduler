@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Drawer, Form, Table, type TableProps } from 'antd';
 import { ScheduleTwoTone } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import { Scheduler } from '@iScheduler/components/Scheduler';
 import { SaveButton } from '@iScheduler/components/internal/SaveButton';
@@ -56,7 +56,15 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
 
   const disabled = disabledProp ?? ctxDisabled;
   const entitySchedulers = schedulers[schedulerType] ?? [];
-  const limited = entitySchedulers.length >= DEFAULT_SCHEDULERS_LIMIT;
+
+  const [removedNewIds, setRemovedNewIds] = useState<Set<string>>(new Set());
+
+  const visibleSchedulers = useMemo(() => {
+    if (removedNewIds.size === 0) return entitySchedulers;
+    return entitySchedulers.filter((entity) => !entity.id || !removedNewIds.has(entity.id));
+  }, [entitySchedulers, removedNewIds]);
+
+  const limited = visibleSchedulers.length >= DEFAULT_SCHEDULERS_LIMIT;
 
   const [editFormRef] = Form.useForm();
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
@@ -80,8 +88,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
         ...editingEntity,
         ...formValue,
         type: schedulerType,
-        [CNsDiscount]:
-          schedulerType === ESchedulerPrefix.SALE ? null : formValue?.[CNsDiscount],
+        [CNsDiscount]: schedulerType === ESchedulerPrefix.SALE ? null : formValue?.[CNsDiscount],
       };
 
       if (onUpdate) {
@@ -98,26 +105,36 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
   };
 
   const handleDelete = async (entity: IScheduler) => {
+    if (entity.id?.startsWith('new-')) {
+      setRemovedNewIds((prev) => {
+        const next = new Set(prev);
+        if (entity.id) next.add(entity.id);
+        return next;
+      });
+      return;
+    }
+
     if (onDelete && entity.id) {
       await onDelete(schedulerType, entity.id);
       onRefresh?.();
+    } else {
+      console.warn('No onDelete handler provided');
     }
   };
 
-  const columns: TableProps<IScheduler>['columns'] = columnsMetadata(
-    {
-      disabled,
-      schedulerType,
-      entities: entitySchedulers,
-      currency,
-      t,
-      onEdit: permissions.canUpdate ? handleEdit : undefined,
-      onDelete: permissions.canDelete ? handleDelete : undefined,
-    },
-  );
+  const columns: TableProps<IScheduler>['columns'] = columnsMetadata({
+    disabled,
+    schedulerType,
+    entities: visibleSchedulers,
+    currency,
+    t,
+    onEdit: permissions.canUpdate ? handleEdit : undefined,
+    onDelete: permissions.canDelete ? handleDelete : undefined,
+  });
 
-  const { filteredColumns, columnsList, selectedColumns, setSelectedColumns } =
-    useColumnsToggle(columns as any[]);
+  const { filteredColumns, columnsList, selectedColumns, setSelectedColumns } = useColumnsToggle(
+    columns as any[],
+  );
 
   const tableProps: TableProps<IScheduler> = {
     columns: filteredColumns as TableProps<IScheduler>['columns'],
@@ -125,7 +142,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
     scroll: { x: 1000 },
     bordered: true,
     className: styles.gridList,
-    dataSource: indexable(entitySchedulers),
+    dataSource: indexable(visibleSchedulers),
     rowKey: (record: IScheduler) => record.id ?? `row-${Math.random()}`,
     title: () => (
       <div className={styles.gridHeader}>
@@ -157,9 +174,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
       </div>
     ),
     footer: () => (
-      <div className={styles.gridFooter}>
-        {`Total ${entitySchedulers.length} items`}
-      </div>
+      <div className={styles.gridFooter}>{`Total ${visibleSchedulers.length} items`}</div>
     ),
   };
 
