@@ -14,12 +14,12 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "storybook-static",
+    "outDir": "dist",
     "baseUrl": ".",
     "paths": {
       "@iScheduler/*": ["src/*"]
     }
   },
   "include": ["src/**/*", "__tests__/**/*"],
-  "exclude": ["node_modules", "storybook-static"]
+  "exclude": ["node_modules", "dist"]
 }
