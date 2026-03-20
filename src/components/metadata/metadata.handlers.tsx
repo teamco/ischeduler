@@ -1,11 +1,11 @@
 import { Tag } from 'antd';
-import React from 'react';
+import styles from '@iScheduler/styles/scheduler.module.less';
 
 import { COLORS } from '@iScheduler/utils/colors.util';
 import type { IScheduler } from '@iScheduler/types';
 
 export const handleWeekly = (weekly: IScheduler['repeat']['weekly']) => (
-  <div>
+  <div className={styles.tagsWrapper}>
     {weekly?.days.map((day, idx) => (
       <Tag key={idx} color={COLORS.tags.volcano}>
         {day}
@@ -20,7 +20,7 @@ export const handleMonthly = (
 ) => {
   if (monthly?.type === 'PERIOD') {
     return (
-      <div>
+      <div className={styles.tagsWrapper}>
         {weekly?.days.map((day, idx) => (
           <Tag key={idx} color={COLORS.tags.cyan}>
             {`${monthly.weekDay} ${day}`}
@@ -31,7 +31,7 @@ export const handleMonthly = (
   }
 
   return (
-    <div>
+    <div className={styles.tagsWrapper}>
       <Tag key="monthDay" color={COLORS.tags.gold}>
         {monthly?.monthDay}
       </Tag>
@@ -46,7 +46,7 @@ export const handleYearly = (
 ) => (
   <>
     {handleMonthly(monthly, weekly)}
-    <div>
+    <div className={styles.tagsWrapper}>
       {yearly?.months?.map((month, idx) => (
         <Tag key={idx} color={COLORS.tags.magenta}>
           {month}
