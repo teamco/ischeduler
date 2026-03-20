@@ -1,5 +1,5 @@
 import { Col, DatePicker, Form, type FormInstance, InputNumber, Row, Select, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import { Duration } from '@iScheduler/components/internal/Duration';
 import { AfterBehavior } from '@iScheduler/components/behaviors/AfterBehavior';
@@ -43,6 +43,8 @@ type TSchedulerProps = {
   discountTypes?: (keyof typeof EDiscountType)[];
   /** Available duration type options (HOUR, DAY, WEEK, MONTH, YEAR, FOREVER). @default [] */
   durationTypes?: (keyof typeof EDurationTypes)[];
+  /** Callback to set the dirty state. */
+  setDirty: (dirty: boolean) => void;
 };
 
 export const Scheduler: React.FC<TSchedulerProps> = (props) => {
@@ -53,6 +55,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     prefix,
     entity,
     onFinish,
+    setDirty,
     disabled = false,
     durationTypes = [],
     discountTypes = [],
@@ -63,6 +66,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
   const [endType, setEndType] = useState<string | null>(null);
   const [periodType, setPeriodType] = useState<string | null>(null);
   const [startAt, setStartAt] = useState<string | null>(null);
+  const [lastEntityId, setLastEntityId] = useState<string | null>(null);
   const [occurs, setOccurs] = useState<string>('0');
 
   const scheduler = formRef.getFieldValue(prefix);
@@ -75,7 +79,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
   }, [formRef]);
 
   useEffect(() => {
-    if (entity) {
+    if (entity && entity.id !== lastEntityId) {
       // Set nested form values without lodash
       const obj: Record<string, unknown> = {};
       let current: Record<string, unknown> = obj;
@@ -85,15 +89,17 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
       }
       current[prefix[prefix.length - 1]] = entity;
       formRef.setFieldsValue(obj);
+      setLastEntityId(entity.id ?? null);
     }
+  }, [entity, formRef, lastEntityId, prefix]);
 
+  useEffect(() => {
     const _periodType = formRef.getFieldValue(mergeNames(prefix, CNsDuration, 'type'));
     const _periodValue = formRef.getFieldValue(mergeNames(prefix, CNsDuration, 'period'));
     const _startAt = formRef.getFieldValue(mergeNames(prefix, 'range', 'startedAt'));
 
     if (_startAt) handleChangeStartDate(_startAt, setStartAt);
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPeriodType(_periodType);
     if (_periodType && _periodValue) {
       handleDurationValueChange(
@@ -109,7 +115,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
   }, [DEFAULT_SCHEDULER, entity, formRef, prefix, t]);
 
   // Build initial values without lodash
-  const buildInitialValues = () => {
+  const buildInitialValues = useMemo(() => {
     const obj: Record<string, unknown> = {};
     let current: Record<string, unknown> = obj;
     for (let i = 0; i < prefix.length - 1; i++) {
@@ -118,7 +124,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     }
     current[prefix[prefix.length - 1]] = DEFAULT_SCHEDULER;
     return obj;
-  };
+  }, [DEFAULT_SCHEDULER, prefix]);
 
   return (
     <Space>
@@ -128,7 +134,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
         form={formRef}
         className={styles.scheduler}
         onFinish={onFinish}
-        initialValues={buildInitialValues()}
+        onFieldsChange={() => setDirty(true)}
+        initialValues={buildInitialValues}
       >
         {[ESchedulerPrefix.DISCOUNT, ESchedulerPrefix.TRIAL_DISCOUNT].includes(schedulerType) && (
           <Row gutter={[24, 24]}>
@@ -276,8 +283,12 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            {endType === CEndReasonTypes[0] && <OnThisDayBehavior prefix={prefix} disabled={disabled} />}
-            {endType === CEndReasonTypes[1] && <AfterBehavior prefix={prefix} disabled={disabled} />}
+            {endType === CEndReasonTypes[0] && (
+              <OnThisDayBehavior prefix={prefix} disabled={disabled} />
+            )}
+            {endType === CEndReasonTypes[1] && (
+              <AfterBehavior prefix={prefix} disabled={disabled} />
+            )}
           </Col>
         </Row>
         <span

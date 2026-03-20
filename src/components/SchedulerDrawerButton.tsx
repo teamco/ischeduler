@@ -1,6 +1,6 @@
 import { Button, Drawer, Form, Tooltip } from 'antd';
 import { ScheduleTwoTone } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import { Scheduler } from '@iScheduler/components/Scheduler';
 import { SaveButton } from '@iScheduler/components/internal/SaveButton';
@@ -22,24 +22,40 @@ export type SchedulerDrawerButtonProps = {
   disabled?: boolean;
   /** Called after a scheduler is successfully created via the drawer form */
   onSuccess?: (scheduler: IScheduler) => void;
+  /** Set dirty state */
+  setDirty: (dirty: boolean) => void;
+  /** Dirty state */
+  dirty: boolean;
+  /** isCreating state */
+  isCreating: boolean;
+  /** Set isCreating state */
+  setIsCreating: (isCreating: boolean) => void;
 };
 
 export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   schedulerType,
   disabled,
   onSuccess,
+  setDirty,
+  dirty,
+  isCreating,
+  setIsCreating,
 }) => {
   const { t, loading, permissions, onCreate } = useSchedulerContext();
   const [formRef] = Form.useForm();
   const [open, setOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
 
   if (!permissions.canCreate) return null;
 
-  const prefix = [CScheduler, schedulerType];
-
-  const durationTypes = Object.keys(EDurationTypes) as (keyof typeof EDurationTypes)[];
-  const discountTypes = Object.keys(EDiscountType) as (keyof typeof EDiscountType)[];
+  const prefix = useMemo(() => [CScheduler, schedulerType], [schedulerType]);
+  const durationTypes = useMemo(
+    () => Object.keys(EDurationTypes) as (keyof typeof EDurationTypes)[],
+    [],
+  );
+  const discountTypes = useMemo(
+    () => Object.keys(EDiscountType) as (keyof typeof EDiscountType)[],
+    [],
+  );
 
   const handleSave = async () => {
     try {
@@ -60,6 +76,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
 
       onSuccess?.(newScheduler);
       setOpen(false);
+      setDirty(false);
       formRef.resetFields();
     } catch {
       // Form validation handles errors
@@ -101,12 +118,13 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
           <SaveButton
             size="small"
             loading={loading || isCreating}
-            disabled={disabled}
+            disabled={disabled || !dirty}
             onClick={handleSave}
           />
         }
       >
         <Scheduler
+          setDirty={setDirty}
           formRef={formRef}
           prefix={prefix}
           schedulerType={schedulerType}
