@@ -1,0 +1,191 @@
+name: 'Pipeline'
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  security-events: write
+
+jobs:
+  lint:
+    name: 'Lint'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - name: Run ESLint
+        run: npx eslint . --format @microsoft/eslint-formatter-sarif --output-file ./eslint-results.sarif
+        continue-on-error: true
+      - name: Upload ESLint SARIF
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: eslint-results.sarif
+
+  # ---------------------------------------------------------
+  # 2. SECURITY (CodeQL)
+  # ---------------------------------------------------------
+  security:
+    name: 'Security (CodeQL)'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript]
+    steps:
+      - uses: ./.github/actions/setup
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: '/language:${{matrix.language}}'
+
+  # ---------------------------------------------------------
+  # 3. TEST
+  # ---------------------------------------------------------
+  test:
+    name: 'Test'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - name: Run Tests
+        run: npm run test
+
+  # ---------------------------------------------------------
+  # 4. BUILD
+  # ---------------------------------------------------------
+  build:
+    name: 'Build'
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - name: Build
+        run: npm run build
+      - name: Upload build dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  # ---------------------------------------------------------
+  # 5. STORYBOOK
+  # ---------------------------------------------------------
+  storybook:
+    name: 'Storybook'
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: ./.github/actions/setup
+      - name: Build Storybook
+        run: npm run build-storybook
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/storybook
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ---------------------------------------------------------
+  # 6. RELEASE (Bump & Publish)
+  # ---------------------------------------------------------
+  release:
+    name: 'Release'
+    needs: [build, security]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Setup Node (for Publish)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+      - name: Download build dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Setup Git config
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: 'Get commit messages'
+        id: commits
+        run: |
+          git fetch --tags
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            COMMITS=$(git log --pretty=format:"* %s" -n 10)
+          else
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"* %s")
+          fi
+          if [ -z "$COMMITS" ] || [ "$COMMITS" = " " ]; then
+            COMMITS="* maintenance: minor updates"
+          fi
+          echo "list<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 'Bump version & Tag'
+        id: version-bump
+        env:
+          COMMIT_LIST: ${{ steps.commits.outputs.list }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          # 1. Process commit list: append actor to every line except merge commits
+          PROCESSED_COMMITS=""
+          while IFS= read -r line; do
+            if [[ "$line" == "* Merge"* ]]; then
+              # Leave merge commits unchanged
+              PROCESSED_COMMITS+="$line"$'\n'
+            else
+              # Append ", by @ACTOR" to other commits (including the fallback)
+              PROCESSED_COMMITS+="$line, by @${ACTOR}"$'\n'
+            fi
+          done <<< "$COMMIT_LIST"
+
+          # 2. Bump patch version immediately
+          npm version patch --no-git-tag-version
+
+          # 3. Read the new version
+          NEW_V=$(node -p "require('./package.json').version")
+          TAG="v$NEW_V"
+          echo "newTag=$TAG" >> $GITHUB_OUTPUT
+
+          # 4. Stage changes
+          git add package.json package-lock.json
+
+          # 5. Create commit message using the processed list
+          printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
+
+          # 6. Commit and tag
+          git commit -F .commit_msg
+          git tag -a "$TAG" -F .commit_msg
+
+          # 7. Push using PAT to trigger other workflows
+          git remote set-url origin https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin main
+          git push origin "$TAG"
+
+      - name: 'Publish to NPM'
+        run: npm publish --provenance --access public
