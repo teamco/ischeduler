@@ -2,10 +2,6 @@
 
 .scheduler {
   width: 100%;
-
-  & * {
-    transition: all 0.5s ease-in-out;
-  }
 }
 
 .result {
@@ -72,6 +68,18 @@
 
   :global(.ant-spin-container) {
     display: flex;
+  }
+
+  :global(.ant-segmented) {
+    width: fit-content;
+  }
+
+  :global(.ant-segmented-item-label) {
+    > div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   }
 
   :global(.ant-space-vertical) {
