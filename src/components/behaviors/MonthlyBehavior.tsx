@@ -1,19 +1,6 @@
-import {
-  InputNumber,
-  Radio,
-  Form,
-  type RadioChangeEvent,
-  type FormInstance,
-  Row,
-  Col,
-} from 'antd';
-import React, {
-  type Dispatch,
-  type SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { InputNumber, Form, type FormInstance, Row, Col, Segmented } from 'antd';
+import React, { type Dispatch, type SetStateAction, useCallback, useEffect, useState } from 'react';
+import { CalendarTwoTone, ControlTwoTone } from '@ant-design/icons';
 
 import { WeeklyBehavior } from '@iScheduler/components/behaviors/WeeklyBehavior';
 import { handleDurationValueChange, handleSelectWeeklyDay } from '@iScheduler/handlers';
@@ -47,8 +34,8 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
     setOccurs,
   } = props;
 
-  const [monthPeriod, setMonthPeriod] =
-    useState<TSchedulerRepeat['monthly']['type']>('DAY');
+  const [monthPeriod, setMonthPeriod] = useState<TSchedulerRepeat['monthly']['type']>('DAY');
+  const currentWeekDay = Form.useWatch(mergeNames([...prefix, ...namespaces], 'weekDay'), formRef);
 
   const day = t('scheduler.day');
 
@@ -61,7 +48,7 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
         handleSelectWeeklyDay(scheduler.duration.period, scheduler, setOccurs, t);
       }
     },
-    [formRef, prefix, setOccurs, t],
+    [formRef, prefix, setOccurs, setMonthPeriod, t],
   );
 
   useEffect(() => {
@@ -85,13 +72,22 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
 
     if (monthPeriod !== 'PERIOD') return null;
 
-    const periods = [
-      { value: getKeyFromEnum(EWeekDays, 'First' as EWeekDays), label: t('scheduler.day.first') },
-      { value: getKeyFromEnum(EWeekDays, 'Second' as EWeekDays), label: t('scheduler.day.second') },
-      { value: getKeyFromEnum(EWeekDays, 'Third' as EWeekDays), label: t('scheduler.day.third') },
-      { value: getKeyFromEnum(EWeekDays, 'Fourth' as EWeekDays), label: t('scheduler.day.fourth') },
-      { value: getKeyFromEnum(EWeekDays, 'Last' as EWeekDays), label: t('scheduler.day.last') },
-    ];
+    const periods = (
+      [
+        ['First', 'scheduler.day.first'],
+        ['Second', 'scheduler.day.second'],
+        ['Third', 'scheduler.day.third'],
+        ['Fourth', 'scheduler.day.fourth'],
+        ['Last', 'scheduler.day.last'],
+      ] as const
+    ).map(([enumKey, labelKey]) => {
+      const value = getKeyFromEnum(EWeekDays, enumKey as EWeekDays);
+      return {
+        value,
+        label: t(labelKey),
+        icon: currentWeekDay === value ? <CalendarTwoTone /> : <CalendarTwoTone twoToneColor="gray" />,
+      };
+    });
 
     return (
       <Col span={24} className={styles.monthlyGridWeek}>
@@ -100,15 +96,13 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
           name={mergeNames([...prefix, ...namespaces], 'weekDay')}
           rules={[requiredField(t('scheduler.weekday'))]}
         >
-          <Radio.Group
+          <Segmented
             disabled={loading || disabled}
-            optionType="button"
-            buttonStyle="solid"
             onChange={handleWeekPeriodType}
-            options={periods.map(({ value, label }, idx) => ({
+            options={periods.map(({ value, label, icon }) => ({
               label,
               value,
-              key: idx,
+              icon,
               disabled: disabled || loading,
             }))}
           />
@@ -127,7 +121,7 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
         />
       </Col>
     );
-  }, [disabled, formRef, loading, monthPeriod, namespaces, prefix, setOccurs, t]);
+  }, [currentWeekDay, disabled, formRef, loading, monthPeriod, namespaces, prefix, setOccurs, t]);
 
   const days = () => {
     if (monthPeriod !== 'DAY') return null;
@@ -165,17 +159,32 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
         name={mergeNames([...prefix, ...namespaces], 'type')}
         rules={[requiredField(t('scheduler.meta.period'))]}
       >
-        <Radio.Group
+        <Segmented
           disabled={disabled || loading}
-          optionType="button"
-          buttonStyle="solid"
-          onChange={(e: RadioChangeEvent) => {
-            e.preventDefault();
-            onChangePeriod(e.target.value);
+          onChange={(value) => {
+            onChangePeriod(value as TSchedulerRepeat['monthly']['type']);
           }}
           options={[
-            { value: 'DAY', label: t('scheduler.day') },
-            { value: 'PERIOD', label: t('scheduler.meta.period') },
+            {
+              value: 'DAY',
+              icon:
+                monthPeriod === 'DAY' ? (
+                  <CalendarTwoTone />
+                ) : (
+                  <CalendarTwoTone twoToneColor="gray" />
+                ),
+              label: t('scheduler.day'),
+            },
+            {
+              value: 'PERIOD',
+              icon:
+                monthPeriod === 'PERIOD' ? (
+                  <ControlTwoTone />
+                ) : (
+                  <ControlTwoTone twoToneColor="gray" />
+                ),
+              label: t('scheduler.meta.period'),
+            },
           ]}
         />
       </Form.Item>
