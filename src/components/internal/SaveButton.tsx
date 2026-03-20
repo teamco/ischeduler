@@ -52,7 +52,7 @@ export const SaveButton: React.FC<TSaveButton> = (props) => {
     onClick?.();
   };
 
-  const label = isEdit ? t('actions.save') : t('actions.save');
+  const label = isEdit ? t('actions.update') : t('actions.save');
 
   return (
     <Button
