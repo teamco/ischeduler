@@ -1,0 +1,80 @@
+name: 'Bump Version & Push'
+description: 'Gathers commits, increments version, commits, tags, and pushes with PAT'
+
+inputs:
+  token:
+    description: 'GitHub PAT to push changes and trigger workflows'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Git config
+      shell: bash
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: 'Get commit messages'
+      id: commits
+      shell: bash
+      run: |
+        git fetch --tags
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -z "$LAST_TAG" ]; then
+          COMMITS=$(git log --pretty=format:"* %s" -n 10)
+        else
+          COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"* %s")
+        fi
+        if [ -z "$COMMITS" ] || [ "$COMMITS" = " " ]; then
+          COMMITS="* maintenance: minor updates"
+        fi
+        echo "list<<EOF" >> $GITHUB_OUTPUT
+        echo "$COMMITS" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: 'Bump version & Tag'
+      id: version-bump
+      shell: bash
+      env:
+        COMMIT_LIST: ${{ steps.commits.outputs.list }}
+        ACTOR: ${{ github.actor }}
+      run: |
+        # 1. Process commit list: append actor to every line except merge commits
+        PROCESSED_COMMITS=""
+        while IFS= read -r line; do
+          if [[ "$line" == "* Merge"* ]]; then
+            # Leave merge commits unchanged
+            PROCESSED_COMMITS+="$line"$'\n'
+          else
+            # Append ", by @ACTOR" to other commits (including the fallback)
+            PROCESSED_COMMITS+="$line, by @${ACTOR}"$'\n'
+          fi
+        done <<< "$COMMIT_LIST"
+
+        # 2. Bump patch version immediately
+        npm version patch --no-git-tag-version
+
+        # 3. Read the new version
+        NEW_V=$(node -p "require('./package.json').version")
+        TAG="v$NEW_V"
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+        # 4. Stage changes
+        git add package.json package-lock.json
+
+        # 5. Create commit message using the processed list
+        printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
+        
+        # 6. Commit and tag
+        git commit -F .commit_msg
+        git tag -a "$TAG" -F .commit_msg
+
+    - name: 'Push changes & tag'
+      shell: bash
+      run: |
+        # 7. Push using PAT to trigger other workflows
+        TAG=${{ steps.version-bump.outputs.tag }}
+        git remote set-url origin https://x-access-token:${{ inputs.token }}@github.com/${{ github.repository }}.git
+        git push origin main
+        git push origin "$TAG"

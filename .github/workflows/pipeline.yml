@@ -120,72 +120,8 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
+      - name: Release Management
+        uses: ./.github/actions/bump
         with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - name: Install dependencies
-        run: npm ci
-      - name: Setup Git config
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      - name: 'Get commit messages'
-        id: commits
-        run: |
-          git fetch --tags
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$LAST_TAG" ]; then
-            COMMITS=$(git log --pretty=format:"* %s" -n 10)
-          else
-            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"* %s")
-          fi
-          if [ -z "$COMMITS" ] || [ "$COMMITS" = " " ]; then
-            COMMITS="* maintenance: minor updates"
-          fi
-          echo "list<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMITS" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: 'Bump version & Tag'
-        id: version-bump
-        env:
-          COMMIT_LIST: ${{ steps.commits.outputs.list }}
-          ACTOR: ${{ github.actor }}
-        run: |
-          # 1. Process commit list: append actor to every line except merge commits
-          PROCESSED_COMMITS=""
-          while IFS= read -r line; do
-            if [[ "$line" == "* Merge"* ]]; then
-              # Leave merge commits unchanged
-              PROCESSED_COMMITS+="$line"$'\n'
-            else
-              # Append ", by @ACTOR" to other commits (including the fallback)
-              PROCESSED_COMMITS+="$line, by @${ACTOR}"$'\n'
-            fi
-          done <<< "$COMMIT_LIST"
-
-          # 2. Bump patch version immediately
-          npm version patch --no-git-tag-version
-
-          # 3. Read the new version
-          NEW_V=$(node -p "require('./package.json').version")
-          TAG="v$NEW_V"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "msg_file=.commit_msg" >> $GITHUB_OUTPUT
-
-          # 4. Stage changes
-          git add package.json package-lock.json
-
-          # 5. Create commit message using the processed list
-          printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
-
-          # 6. Commit and tag
-          git commit -F .commit_msg
-          git tag -a "$TAG" -F .commit_msg
-
-          # 7. Push using PAT to trigger other workflows
-          git remote set-url origin https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
-          git push origin main
-          git push origin "$TAG"
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
