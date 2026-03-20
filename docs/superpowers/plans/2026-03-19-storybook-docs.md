@@ -16,32 +16,33 @@
 
 ## File Structure
 
-| Action | File | Responsibility |
-|--------|------|----------------|
-| Modify | `.storybook/main.ts` | Enable addon-docs, expand stories glob for MDX |
-| Modify | `.storybook/preview.tsx` | Sidebar sort order, docs parameters |
-| Modify | `src/provider/SchedulerProvider.tsx` | JSDoc on `SchedulerProviderProps` |
-| Modify | `src/provider/SchedulerContext.ts` | JSDoc on `SchedulerContextValue` |
-| Modify | `src/components/Scheduler.tsx` | JSDoc on `TSchedulerProps` |
-| Modify | `src/components/SchedulersList.tsx` | JSDoc on `SchedulersListProps` |
-| Modify | `src/components/SchedulerDrawerButton.tsx` | JSDoc on `SchedulerDrawerButtonProps` |
-| Modify | `src/stories/Scheduler.stories.tsx` | Add docs descriptions |
-| Modify | `src/stories/SchedulersList.stories.tsx` | Add docs descriptions |
-| Modify | `src/stories/SchedulerDrawerButton.stories.tsx` | Add docs descriptions |
-| Modify | `src/stories/Playground.stories.tsx` | Add docs descriptions |
-| Create | `src/stories/docs/GettingStarted.mdx` | Installation, peer deps, quick start |
-| Create | `src/stories/docs/FirebaseIntegration.mdx` | Firestore <-> dayjs conversion |
-| Create | `src/stories/docs/TanStackQuery.mdx` | TanStack Query integration |
-| Create | `src/stories/docs/Translations.mdx` | i18n system, all translation keys |
-| Create | `src/stories/docs/TypesReference.mdx` | Enums, interfaces, defaults |
-| Create | `src/stories/docs/Contributing.mdx` | Dev setup, standards, PR process |
-| Modify | `README.md` | Slim down, link to Storybook |
+| Action | File                                            | Responsibility                                 |
+| ------ | ----------------------------------------------- | ---------------------------------------------- |
+| Modify | `.storybook/main.ts`                            | Enable addon-docs, expand stories glob for MDX |
+| Modify | `.storybook/preview.tsx`                        | Sidebar sort order, docs parameters            |
+| Modify | `src/provider/SchedulerProvider.tsx`            | JSDoc on `SchedulerProviderProps`              |
+| Modify | `src/provider/SchedulerContext.ts`              | JSDoc on `SchedulerContextValue`               |
+| Modify | `src/components/Scheduler.tsx`                  | JSDoc on `TSchedulerProps`                     |
+| Modify | `src/components/SchedulersList.tsx`             | JSDoc on `SchedulersListProps`                 |
+| Modify | `src/components/SchedulerDrawerButton.tsx`      | JSDoc on `SchedulerDrawerButtonProps`          |
+| Modify | `src/stories/Scheduler.stories.tsx`             | Add docs descriptions                          |
+| Modify | `src/stories/SchedulersList.stories.tsx`        | Add docs descriptions                          |
+| Modify | `src/stories/SchedulerDrawerButton.stories.tsx` | Add docs descriptions                          |
+| Modify | `src/stories/Playground.stories.tsx`            | Add docs descriptions                          |
+| Create | `src/stories/docs/GettingStarted.mdx`           | Installation, peer deps, quick start           |
+| Create | `src/stories/docs/FirebaseIntegration.mdx`      | Firestore <-> dayjs conversion                 |
+| Create | `src/stories/docs/TanStackQuery.mdx`            | TanStack Query integration                     |
+| Create | `src/stories/docs/Translations.mdx`             | i18n system, all translation keys              |
+| Create | `src/stories/docs/TypesReference.mdx`           | Enums, interfaces, defaults                    |
+| Create | `src/stories/docs/Contributing.mdx`             | Dev setup, standards, PR process               |
+| Modify | `README.md`                                     | Slim down, link to Storybook                   |
 
 ---
 
 ### Task 1: Enable addon-docs and expand stories glob
 
 **Files:**
+
 - Modify: `.storybook/main.ts:1-32`
 
 - [ ] **Step 1: Update main.ts**
@@ -102,6 +103,7 @@ git commit -m "feat(storybook): enable addon-docs and MDX story glob"
 ### Task 2: Configure preview with sidebar sort and docs parameters
 
 **Files:**
+
 - Modify: `.storybook/preview.tsx:1-19`
 
 - [ ] **Step 1: Update preview.tsx**
@@ -169,6 +171,7 @@ git commit -m "feat(storybook): add sidebar sort order for Guides > Components >
 ### Task 3: Add JSDoc to SchedulerProviderProps and SchedulerContextValue
 
 **Files:**
+
 - Modify: `src/provider/SchedulerProvider.tsx:7-22`
 - Modify: `src/provider/SchedulerContext.ts:5-27`
 
@@ -265,6 +268,7 @@ git commit -m "docs: add JSDoc to SchedulerProviderProps and SchedulerContextVal
 ### Task 4: Add JSDoc to component prop types
 
 **Files:**
+
 - Modify: `src/components/Scheduler.tsx:27-37`
 - Modify: `src/components/SchedulersList.tsx:29-36`
 - Modify: `src/components/SchedulerDrawerButton.tsx:18-22`
@@ -349,6 +353,7 @@ git commit -m "docs: add JSDoc to Scheduler, SchedulersList, and SchedulerDrawer
 ### Task 5: Add docs descriptions to story files
 
 **Files:**
+
 - Modify: `src/stories/Scheduler.stories.tsx`
 - Modify: `src/stories/SchedulersList.stories.tsx`
 - Modify: `src/stories/SchedulerDrawerButton.stories.tsx`
@@ -563,7 +568,8 @@ export const Discount: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Opens a drawer with the discount scheduler form, including discount type and value fields.',
+        story:
+          'Opens a drawer with the discount scheduler form, including discount type and value fields.',
       },
     },
   },
@@ -632,11 +638,12 @@ git commit -m "docs(storybook): add component and story descriptions for addon-d
 ### Task 6: Create Getting Started MDX page
 
 **Files:**
+
 - Create: `src/stories/docs/GettingStarted.mdx`
 
 - [ ] **Step 1: Create the file**
 
-```mdx
+````mdx
 import { Meta } from '@storybook/blocks';
 
 <Meta title="Guides/Getting Started" />
@@ -650,6 +657,7 @@ npm install @teamco/ischeduler
 # or
 yarn add @teamco/ischeduler
 ```
+````
 
 ## Peer Dependencies
 
@@ -659,13 +667,13 @@ Make sure your project has these installed:
 npm install react react-dom antd dayjs @ant-design/icons
 ```
 
-| Package | Version |
-|---------|---------|
-| `react` | ^19.2.4 |
-| `react-dom` | ^19.2.4 |
-| `antd` | ^6.3.3 |
-| `dayjs` | ^1.11.20 |
-| `@ant-design/icons` | ^6.1.0 |
+| Package             | Version  |
+| ------------------- | -------- |
+| `react`             | ^19.2.4  |
+| `react-dom`         | ^19.2.4  |
+| `antd`              | ^6.3.3   |
+| `dayjs`             | ^1.11.20 |
+| `@ant-design/icons` | ^6.1.0   |
 
 ## Quick Start
 
@@ -738,7 +746,8 @@ function SchedulerPage() {
 - See the **[Playground](?path=/story/playground--full-demo)** for a live interactive demo
 - Check **[Firebase Integration](?path=/docs/guides-firebase-integration--docs)** or **[TanStack Query](?path=/docs/guides-tanstack-query--docs)** for backend integration patterns
 - Browse the **[Types Reference](?path=/docs/guides-types-reference--docs)** for all exported enums and interfaces
-```
+
+````
 
 - [ ] **Step 2: Verify it appears in Storybook sidebar**
 
@@ -750,18 +759,19 @@ Expected: "Guides > Getting Started" appears in the sidebar.
 ```bash
 git add src/stories/docs/GettingStarted.mdx
 git commit -m "docs(storybook): add Getting Started guide page"
-```
+````
 
 ---
 
 ### Task 7: Create Firebase Integration MDX page
 
 **Files:**
+
 - Create: `src/stories/docs/FirebaseIntegration.mdx`
 
 - [ ] **Step 1: Create the file**
 
-```mdx
+````mdx
 import { Meta } from '@storybook/blocks';
 
 <Meta title="Guides/Firebase Integration" />
@@ -782,6 +792,7 @@ const toDayjs = (ts: Timestamp) => dayjs(ts.toDate());
 // dayjs → Firestore Timestamp (when writing to Firestore)
 const toTimestamp = (d: dayjs.Dayjs) => Timestamp.fromDate(d.toDate());
 ```
+````
 
 ## Converting Scheduler Data
 
@@ -797,9 +808,7 @@ const convertScheduler = (raw: FirestoreScheduler): IScheduler => ({
     startedAt: toDayjs(raw.range.startedAt),
     endReason: {
       ...raw.range.endReason,
-      expiredAt: raw.range.endReason.expiredAt
-        ? toDayjs(raw.range.endReason.expiredAt)
-        : null,
+      expiredAt: raw.range.endReason.expiredAt ? toDayjs(raw.range.endReason.expiredAt) : null,
     },
   },
 });
@@ -829,25 +838,27 @@ const onCreate = async (type, scheduler) => {
   await addDoc(collection(db, 'schedulers'), doc);
 };
 ```
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add src/stories/docs/FirebaseIntegration.mdx
 git commit -m "docs(storybook): add Firebase Integration guide page"
-```
+````
 
 ---
 
 ### Task 8: Create TanStack Query MDX page
 
 **Files:**
+
 - Create: `src/stories/docs/TanStackQuery.mdx`
 
 - [ ] **Step 1: Create the file**
 
-```mdx
+````mdx
 import { Meta } from '@storybook/blocks';
 
 <Meta title="Guides/TanStack Query" />
@@ -895,11 +906,11 @@ function useSchedulerData(entityId: string) {
       createMutation.mutateAsync({ type, scheduler }),
     onUpdate: (type: ESchedulerPrefix, scheduler: IScheduler) =>
       updateMutation.mutateAsync({ type, scheduler }),
-    onDelete: (type: ESchedulerPrefix, id: string) =>
-      deleteMutation.mutateAsync({ type, id }),
+    onDelete: (type: ESchedulerPrefix, id: string) => deleteMutation.mutateAsync({ type, id }),
   };
 }
 ```
+````
 
 ## Usage with SchedulerProvider
 
@@ -925,25 +936,27 @@ function SchedulerPage({ entityId }: { entityId: string }) {
   );
 }
 ```
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add src/stories/docs/TanStackQuery.mdx
 git commit -m "docs(storybook): add TanStack Query guide page"
-```
+````
 
 ---
 
 ### Task 9: Create Translations MDX page
 
 **Files:**
+
 - Create: `src/stories/docs/Translations.mdx`
 
 - [ ] **Step 1: Create the file**
 
-```mdx
+````mdx
 import { Meta } from '@storybook/blocks';
 
 <Meta title="Guides/i18n & Translations" />
@@ -961,7 +974,7 @@ iScheduler ships with English translations built in. Override any key via the `t
 ```tsx
 <SchedulerProvider
   translations={{
-    'scheduler': 'Planificador',
+    scheduler: 'Planificador',
     'scheduler.startedAt': 'Fecha de inicio',
     'scheduler.duration': 'Repetir cada',
     'scheduler.weekdays.monday': 'Lunes',
@@ -971,6 +984,7 @@ iScheduler ships with English translations built in. Override any key via the `t
   {/* components use translated strings */}
 </SchedulerProvider>
 ```
+````
 
 ## Variable Interpolation
 
@@ -995,113 +1009,116 @@ console.log(Object.keys(defaultTranslations));
 
 ## All Translation Keys
 
-| Key | Default (English) |
-|-----|-------------------|
-| `scheduler` | Scheduler |
-| `scheduler.info` | Scheduler Info |
-| `scheduler.header.title` | {{entity}} Scheduler ({{count}}) |
-| `scheduler.result` | Occurs **{{occurs}}**, starting {{startAt}}. |
-| `scheduler.startedAt` | Started at |
-| `scheduler.duration` | Repeat Every |
-| `scheduler.occurrences` | Occurrences |
-| `scheduler.duration.end` | End Reason |
-| `scheduler.duration.endDate` | End Date |
-| `scheduler.duration.end.day` | On this day |
-| `scheduler.duration.end.after` | After |
-| `scheduler.duration.end.no` | No end day |
-| `scheduler.weekdays.sunday` | Sunday |
-| `scheduler.weekdays.monday` | Monday |
-| `scheduler.weekdays.tuesday` | Tuesday |
-| `scheduler.weekdays.wednesday` | Wednesday |
-| `scheduler.weekdays.thursday` | Thursday |
-| `scheduler.weekdays.friday` | Friday |
-| `scheduler.weekdays.saturday` | Saturday |
-| `scheduler.weekdays.short.sunday` | Sun |
-| `scheduler.weekdays.short.monday` | Mon |
-| `scheduler.weekdays.short.tuesday` | Tue |
-| `scheduler.weekdays.short.wednesday` | Wed |
-| `scheduler.weekdays.short.thursday` | Thu |
-| `scheduler.weekdays.short.friday` | Fri |
-| `scheduler.weekdays.short.saturday` | Sat |
-| `scheduler.months.january` | January |
-| `scheduler.months.february` | February |
-| `scheduler.months.march` | March |
-| `scheduler.months.april` | April |
-| `scheduler.months.may` | May |
-| `scheduler.months.june` | June |
-| `scheduler.months.july` | July |
-| `scheduler.months.august` | August |
-| `scheduler.months.september` | September |
-| `scheduler.months.october` | October |
-| `scheduler.months.november` | November |
-| `scheduler.months.december` | December |
-| `scheduler.months.short.january` | Jan |
-| `scheduler.months.short.february` | Feb |
-| `scheduler.months.short.march` | Mar |
-| `scheduler.months.short.april` | Apr |
-| `scheduler.months.short.may` | May |
-| `scheduler.months.short.june` | Jun |
-| `scheduler.months.short.july` | Jul |
-| `scheduler.months.short.august` | Aug |
-| `scheduler.months.short.september` | Sep |
-| `scheduler.months.short.october` | Oct |
-| `scheduler.months.short.november` | Nov |
-| `scheduler.months.short.december` | Dec |
-| `scheduler.separator.and` | and |
-| `scheduler.separator.on` | on |
-| `scheduler.separator.day` | day |
-| `scheduler.separator.every` | every |
-| `scheduler.separator.of` | of |
-| `scheduler.separator.the` | the |
-| `scheduler.day.first` | First |
-| `scheduler.day.second` | Second |
-| `scheduler.day.third` | Third |
-| `scheduler.day.fourth` | Fourth |
-| `scheduler.day.last` | Last |
-| `scheduler.weekday` | Weekday |
-| `scheduler.weekend` | Weekend Day |
-| `scheduler.day` | Day |
-| `scheduler.days` | Days |
-| `scheduler.week` | Week |
-| `scheduler.weeks` | Weeks |
-| `scheduler.year` | Year |
-| `scheduler.years` | Years |
-| `scheduler.monthDay` | Month Day |
-| `scheduler.month` | Month |
-| `scheduler.months` | Months |
-| `scheduler.actions.manage` | Manage Scheduler |
-| `scheduler.meta.assignedTo` | Assigned To |
-| `scheduler.meta.duration` | Duration |
-| `scheduler.meta.period` | Period |
-| `scheduler.limited` | The Scheduler is limited to: {{limit}} |
-| `scheduler.info.helper` | Set the scheduler to set a sale period. |
-| `table.actions` | Actions |
-| `actions.edit` | Edit |
-| `actions.delete` | Delete |
-| `actions.save` | Save |
-| `actions.cancel` | Cancel |
-| `actions.confirm.delete` | Are you sure you want to delete this scheduler? |
-| `table.hideColumns` | Hide Columns |
-| `toolbar.refresh` | Refresh |
-```
+| Key                                  | Default (English)                               |
+| ------------------------------------ | ----------------------------------------------- |
+| `scheduler`                          | Scheduler                                       |
+| `scheduler.info`                     | Scheduler Info                                  |
+| `scheduler.header.title`             | {{entity}} Scheduler ({{count}})                |
+| `scheduler.result`                   | Occurs **{{occurs}}**, starting {{startAt}}.    |
+| `scheduler.startedAt`                | Started at                                      |
+| `scheduler.duration`                 | Repeat Every                                    |
+| `scheduler.occurrences`              | Occurrences                                     |
+| `scheduler.duration.end`             | End Reason                                      |
+| `scheduler.duration.endDate`         | End Date                                        |
+| `scheduler.duration.end.day`         | On this day                                     |
+| `scheduler.duration.end.after`       | After                                           |
+| `scheduler.duration.end.no`          | No end day                                      |
+| `scheduler.weekdays.sunday`          | Sunday                                          |
+| `scheduler.weekdays.monday`          | Monday                                          |
+| `scheduler.weekdays.tuesday`         | Tuesday                                         |
+| `scheduler.weekdays.wednesday`       | Wednesday                                       |
+| `scheduler.weekdays.thursday`        | Thursday                                        |
+| `scheduler.weekdays.friday`          | Friday                                          |
+| `scheduler.weekdays.saturday`        | Saturday                                        |
+| `scheduler.weekdays.short.sunday`    | Sun                                             |
+| `scheduler.weekdays.short.monday`    | Mon                                             |
+| `scheduler.weekdays.short.tuesday`   | Tue                                             |
+| `scheduler.weekdays.short.wednesday` | Wed                                             |
+| `scheduler.weekdays.short.thursday`  | Thu                                             |
+| `scheduler.weekdays.short.friday`    | Fri                                             |
+| `scheduler.weekdays.short.saturday`  | Sat                                             |
+| `scheduler.months.january`           | January                                         |
+| `scheduler.months.february`          | February                                        |
+| `scheduler.months.march`             | March                                           |
+| `scheduler.months.april`             | April                                           |
+| `scheduler.months.may`               | May                                             |
+| `scheduler.months.june`              | June                                            |
+| `scheduler.months.july`              | July                                            |
+| `scheduler.months.august`            | August                                          |
+| `scheduler.months.september`         | September                                       |
+| `scheduler.months.october`           | October                                         |
+| `scheduler.months.november`          | November                                        |
+| `scheduler.months.december`          | December                                        |
+| `scheduler.months.short.january`     | Jan                                             |
+| `scheduler.months.short.february`    | Feb                                             |
+| `scheduler.months.short.march`       | Mar                                             |
+| `scheduler.months.short.april`       | Apr                                             |
+| `scheduler.months.short.may`         | May                                             |
+| `scheduler.months.short.june`        | Jun                                             |
+| `scheduler.months.short.july`        | Jul                                             |
+| `scheduler.months.short.august`      | Aug                                             |
+| `scheduler.months.short.september`   | Sep                                             |
+| `scheduler.months.short.october`     | Oct                                             |
+| `scheduler.months.short.november`    | Nov                                             |
+| `scheduler.months.short.december`    | Dec                                             |
+| `scheduler.separator.and`            | and                                             |
+| `scheduler.separator.on`             | on                                              |
+| `scheduler.separator.day`            | day                                             |
+| `scheduler.separator.every`          | every                                           |
+| `scheduler.separator.of`             | of                                              |
+| `scheduler.separator.the`            | the                                             |
+| `scheduler.day.first`                | First                                           |
+| `scheduler.day.second`               | Second                                          |
+| `scheduler.day.third`                | Third                                           |
+| `scheduler.day.fourth`               | Fourth                                          |
+| `scheduler.day.last`                 | Last                                            |
+| `scheduler.weekday`                  | Weekday                                         |
+| `scheduler.weekend`                  | Weekend Day                                     |
+| `scheduler.day`                      | Day                                             |
+| `scheduler.days`                     | Days                                            |
+| `scheduler.week`                     | Week                                            |
+| `scheduler.weeks`                    | Weeks                                           |
+| `scheduler.year`                     | Year                                            |
+| `scheduler.years`                    | Years                                           |
+| `scheduler.monthDay`                 | Month Day                                       |
+| `scheduler.month`                    | Month                                           |
+| `scheduler.months`                   | Months                                          |
+| `scheduler.actions.manage`           | Manage Scheduler                                |
+| `scheduler.meta.assignedTo`          | Assigned To                                     |
+| `scheduler.meta.duration`            | Duration                                        |
+| `scheduler.meta.period`              | Period                                          |
+| `scheduler.limited`                  | The Scheduler is limited to: {{limit}}          |
+| `scheduler.info.helper`              | Set the scheduler to set a sale period.         |
+| `table.actions`                      | Actions                                         |
+| `actions.edit`                       | Edit                                            |
+| `actions.delete`                     | Delete                                          |
+| `actions.save`                       | Save                                            |
+| `actions.update`                     | Update                                          |
+| `actions.cancel`                     | Cancel                                          |
+| `actions.confirm.delete`             | Are you sure you want to delete this scheduler? |
+| `table.hideColumns`                  | Hide Columns                                    |
+| `toolbar.refresh`                    | Refresh                                         |
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add src/stories/docs/Translations.mdx
 git commit -m "docs(storybook): add i18n & Translations guide page"
-```
+````
 
 ---
 
 ### Task 10: Create Types Reference MDX page
 
 **Files:**
+
 - Create: `src/stories/docs/TypesReference.mdx`
 
 - [ ] **Step 1: Create the file**
 
-```mdx
+````mdx
 import { Meta } from '@storybook/blocks';
 
 <Meta title="Guides/Types Reference" />
@@ -1123,6 +1140,7 @@ enum ESchedulerPrefix {
   TRIAL_DISCOUNT = 'trialDiscount',
 }
 ```
+````
 
 ### EDurationTypes
 
@@ -1167,7 +1185,7 @@ How a scheduler's range ends:
 
 ```ts
 enum EEndReasonType {
-  DATE = 'Date',     // Ends on a specific date
+  DATE = 'Date', // Ends on a specific date
   NUMBER = 'Number', // Ends after N occurrences
   FOREVER = 'Forever', // Never ends
 }
@@ -1211,12 +1229,18 @@ Months of the year:
 
 ```ts
 enum EMonths {
-  JANUARY = 'January',   FEBRUARY = 'February',
-  MARCH = 'March',       APRIL = 'April',
-  MAY = 'May',           JUNE = 'June',
-  JULY = 'July',         AUGUST = 'August',
-  SEPTEMBER = 'September', OCTOBER = 'October',
-  NOVEMBER = 'November', DECEMBER = 'December',
+  JANUARY = 'January',
+  FEBRUARY = 'February',
+  MARCH = 'March',
+  APRIL = 'April',
+  MAY = 'May',
+  JUNE = 'June',
+  JULY = 'July',
+  AUGUST = 'August',
+  SEPTEMBER = 'September',
+  OCTOBER = 'October',
+  NOVEMBER = 'November',
+  DECEMBER = 'December',
 }
 ```
 
@@ -1260,7 +1284,7 @@ How often the scheduler repeats:
 ```ts
 type TSchedulerDuration = {
   type: keyof typeof EDurationTypes; // e.g. 'WEEK', 'MONTH'
-  period: number;                     // e.g. 2 (every 2 weeks)
+  period: number; // e.g. 2 (every 2 weeks)
 };
 ```
 
@@ -1285,11 +1309,11 @@ Repeat rules for weekly, monthly, and yearly patterns:
 ```ts
 type TSchedulerRepeat = {
   weekly: {
-    days: (keyof typeof EDays)[];  // e.g. ['MONDAY', 'WEDNESDAY', 'FRIDAY']
+    days: (keyof typeof EDays)[]; // e.g. ['MONDAY', 'WEDNESDAY', 'FRIDAY']
   };
   monthly: {
     weekDay?: keyof typeof EWeekDays; // e.g. 'FIRST'
-    monthDay?: number;                 // e.g. 15
+    monthDay?: number; // e.g. 15
     type: 'DAY' | 'PERIOD';
   };
   yearly: {
@@ -1305,7 +1329,7 @@ Discount configuration (for DISCOUNT and TRIAL_DISCOUNT types):
 ```ts
 type TDiscount = {
   type: TDiscountType; // 'PERCENT' | 'FIXED'
-  value: number;        // e.g. 15 (meaning 15% or $15)
+  value: number; // e.g. 15 (meaning 15% or $15)
 };
 ```
 
@@ -1318,25 +1342,27 @@ Template used when creating a new sale scheduler. Includes sensible defaults for
 ### DEFAULT_DISCOUNT_SCHEDULER
 
 Template used when creating a new discount scheduler. Same as sale but includes a default discount of 1%.
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add src/stories/docs/TypesReference.mdx
 git commit -m "docs(storybook): add Types Reference guide page"
-```
+````
 
 ---
 
 ### Task 11: Create Contributing MDX page
 
 **Files:**
+
 - Create: `src/stories/docs/Contributing.mdx`
 
 - [ ] **Step 1: Create the file**
 
-```mdx
+````mdx
 import { Meta } from '@storybook/blocks';
 
 <Meta title="Guides/Contributing" />
@@ -1356,19 +1382,20 @@ npm install
 # Start Storybook dev server
 npm run storybook
 ```
+````
 
 ## Development Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Vite dev server |
-| `npm run build` | Production build (TypeScript check + Vite) |
-| `npm run test` | Run all tests |
-| `npm run test:watch` | Tests in watch mode |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier |
-| `npm run storybook` | Storybook dev server on port 6006 |
-| `npm run build-storybook` | Static Storybook build |
+| Command                   | Description                                |
+| ------------------------- | ------------------------------------------ |
+| `npm run dev`             | Vite dev server                            |
+| `npm run build`           | Production build (TypeScript check + Vite) |
+| `npm run test`            | Run all tests                              |
+| `npm run test:watch`      | Tests in watch mode                        |
+| `npm run lint`            | ESLint                                     |
+| `npm run format`          | Prettier                                   |
+| `npm run storybook`       | Storybook dev server on port 6006          |
+| `npm run build-storybook` | Static Storybook build                     |
 
 ## Code Standards
 
@@ -1390,14 +1417,14 @@ All changes must include tests:
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-| Prefix | Use for |
-|--------|---------|
-| `feat:` | New features |
-| `fix:` | Bug fixes |
-| `docs:` | Documentation changes |
-| `test:` | Test changes |
-| `refactor:` | Code restructuring |
-| `chore:` | Maintenance tasks |
+| Prefix      | Use for               |
+| ----------- | --------------------- |
+| `feat:`     | New features          |
+| `fix:`      | Bug fixes             |
+| `docs:`     | Documentation changes |
+| `test:`     | Test changes          |
+| `refactor:` | Code restructuring    |
+| `chore:`    | Maintenance tasks     |
 
 ## Pull Request Process
 
@@ -1406,20 +1433,22 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 3. Run `npm run build` to verify the build succeeds
 4. Write a clear PR description explaining what and why
 5. Reference any related issues
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add src/stories/docs/Contributing.mdx
 git commit -m "docs(storybook): add Contributing guide page"
-```
+````
 
 ---
 
 ### Task 12: Slim the README
 
 **Files:**
+
 - Modify: `README.md`
 
 - [ ] **Step 1: Replace README.md**
@@ -1473,24 +1502,19 @@ Make sure your project has these installed:
 npm install react react-dom antd dayjs @ant-design/icons
 ```
 
-| Package | Version |
-|---------|---------|
-| `react` | ^19.2.4 |
-| `react-dom` | ^19.2.4 |
-| `antd` | ^6.3.3 |
-| `dayjs` | ^1.11.20 |
-| `@ant-design/icons` | ^6.1.0 |
+| Package             | Version  |
+| ------------------- | -------- |
+| `react`             | ^19.2.4  |
+| `react-dom`         | ^19.2.4  |
+| `antd`              | ^6.3.3   |
+| `dayjs`             | ^1.11.20 |
+| `@ant-design/icons` | ^6.1.0   |
 
 ## Quick Start
 
 ```tsx
 import { useState, useCallback } from 'react';
-import {
-  SchedulerProvider,
-  SchedulersList,
-  ESchedulerPrefix,
-  type IScheduler,
-} from 'ischeduler';
+import { SchedulerProvider, SchedulersList, ESchedulerPrefix, type IScheduler } from 'ischeduler';
 import 'ischeduler/dist/ischeduler.css';
 
 function SchedulerPage() {
@@ -1609,6 +1633,7 @@ Expected: Build completes without errors. Confirms JSDoc/story changes don't bre
 Start Storybook: `npm run storybook`
 
 Verify:
+
 - Sidebar shows: Guides (6 pages) > Components (3) > Playground (1)
 - Each Guides page renders with correct content
 - Each Component Docs tab shows: description, ArgTypes table, source, stories
