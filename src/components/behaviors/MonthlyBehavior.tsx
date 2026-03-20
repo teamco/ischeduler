@@ -54,8 +54,6 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
   useEffect(() => {
     const fieldPath = mergeNames([...prefix, ...namespaces], 'type');
     const type: TSchedulerRepeat['monthly']['type'] = formRef.getFieldValue(fieldPath);
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     onChangePeriod(type);
   }, [formRef, onChangePeriod, prefix, namespaces]);
 
@@ -85,7 +83,8 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
       return {
         value,
         label: t(labelKey),
-        icon: currentWeekDay === value ? <CalendarTwoTone /> : <CalendarTwoTone twoToneColor="gray" />,
+        icon:
+          currentWeekDay === value ? <CalendarTwoTone /> : <CalendarTwoTone twoToneColor="gray" />,
       };
     });
 
