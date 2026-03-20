@@ -121,17 +121,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
       - uses: ./.github/actions/setup
-      - name: Setup Node (for Publish)
+      - name: Setup NPM Registry
         uses: actions/setup-node@v4
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-      - name: Download build dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
       - name: Setup Git config
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -177,19 +172,26 @@ jobs:
           # 3. Read the new version
           NEW_V=$(node -p "require('./package.json').version")
           TAG="v$NEW_V"
-          echo "newTag=$TAG" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "msg_file=.commit_msg" >> $GITHUB_OUTPUT
 
           # 4. Stage changes
           git add package.json package-lock.json
 
           # 5. Create commit message using the processed list
           printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
-
+          
           # 6. Commit and tag
           git commit -F .commit_msg
           git tag -a "$TAG" -F .commit_msg
 
+      - name: 'Build project'
+        run: npm run build
+
+      - name: 'Push changes & tag'
+        run: |
           # 7. Push using PAT to trigger other workflows
+          TAG=${{ steps.version-bump.outputs.tag }}
           git remote set-url origin https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin main
           git push origin "$TAG"
