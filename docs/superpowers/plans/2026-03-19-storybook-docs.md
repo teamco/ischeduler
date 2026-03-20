@@ -1491,7 +1491,7 @@ import {
   ESchedulerPrefix,
   type IScheduler,
 } from 'ischeduler';
-import 'iScheduler/dist/ischeduler.css';
+import 'ischeduler/dist/ischeduler.css';
 
 function SchedulerPage() {
   const [schedulers, setSchedulers] = useState({

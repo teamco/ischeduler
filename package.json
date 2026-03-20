@@ -20,11 +20,11 @@
     "date picker"
   ],
   "type": "module",
-  "main": "storybook-static/iScheduler.cjs.js",
-  "module": "storybook-static/iScheduler.es.js",
-  "types": "storybook-static/index.d.ts",
+  "main": "dist/iScheduler.cjs.js",
+  "module": "dist/iScheduler.es.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "storybook-static"
+    "dist"
   ],
   "sideEffects": [
     "**/*.css",
@@ -39,7 +39,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,less}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,less}\"",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build -o dist/storybook"
   },
   "peerDependencies": {
     "@ant-design/icons": "^6.1.0",

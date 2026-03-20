@@ -18,7 +18,7 @@ export interface SchedulerProviderProps {
   /** Called when an existing scheduler is updated via the edit drawer */
   onUpdate?: (type: ESchedulerPrefix, scheduler: IScheduler) => Promise<void>;
   /** Called when a scheduler is deleted from the list */
-  onDelete?: (type: ESchedulerPrefix, schedulerId: string) => Promise<void>;
+  onDelete?: (type: ESchedulerPrefix, schedulerId: IScheduler['id']) => Promise<void>;
   /** Permission flags controlling which CRUD actions are available. All default to `true`. */
   permissions?: {
     canCreate?: boolean;

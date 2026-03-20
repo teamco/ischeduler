@@ -8,7 +8,7 @@ import globals from 'globals';
 export default [
   // 1. Ignore the dist directory
   {
-    ignores: ['dist/**', 'storybook-static/**', '**/*.d.ts'],
+    ignores: ['dist/**', '**/*.d.ts'],
   },
 
   // 2. Base JavaScript/TypeScript configuration
