@@ -1,6 +1,6 @@
 {
   "name": "@teamco/ischeduler",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "Recurring event scheduler UI components for React + Ant Design",
   "license": "MIT",
   "repository": {
