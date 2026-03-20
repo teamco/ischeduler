@@ -18,6 +18,7 @@ jobs:
     name: 'Lint'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
       - name: Run ESLint
         run: npx eslint . --format @microsoft/eslint-formatter-sarif --output-file ./eslint-results.sarif
@@ -38,6 +39,7 @@ jobs:
       matrix:
         language: [javascript-typescript]
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
@@ -56,6 +58,7 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
       - name: Run Tests
         run: npm run test
@@ -68,6 +71,7 @@ jobs:
     needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
       - name: Build
         run: npm run build
@@ -89,6 +93,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
       - name: Build Storybook
         run: npm run build-storybook
@@ -111,9 +116,11 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/setup
+      - uses: actions/checkout@v6
         with:
+          fetch-depth: 0
           token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/setup
       - name: Setup Node (for Publish)
         uses: actions/setup-node@v4
         with:
