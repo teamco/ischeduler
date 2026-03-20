@@ -93,7 +93,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
       - name: Build Storybook
         run: npm run build-storybook
@@ -116,7 +116,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
@@ -180,21 +180,12 @@ jobs:
 
           # 5. Create commit message using the processed list
           printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
-          
+
           # 6. Commit and tag
           git commit -F .commit_msg
           git tag -a "$TAG" -F .commit_msg
 
-      - name: 'Build project'
-        run: npm run build
-
-      - name: 'Push changes & tag'
-        run: |
           # 7. Push using PAT to trigger other workflows
-          TAG=${{ steps.version-bump.outputs.tag }}
           git remote set-url origin https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin main
           git push origin "$TAG"
-
-      - name: 'Publish to NPM'
-        run: npm publish --provenance --access public
