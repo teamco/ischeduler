@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 export const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
-export const NADate = '-';
+export const NADate = '—';
 
 /**
  * Get enum key from its value.
