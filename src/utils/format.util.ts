@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 
 export const DEFAULT_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
+export const NADate = '-';
 
 /**
  * Get enum key from its value.
@@ -29,15 +30,29 @@ export const numberToCurrency = (value: number, currency: string): string => {
 };
 
 /**
- * Format a timestamp (dayjs or string) to a locale date-time string.
+ * Converts a timestamp to a Date object.
+ * @param {string | number} ts - The timestamp to convert, which can be a number or a string.
+ * @returns {Date} A Date object representing the given timestamp.
  */
+const toDate = (ts: Date | string | number): Date => {
+  if (isNaN(new Date(ts).getDate())) {
+    ts = parseInt(ts?.toString(), 10);
+  }
+  return new Date(ts);
+};
+
+export const tsToDate = (ts: Date | string | number | undefined): string =>
+  ts ? toDate(ts).toLocaleDateString() : NADate;
+export const tsToTime = (ts: Date | string | number | undefined): string =>
+  ts ? toDate(ts).toLocaleTimeString() : NADate;
 export const tsToLocaleDateTime = (
-  ts: dayjs.Dayjs | string | undefined | null,
-  format: string = DEFAULT_DATE_TIME_FORMAT,
+  ts: Date | string | number | undefined,
 ): string => {
-  if (!ts) return '—';
-  const d = dayjs(ts);
-  return d.isValid() ? d.format(format) : '—';
+  let _ts = ts;
+  if ((_ts as any)?.seconds && (_ts as any)?.nanoseconds) {
+    _ts = (_ts as any).toDate();
+  }
+  return _ts ? `${tsToDate(_ts)} ${tsToTime(_ts)}` : NADate;
 };
 
 /**

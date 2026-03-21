@@ -6,6 +6,8 @@ const enUS: SchedulerTranslations = {
   'scheduler.header.title': '{{entity}} Scheduler ({{count}})',
   'scheduler.result': 'Occurs <strong>{{occurs}}</strong>, starting {{startAt}}.',
   'scheduler.startedAt': 'Started at',
+  'scheduler.updatedAt': 'Updated at',
+  'scheduler.status': 'Status',
   'scheduler.duration': 'Repeat Every',
   'scheduler.occurrences': 'Occurrences',
   'scheduler.weekdays.sunday': 'Sunday',
