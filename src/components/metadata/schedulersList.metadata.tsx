@@ -123,7 +123,7 @@ export const columnsMetadata = (
     },
     discountColumn,
     {
-      title: 'Status',
+      title: t('scheduler.status'),
       dataIndex: 'status',
       key: 'status',
       width: 150,
@@ -132,14 +132,14 @@ export const columnsMetadata = (
       render: (status: keyof typeof EStatus) => <StatusTag status={status} />,
     },
     {
-      title: 'Updated',
+      title: t('scheduler.updatedAt'),
       width: 200,
       dataIndex: 'metadata',
       align: 'center' as const,
       key: 'metadata.updatedAt',
       concealable: true,
       render: (metadata: ISchedulerMetadata | undefined) => (
-        <div>{metadata?.updatedAt ? tsToLocaleDateTime(metadata.updatedAt) : '—'}</div>
+        <div>{metadata?.updatedAt ? tsToLocaleDateTime(metadata.updatedAt as any) : '—'}</div>
       ),
     },
     actionsColumn,
@@ -147,8 +147,7 @@ export const columnsMetadata = (
 
   return filterIn.length
     ? (columns.filter(
-        (column) =>
-          filterIn.includes(column?.dataIndex as string) || column.dataIndex === 'idx',
+        (column) => filterIn.includes(column?.dataIndex as string) || column.dataIndex === 'idx',
       ) as TableProps<IScheduler>['columns'])
     : (columns as TableProps<IScheduler>['columns']);
 };

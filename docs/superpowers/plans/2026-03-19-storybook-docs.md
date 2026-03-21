@@ -1016,6 +1016,8 @@ console.log(Object.keys(defaultTranslations));
 | `scheduler.header.title`             | {{entity}} Scheduler ({{count}})                |
 | `scheduler.result`                   | Occurs **{{occurs}}**, starting {{startAt}}.    |
 | `scheduler.startedAt`                | Started at                                      |
+| `scheduler.updatedAt`                | Updated at                                      |
+| `scheduler.status`                   | Status                                          |
 | `scheduler.duration`                 | Repeat Every                                    |
 | `scheduler.occurrences`              | Occurrences                                     |
 | `scheduler.duration.end`             | End Reason                                      |
