@@ -1,0 +1,156 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Headless Usage" />
+
+# Headless Usage
+
+Use iScheduler's form and drawer without the built-in table. This pattern lets you capture scheduler data as JSON and render it however you want.
+
+## When to Use
+
+- You need a custom table, card layout, or calendar view
+- You want to display scheduler data in a different format
+- You only need the creation form, not the full CRUD table
+
+## Basic Example
+
+Render just a button that opens the scheduler drawer. Capture the result via `onSuccess`:
+
+```tsx
+import { useState } from 'react';
+import {
+  SchedulerProvider,
+  SchedulerDrawerButton,
+  ESchedulerPrefix,
+  type IScheduler,
+} from '@teamco/ischeduler';
+import '@teamco/ischeduler/dist/ischeduler.css';
+
+function HeadlessScheduler() {
+  const [scheduler, setScheduler] = useState<IScheduler | null>(null);
+  const [dirty, setDirty] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const emptySchedulers = {
+    [ESchedulerPrefix.SALE]: [],
+    [ESchedulerPrefix.DISCOUNT]: [],
+    [ESchedulerPrefix.TRIAL_DISCOUNT]: [],
+  };
+
+  return (
+    <SchedulerProvider
+      schedulers={emptySchedulers}
+      onCreate={async (type, s) => {
+        // Persist to your backend here
+        await api.createScheduler(type, s);
+      }}
+    >
+      <SchedulerDrawerButton
+        schedulerType={ESchedulerPrefix.SALE}
+        onSuccess={(s) => setScheduler(s)}
+        dirty={dirty}
+        setDirty={setDirty}
+        isCreating={isCreating}
+        setIsCreating={setIsCreating}
+        buttonProps={{ type: 'primary' }}
+      />
+
+      {scheduler && (
+        <pre>{JSON.stringify(scheduler, null, 2)}</pre>
+      )}
+    </SchedulerProvider>
+  );
+}
+```
+
+## Key Concepts
+
+### `onCreate` vs `onSuccess`
+
+These are two separate callbacks with different purposes:
+
+<table>
+  <thead>
+    <tr>
+      <th>Callback</th>
+      <th>Where</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>onCreate</code></td>
+      <td><code>SchedulerProvider</code></td>
+      <td>Persist data to your backend (API call, database write)</td>
+    </tr>
+    <tr>
+      <td><code>onSuccess</code></td>
+      <td><code>SchedulerDrawerButton</code></td>
+      <td>Capture the result in local state for your UI</td>
+    </tr>
+  </tbody>
+</table>
+
+Both receive the full `IScheduler` object. `onCreate` fires first (on the provider), then `onSuccess` fires on the button.
+
+### `buttonProps`
+
+By default, `SchedulerDrawerButton` renders as a link. Pass `buttonProps` to customize the button appearance:
+
+```tsx
+// Primary button
+<SchedulerDrawerButton buttonProps={{ type: 'primary' }} ... />
+
+// Dashed button with custom icon
+<SchedulerDrawerButton buttonProps={{ type: 'dashed', icon: <PlusOutlined /> }} ... />
+```
+
+`buttonProps` accepts all Ant Design `Button` props except `disabled` and `onClick` (managed internally).
+
+### State Props
+
+`SchedulerDrawerButton` requires four state props for form tracking:
+
+```tsx
+const [dirty, setDirty] = useState(false);
+const [isCreating, setIsCreating] = useState(false);
+
+<SchedulerDrawerButton
+  dirty={dirty}
+  setDirty={setDirty}
+  isCreating={isCreating}
+  setIsCreating={setIsCreating}
+  ...
+/>
+```
+
+- `dirty` / `setDirty` — tracks whether the form has unsaved changes (enables the Save button)
+- `isCreating` / `setIsCreating` — tracks the save-in-progress state (shows loading spinner)
+
+## Rendering Your Own UI
+
+The `IScheduler` object you receive contains everything you need:
+
+```tsx
+const onSuccess = (scheduler: IScheduler) => {
+  // scheduler.type — 'sale' | 'discount' | 'trialDiscount'
+  // scheduler.duration — { type: 'WEEK', period: 2 }
+  // scheduler.repeat — { weekly, monthly, yearly }
+  // scheduler.range — { startedAt, endReason }
+  // scheduler.discount — { type, value } (for discount types)
+
+  // Render in your own table
+  setRows((prev) => [...prev, scheduler]);
+
+  // Or transform for a calendar view
+  setEvents((prev) => [...prev, toCalendarEvent(scheduler)]);
+
+  // Or send to a different state manager
+  dispatch(addScheduler(scheduler));
+};
+```
+
+## Live Examples
+
+- **[BasicSale](?path=/story/headless--basic-sale)** — Simplest setup: one button, one textarea
+- **[WithTypeSelector](?path=/story/headless--with-type-selector)** — Switch between Sale, Discount, and Trial Discount types
