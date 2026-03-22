@@ -1,4 +1,4 @@
-import { Button, Drawer, Form, Tooltip } from 'antd';
+import { Button, type ButtonProps, Drawer, Form, Tooltip } from 'antd';
 import { ScheduleTwoTone } from '@ant-design/icons';
 import React, { useState, useMemo } from 'react';
 
@@ -30,6 +30,8 @@ export type SchedulerDrawerButtonProps = {
   isCreating: boolean;
   /** Set isCreating state */
   setIsCreating: (isCreating: boolean) => void;
+  /** Override default button appearance. By default renders as a link. Pass e.g. `{ type: 'primary' }` for a visible button. */
+  buttonProps?: Omit<ButtonProps, 'disabled' | 'onClick'>;
 };
 
 export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
@@ -40,12 +42,11 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   dirty,
   isCreating,
   setIsCreating,
+  buttonProps,
 }) => {
   const { t, loading, permissions, onCreate } = useSchedulerContext();
   const [formRef] = Form.useForm();
   const [open, setOpen] = useState(false);
-
-  if (!permissions.canCreate) return null;
 
   const prefix = useMemo(() => [CScheduler, schedulerType], [schedulerType]);
   const durationTypes = useMemo(
@@ -56,6 +57,8 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
     () => Object.keys(EDiscountType) as (keyof typeof EDiscountType)[],
     [],
   );
+
+  if (!permissions.canCreate) return null;
 
   const handleSave = async () => {
     try {
@@ -89,9 +92,10 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
     <>
       <Button
         style={{ padding: 0 }}
-        disabled={disabled || loading}
         color="default"
         variant="link"
+        {...buttonProps}
+        disabled={disabled || loading}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
