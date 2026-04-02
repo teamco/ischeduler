@@ -1,9 +1,9 @@
-/.idea
-/node_modules
-/debug-storybook.log
-/storybook-static
-/dist
-/coverage
+**/**/.idea
+**/**/node_modules
+**/**/debug-storybook.log
+**/**/storybook-static
+**/**/dist
+**/**/coverage
 /.vscode
 /.DS_Store
 /.env
@@ -11,4 +11,4 @@
 /.env.development
 /.env.test
 /.env.production
-/.tmp
+**/**/.tmp
