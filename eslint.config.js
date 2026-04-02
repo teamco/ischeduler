@@ -12,8 +12,10 @@ export default [
   // 1. Ignore the dist directory
   {
     ignores: ['dist/**', '**/*.d.ts'],
-  }, // 2. Base JavaScript/TypeScript configuration
-  js.configs.recommended, // 3. TypeScript ESLint recommended config + custom TS rule
+  },
+  // 2. Base JavaScript/TypeScript configuration
+  js.configs.recommended,
+  // 3. TypeScript ESLint recommended config + custom TS rule
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -37,7 +39,8 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-empty-object-type': 'off',
     },
-  }, // 4. React plugin recommended config + custom React rule
+  },
+  // 4. React plugin recommended config + custom React rule
   {
     files: ['**/*.{jsx,tsx}'],
     plugins: {
@@ -52,7 +55,8 @@ export default [
       ...reactPlugin.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
     },
-  }, // 5. React Hooks plugin recommended config
+  },
+  // 5. React Hooks plugin recommended config
   {
     files: ['**/*.{jsx,tsx}'],
     plugins: {
@@ -60,6 +64,15 @@ export default [
     },
     rules: {
       ...reactHooksPlugin.configs.recommended.rules,
+    },
+  },
+  // 6. Node.js globals for CJS files
+  {
+    files: ['**/*.cjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
     },
   },
   ...storybook.configs['flat/recommended'],
