@@ -23,7 +23,7 @@ export const AfterBehavior: React.FC<TAfterBehaviorProps> = (props) => {
       label={occurrencesLabel}
       value={value ?? ''}
       disabled={disabled}
-      inputProps={{ min }}
+      slotProps={{ htmlInput: { min } }}
       onChange={(e) => onChange?.(parseInt(e.target.value, 10))}
     />
   );
