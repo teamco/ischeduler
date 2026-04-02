@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { 
   Box, 
   ToggleButton, 
@@ -31,8 +31,10 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
   const { t, loading } = useSchedulerContext();
   const { value, onChange, onWeeklyChange, disabled, setOccurs, scheduler } = props;
   const schedulerRef = useRef(scheduler);
-  // eslint-disable-next-line react-hooks/refs
-  schedulerRef.current = scheduler;
+  
+  useEffect(() => {
+    schedulerRef.current = scheduler;
+  }, [scheduler]);
 
   const monthPeriod = value?.type || 'DAY';
 
@@ -121,7 +123,7 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
           size="small"
           value={value?.monthDay ?? ''}
           disabled={disabled || loading}
-          inputProps={{ min: 1, max: 31 }}
+          slotProps={{ htmlInput: { min: 1, max: 31 } }}
           onChange={(e) => handleDayChange(parseInt(e.target.value, 10))}
           sx={{ width: 120 }}
         />

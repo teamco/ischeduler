@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, Dispatch, SetStateAction } from 'react';
+import React, { useMemo, useCallback, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { CheckboxButton } from '../internal/CheckboxButton';
 import { 
@@ -22,8 +22,10 @@ export const WeeklyBehavior: React.FC<TWeeklyBehaviorProps> = (props) => {
   const { t, loading } = useSchedulerContext();
   const { value = [], onChange, disabled, setOccurs, scheduler } = props;
   const schedulerRef = useRef(scheduler);
-  // eslint-disable-next-line react-hooks/refs
-  schedulerRef.current = scheduler;
+  
+  useEffect(() => {
+    schedulerRef.current = scheduler;
+  }, [scheduler]);
 
   const shortDays = useMemo(
     () =>

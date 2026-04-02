@@ -57,7 +57,7 @@ export const Duration: React.FC<TDurationProps> = (props) => {
         label={label}
         value={periodValue ?? ''}
         disabled={disabled}
-        inputProps={{ min }}
+        slotProps={{ htmlInput: { min } }}
         onChange={(e) => onValueChange?.(parseInt(e.target.value, 10))}
       />
     </Box>
