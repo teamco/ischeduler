@@ -89,6 +89,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
       }
       current[prefix[prefix.length - 1]] = entity;
       formRef.setFieldsValue(obj);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLastEntityId(entity.id ?? null);
     }
   }, [entity, formRef, lastEntityId, prefix]);
@@ -100,6 +101,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
 
     if (_startAt) handleChangeStartDate(_startAt, setStartAt);
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPeriodType(_periodType);
     if (_periodType && _periodValue) {
       handleDurationValueChange(
