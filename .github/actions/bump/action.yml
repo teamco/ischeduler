@@ -52,8 +52,11 @@ runs:
           fi
         done <<< "$COMMIT_LIST"
 
-        # 2. Bump patch version immediately
+        # 2. Bump patch version in all packages
         npm version patch --no-git-tag-version
+        for pkg in packages/core packages/antd packages/mui packages/shadcn; do
+          (cd "$pkg" && npm version patch --no-git-tag-version)
+        done
 
         # 3. Read the new version
         NEW_V=$(node -p "require('./package.json').version")
@@ -61,7 +64,7 @@ runs:
         echo "tag=$TAG" >> $GITHUB_OUTPUT
 
         # 4. Stage changes
-        git add package.json package-lock.json
+        git add package.json package-lock.json packages/*/package.json
 
         # 5. Create commit message using the processed list
         printf "ci: version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$TAG" "$PROCESSED_COMMITS" > .commit_msg

@@ -17,7 +17,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@iScheduler/*": ["src/*"]
+      "@teamco/ischeduler-core": ["packages/core/src/index.ts"],
+      "@teamco/ischeduler-antd": ["packages/antd/src/index.ts"],
+      "@teamco/ischeduler-mui": ["packages/mui/src/index.ts"],
+      "@teamco/ischeduler-shadcn": ["packages/shadcn/src/index.ts"]
     }
   },
   "include": ["src/**/*", "__tests__/**/*"],
