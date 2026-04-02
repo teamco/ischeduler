@@ -14,7 +14,7 @@ import {
   SheetTitle,
 } from "./ui/sheet"
 import { Button } from "./ui/button"
-import { CalendarDays, Plus, X } from "lucide-react"
+import { CalendarDays, X } from "lucide-react"
 
 import { Scheduler } from './Scheduler';
 import { SaveButton } from './internal/SaveButton';

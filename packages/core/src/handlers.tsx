@@ -77,11 +77,14 @@ export const handleSelectWeeklyDay = (
 
 export const handleMultipleDurations = (values: string[] = [], t: TFn) => {
   const _and = t('scheduler.separator.and');
+  const joined = values.join(', ');
+  const lastCommaIndex = joined.lastIndexOf(',');
 
-  return [...values]
-    .join(', ')
-    .replace(/,*$/, '')
-    .replace(/,(?=[^,]*$)/, _and);
+  // If there's no comma, return the string as is
+  if (lastCommaIndex === -1) return joined;
+
+  // Replace the last comma with the translated "and"
+  return joined.slice(0, lastCommaIndex) + _and + joined.slice(lastCommaIndex + 1);
 };
 
 export type THandleSchedulerForm = {

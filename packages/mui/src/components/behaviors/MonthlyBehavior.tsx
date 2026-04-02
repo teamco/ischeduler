@@ -31,6 +31,7 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
   const { t, loading } = useSchedulerContext();
   const { value, onChange, onWeeklyChange, disabled, setOccurs, scheduler } = props;
   const schedulerRef = useRef(scheduler);
+  // eslint-disable-next-line react-hooks/refs
   schedulerRef.current = scheduler;
 
   const monthPeriod = value?.type || 'DAY';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import {
   useSchedulerContext,
@@ -9,8 +9,6 @@ import {
   IScheduler,
   DEFAULT_SALE_SCHEDULER,
   DEFAULT_DISCOUNT_SCHEDULER,
-  CNsDuration,
-  CNsDiscount,
   CEndReasonTypes,
   handleChangeStartDate,
   handleDurationValueChange,
@@ -57,7 +55,6 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     disabled = false,
     durationTypes = Object.keys(EDurationTypes) as (keyof typeof EDurationTypes)[],
     discountTypes = Object.keys(EDiscountType) as (keyof typeof EDiscountType)[],
-    readOnlyFields = [],
     schedulerType,
   } = props;
 

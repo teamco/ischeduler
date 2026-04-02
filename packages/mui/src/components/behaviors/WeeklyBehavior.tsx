@@ -22,6 +22,7 @@ export const WeeklyBehavior: React.FC<TWeeklyBehaviorProps> = (props) => {
   const { t, loading } = useSchedulerContext();
   const { value = [], onChange, disabled, setOccurs, scheduler } = props;
   const schedulerRef = useRef(scheduler);
+  // eslint-disable-next-line react-hooks/refs
   schedulerRef.current = scheduler;
 
   const shortDays = useMemo(

@@ -34,6 +34,7 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     onWeeklyChange
   } = props;
   const schedulerRef = useRef(scheduler);
+  // eslint-disable-next-line react-hooks/refs
   schedulerRef.current = scheduler;
 
   const longMonths = useMemo(
