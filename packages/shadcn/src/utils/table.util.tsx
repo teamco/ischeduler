@@ -1,4 +1,3 @@
-import React from 'react';
 import type { IScheduler } from '@teamco/ischeduler-core';
 
 export const indexable = (data: IScheduler[]) => {
@@ -9,6 +8,7 @@ export const indexable = (data: IScheduler[]) => {
   }));
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const indexColumn = (t: (key: string) => string) => ({
   title: '#',
   dataIndex: 'index',

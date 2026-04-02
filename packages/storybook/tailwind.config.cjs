@@ -2,7 +2,9 @@
 module.exports = {
   darkMode: ['class'],
   content: [
+    // eslint-disable-next-line no-undef
     __dirname + '/src/stories/shadcn/**/*.{ts,tsx}',
+    // eslint-disable-next-line no-undef
     __dirname + '/../shadcn/src/**/*.{ts,tsx}',
   ],
   prefix: '',
