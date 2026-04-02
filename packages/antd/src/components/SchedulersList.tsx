@@ -55,6 +55,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
   const { schedulers, loading, disabled: ctxDisabled, t, permissions, onUpdate, onDelete } = ctx;
 
   const disabled = disabledProp ?? ctxDisabled;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const entitySchedulers = schedulers[schedulerType] ?? [];
 
   const [removedNewIds, setRemovedNewIds] = useState<Set<string>>(new Set());

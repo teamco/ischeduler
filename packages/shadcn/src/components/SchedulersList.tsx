@@ -1,20 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "./ui/table"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "./ui/sheet"
-import { Button } from "./ui/button"
-import { CalendarDays, X } from "lucide-react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
+import { Button } from './ui/button';
+import { CalendarDays, X } from 'lucide-react';
 
 import { Scheduler } from './Scheduler';
 import { SaveButton } from './internal/SaveButton';
@@ -23,13 +11,13 @@ import { HideColumns } from './internal/HideColumns';
 import { Toolbar } from './internal/Toolbar';
 import { columnsMetadata, TShadcnColumn } from './metadata/schedulersList.metadata';
 import { indexable } from '../utils/table.util';
-import { 
-  useColumnsToggle, 
+import {
+  useColumnsToggle,
   useSchedulerContext,
   ESchedulerPrefix,
   ECurrency,
   IScheduler,
-  DEFAULT_SCHEDULERS_LIMIT
+  DEFAULT_SCHEDULERS_LIMIT,
 } from '@teamco/ischeduler-core';
 
 export type SchedulersListProps = {
@@ -51,8 +39,17 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     onRefresh,
   } = props;
 
-  const { schedulers, loading, disabled: ctxDisabled, t, permissions, onUpdate, onDelete } = useSchedulerContext();
+  const {
+    schedulers,
+    loading,
+    disabled: ctxDisabled,
+    t,
+    permissions,
+    onUpdate,
+    onDelete,
+  } = useSchedulerContext();
   const disabled = disabledProp ?? ctxDisabled;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const entitySchedulers = schedulers[schedulerType] ?? [];
 
   const [removedNewIds, setRemovedNewIds] = useState<Set<string>>(new Set());
@@ -90,6 +87,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDelete = async (entity: IScheduler) => {
     if (entity.id?.startsWith('new-')) {
       setRemovedNewIds((prev) => {
@@ -106,15 +104,28 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     }
   };
 
-  const columns = useMemo(() => columnsMetadata({
-    disabled,
-    schedulerType,
-    entities: visibleSchedulers as any,
-    currency,
-    t,
-    onEdit: permissions.canUpdate ? handleEdit : undefined,
-    onDelete: permissions.canDelete ? handleDelete : undefined,
-  }), [disabled, schedulerType, visibleSchedulers, currency, t, permissions]);
+  const columns = useMemo(
+    () =>
+      columnsMetadata({
+        disabled,
+        schedulerType,
+        entities: visibleSchedulers as any,
+        currency,
+        t,
+        onEdit: permissions.canUpdate ? handleEdit : undefined,
+        onDelete: permissions.canDelete ? handleDelete : undefined,
+      }),
+    [
+      disabled,
+      schedulerType,
+      visibleSchedulers,
+      currency,
+      t,
+      permissions.canUpdate,
+      permissions.canDelete,
+      handleDelete,
+    ],
+  );
 
   const { filteredColumns, columnsList, selectedColumns, setSelectedColumns } = useColumnsToggle(
     columns as any[],
@@ -135,8 +146,8 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
               disabled={disabled || loading || limited || isCreating}
               onSuccess={() => onRefresh?.()}
               buttonProps={{
-                variant: "outline",
-                size: "sm",
+                variant: 'outline',
+                size: 'sm',
               }}
             />
           )}
@@ -154,27 +165,31 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
         <Table>
           <TableHeader>
             <TableRow>
-              {((filteredColumns as unknown as (TShadcnColumn & { hidden?: boolean })[]).filter(c => !c.hidden)).map((column) => (
-                <TableHead key={column.id} className={column.className}>
-                  {column.label}
-                </TableHead>
-              ))}
+              {(filteredColumns as unknown as (TShadcnColumn & { hidden?: boolean })[])
+                .filter((c) => !c.hidden)
+                .map((column) => (
+                  <TableHead key={column.id} className={column.className}>
+                    {column.label}
+                  </TableHead>
+                ))}
             </TableRow>
           </TableHeader>
           <TableBody>
             {visibleSchedulers.map((row: any) => (
               <TableRow key={row.key}>
-                {((filteredColumns as unknown as (TShadcnColumn & { hidden?: boolean })[]).filter(c => !c.hidden)).map((column) => {
-                  const value = column.id.includes('.') 
-                    ? column.id.split('.').reduce((obj, key) => obj?.[key], row)
-                    : row[column.id];
-                  
-                  return (
-                    <TableCell key={column.id} className={column.className}>
-                      {column.format ? column.format(value, row) : value}
-                    </TableCell>
-                  );
-                })}
+                {(filteredColumns as unknown as (TShadcnColumn & { hidden?: boolean })[])
+                  .filter((c) => !c.hidden)
+                  .map((column) => {
+                    const value = column.id.includes('.')
+                      ? column.id.split('.').reduce((obj, key) => obj?.[key], row)
+                      : row[column.id];
+
+                    return (
+                      <TableCell key={column.id} className={column.className}>
+                        {column.format ? column.format(value, row) : value}
+                      </TableCell>
+                    );
+                  })}
               </TableRow>
             ))}
             {visibleSchedulers.length === 0 && (
@@ -214,7 +229,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
               />
             </div>
           </SheetHeader>
-          
+
           <div className="mt-6">
             {editDrawerOpen && editingEntity && (
               <Scheduler
