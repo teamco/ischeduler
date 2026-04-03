@@ -1,6 +1,6 @@
 {
   "name": "@teamco/ischeduler-core",
-  "version": "0.1.50",
+  "version": "0.1.51",
   "description": "Headless core for iScheduler — types, utils, handlers, i18n, provider",
   "license": "MIT",
   "repository": {
