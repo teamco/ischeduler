@@ -6,9 +6,10 @@ Provides a complete scheduler form, a table list with CRUD actions, and a drawer
 
 [![license](https://img.shields.io/npm/l/@teamco/ischeduler-shadcn.svg)](../../LICENSE)
 
-## Demo sandbox: [https://teamco.github.io/ischeduler/](https://teamco.github.io/ischeduler/)
+## Demo sandbox: [https://teamco.github.io/ischeduler/](https://teamco.github.io/ischeduler/?path=/story/shadcn-overview--overview-story)
 
-<img width="1024" height="480" alt="Screenshot 2026-03-19 at 8 06 36" src="https://github.com/user-attachments/assets/38efdd68-fb5b-4c9c-9532-5848931605cf" />
+<img width="1024" height="239" alt="Screenshot 2026-04-03 at 9 29 00" src="https://github.com/user-attachments/assets/de3375b6-1ff6-436c-92da-17965c1302a2" />
+<img width="1024" height="504" alt="Screenshot 2026-04-03 at 9 29 19" src="https://github.com/user-attachments/assets/46460517-7573-453e-83d0-2324dfb88986" />
 
 ## Installation
 
