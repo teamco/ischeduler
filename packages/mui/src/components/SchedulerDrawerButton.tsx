@@ -1,23 +1,24 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  Button, 
-  Drawer, 
-  Tooltip, 
-  Box, 
-  Typography, 
+import React, { useState, useMemo, useEffect } from 'react';
+import {
+  Button,
+  Drawer,
+  Tooltip,
+  Box,
+  Typography,
   IconButton,
   Divider,
-  ButtonProps
+  ButtonProps,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import { useSchedulerContext, 
-  ESchedulerPrefix, 
-  IScheduler, 
-  DEFAULT_SALE_SCHEDULER, 
+import {
+  useSchedulerContext,
+  ESchedulerPrefix,
+  IScheduler,
+  DEFAULT_SALE_SCHEDULER,
   DEFAULT_DISCOUNT_SCHEDULER,
   DEFAULT_SCHEDULERS_LIMIT,
-  CNsDiscount
+  CNsDiscount,
 } from '@teamco/ischeduler-core';
 
 import { Scheduler } from './Scheduler';
@@ -32,6 +33,10 @@ export type SchedulerDrawerButtonProps = {
   isCreating: boolean;
   setIsCreating: (isCreating: boolean) => void;
   buttonProps?: Partial<ButtonProps>;
+  // Controlled props
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showButton?: boolean;
 };
 
 export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
@@ -43,22 +48,37 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   isCreating,
   setIsCreating,
   buttonProps,
+  open: controlledOpen,
+  onOpenChange,
+  showButton = true,
 }) => {
   const { t, loading, permissions, onCreate } = useSchedulerContext();
-  const [open, setOpen] = useState(false);
-  
-  const DEFAULT_SCHEDULER = useMemo(() => 
-    schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER
-  , [schedulerType]);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = (val: boolean) => {
+    if (onOpenChange) onOpenChange(val);
+    else setInternalOpen(val);
+  };
+
+  const DEFAULT_SCHEDULER = useMemo(
+    () =>
+      schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER,
+    [schedulerType],
+  );
 
   const [schedulerValue, setSchedulerValue] = useState<IScheduler>(DEFAULT_SCHEDULER as IScheduler);
 
+  // Reset value when drawer opens
+  useEffect(() => {
+    if (open) {
+      setSchedulerValue(DEFAULT_SCHEDULER as IScheduler);
+    }
+  }, [open, DEFAULT_SCHEDULER]);
+
   if (!permissions.canCreate) return null;
 
-  const handleOpen = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSchedulerValue(DEFAULT_SCHEDULER as IScheduler);
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -70,12 +90,13 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   const handleSave = async () => {
     try {
       setIsCreating(true);
-      
+
       const newScheduler: IScheduler = {
         id: `new-${Date.now()}`,
         ...schedulerValue,
         type: schedulerType,
-        [CNsDiscount]: schedulerType === ESchedulerPrefix.SALE ? null : schedulerValue?.[CNsDiscount],
+        [CNsDiscount]:
+          schedulerType === ESchedulerPrefix.SALE ? null : schedulerValue?.[CNsDiscount],
       };
 
       if (onCreate) {
@@ -94,33 +115,39 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
 
   return (
     <>
-      <Tooltip
-        title={disabled ? t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT }) : ''}
-      >
-        <span>
-          <Button
-            variant="text"
-            size="small"
-            {...buttonProps}
-            disabled={disabled || loading}
-            onClick={handleOpen}
-            sx={{ textTransform: 'none', p: 0, minWidth: 'auto', ...buttonProps?.sx }}
-          >
-            {t('scheduler')}
-          </Button>
-        </span>
-      </Tooltip>
+      {showButton && (
+        <Tooltip
+          title={disabled ? t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT }) : ''}
+        >
+          <span>
+            <Button
+              variant="text"
+              size="small"
+              {...buttonProps}
+              disabled={disabled || loading}
+              onClick={handleOpen}
+              sx={{ textTransform: 'none', p: 0, minWidth: 'auto', ...buttonProps?.sx }}
+            >
+              {t('scheduler')}
+            </Button>
+          </span>
+        </Tooltip>
+      )}
 
       <Drawer
         anchor="right"
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          sx: { width: { xs: '100%', sm: 600 }, p: 0 }
+        slotProps={{
+          paper: {
+            sx: { width: { xs: '100%', sm: 600 }, p: 0 },
+          },
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box
+            sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <DateRangeIcon color="primary" />
               <Typography variant="h6">{t('scheduler')}</Typography>
@@ -136,9 +163,9 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
               </IconButton>
             </Box>
           </Box>
-          
+
           <Divider />
-          
+
           <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto' }}>
             <Scheduler
               schedulerType={schedulerType}
