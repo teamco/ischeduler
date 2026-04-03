@@ -6,9 +6,10 @@ Provides a complete scheduler form, a table list with CRUD actions, and a drawer
 
 [![license](https://img.shields.io/npm/l/@teamco/ischeduler-mui.svg)](../../LICENSE)
 
-## Demo sandbox: [https://teamco.github.io/ischeduler/](https://teamco.github.io/ischeduler/)
+## Demo sandbox: [https://teamco.github.io/ischeduler/]([https://teamco.github.io/ischeduler/](https://teamco.github.io/ischeduler/?path=/story/mui-overview--overview-story)
 
-<img width="1024" height="480" alt="Screenshot 2026-03-19 at 8 06 36" src="https://github.com/user-attachments/assets/38efdd68-fb5b-4c9c-9532-5848931605cf" />
+<img width="1024" height="293" alt="Screenshot 2026-04-03 at 9 22 35" src="https://github.com/user-attachments/assets/a061f369-ae4d-45f1-ada5-b0f796272a56" />
+<img width="1024" height="535" alt="Screenshot 2026-04-03 at 9 22 57" src="https://github.com/user-attachments/assets/0adb5396-5540-4cfc-b09c-3edb8bdbb7f0" />
 
 ## Installation
 
