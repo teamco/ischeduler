@@ -1,24 +1,16 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Button, 
-  ButtonProps
-} from "./ui/button"
+import { Button, ButtonProps } from './ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { CalendarDays, X } from 'lucide-react';
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-import { CalendarDays, X } from "lucide-react"
-import { useSchedulerContext, 
-  ESchedulerPrefix, 
-  IScheduler, 
-  DEFAULT_SALE_SCHEDULER, 
+  useSchedulerContext,
+  ESchedulerPrefix,
+  IScheduler,
+  DEFAULT_SALE_SCHEDULER,
   DEFAULT_DISCOUNT_SCHEDULER,
   DEFAULT_SCHEDULERS_LIMIT,
-  CNsDiscount
+  CNsDiscount,
 } from '@teamco/ischeduler-core';
 
 import { Scheduler } from './Scheduler';
@@ -45,12 +37,20 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   setIsCreating,
   buttonProps,
 }) => {
-  const { t, loading, permissions, onCreate } = useSchedulerContext();
+  const {
+    t,
+    loading,
+    permissions,
+    onCreate,
+    limit = DEFAULT_SCHEDULERS_LIMIT,
+  } = useSchedulerContext();
   const [open, setOpen] = useState(false);
-  
-  const DEFAULT_SCHEDULER = useMemo(() => 
-    schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER
-  , [schedulerType]);
+
+  const DEFAULT_SCHEDULER = useMemo(
+    () =>
+      schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER,
+    [schedulerType],
+  );
 
   const [schedulerValue, setSchedulerValue] = useState<IScheduler>(DEFAULT_SCHEDULER as IScheduler);
 
@@ -68,12 +68,13 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   const handleSave = async () => {
     try {
       setIsCreating(true);
-      
+
       const newScheduler: IScheduler = {
         id: `new-${Date.now()}`,
         ...schedulerValue,
         type: schedulerType,
-        [CNsDiscount]: schedulerType === ESchedulerPrefix.SALE ? null : schedulerValue?.[CNsDiscount],
+        [CNsDiscount]:
+          schedulerType === ESchedulerPrefix.SALE ? null : schedulerValue?.[CNsDiscount],
       };
 
       if (onCreate) {
@@ -96,19 +97,14 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={disabled || loading}
-                {...buttonProps}
-              >
+              <Button variant="outline" size="sm" disabled={disabled || loading} {...buttonProps}>
                 {t('scheduler')}
               </Button>
             </SheetTrigger>
           </TooltipTrigger>
           {disabled && (
             <TooltipContent>
-              <p>{t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT })}</p>
+              <p>{t('scheduler.limited', { limit })}</p>
             </TooltipContent>
           )}
         </Tooltip>
@@ -121,11 +117,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
             <SheetTitle>{t('scheduler')}</SheetTitle>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setOpen(false)}
-            >
+            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
               <X className="h-4 w-4" />
             </Button>
             <SaveButton
@@ -135,7 +127,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
             />
           </div>
         </SheetHeader>
-        
+
         <div className="mt-6">
           <Scheduler
             schedulerType={schedulerType}

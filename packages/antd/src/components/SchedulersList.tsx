@@ -52,7 +52,16 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
   } = props;
 
   const ctx = useSchedulerContext();
-  const { schedulers, loading, disabled: ctxDisabled, t, permissions, onUpdate, onDelete } = ctx;
+  const {
+    schedulers,
+    loading,
+    limit = DEFAULT_SCHEDULERS_LIMIT,
+    disabled: ctxDisabled,
+    t,
+    permissions,
+    onUpdate,
+    onDelete,
+  } = ctx;
 
   const disabled = disabledProp ?? ctxDisabled;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +76,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
     return entitySchedulers.filter((entity) => !entity.id || !removedNewIds.has(entity.id));
   }, [entitySchedulers, removedNewIds]);
 
-  const limited = visibleSchedulers.length >= DEFAULT_SCHEDULERS_LIMIT;
+  const limited = visibleSchedulers.length >= limit;
 
   const [editFormRef] = Form.useForm();
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
@@ -166,10 +175,10 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
                       <SchedulerDrawerButton
                         setDirty={setDirty}
                         dirty={dirty}
-                        isCreating={isCreating}
+                        isCreating={isCreating || loading}
                         setIsCreating={setIsCreating}
                         schedulerType={schedulerType}
-                        disabled={disabled || loading || limited || isCreating}
+                        disabled={disabled || limited}
                         onSuccess={() => onRefresh?.()}
                       />
                     ),
@@ -213,8 +222,8 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
           <SaveButton
             size="small"
             isEdit={!!editingEntity}
-            loading={loading}
-            disabled={disabled || !dirty || isCreating}
+            loading={loading || isCreating}
+            disabled={disabled || !dirty || limited}
             onClick={handleEditSave}
           />
         }
