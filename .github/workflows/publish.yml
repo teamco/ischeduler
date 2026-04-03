@@ -14,102 +14,23 @@ permissions:
 
 jobs:
   # ---------------------------------------------------------
-  # 1. BUILD
-  # ---------------------------------------------------------
-  build:
-    name: 'Build'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup
-
-      - name: Build core
-        working-directory: packages/core
-        run: npm run build
-
-      - name: Build antd
-        working-directory: packages/antd
-        run: npm run build
-
-      - name: Build mui
-        working-directory: packages/mui
-        run: npm run build
-
-      - name: Build shadcn
-        working-directory: packages/shadcn
-        run: npm run build
-
-      - name: Upload core dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-core
-          path: packages/core/dist
-
-      - name: Upload antd dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-antd
-          path: packages/antd/dist
-
-      - name: Upload mui dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-mui
-          path: packages/mui/dist
-
-      - name: Upload shadcn dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-shadcn
-          path: packages/shadcn/dist
-
-  # ---------------------------------------------------------
-  # 2. PUBLISH (depends on build)
+  # 1. BUILD & PUBLISH (Matrix)
   # ---------------------------------------------------------
   publish:
-    name: 'Publish'
-    needs: build
+    name: 'Publish ${{ matrix.package }}'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [core, antd, mui, shadcn]
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
 
-      - name: Download core dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-core
-          path: packages/core/dist
+      - name: Build ${{ matrix.package }}
+        working-directory: packages/${{ matrix.package }}
+        run: npm run build
 
-      - name: Download antd dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-antd
-          path: packages/antd/dist
-
-      - name: Download mui dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-mui
-          path: packages/mui/dist
-
-      - name: Download shadcn dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-shadcn
-          path: packages/shadcn/dist
-
-      - name: Publish @teamco/ischeduler-core
-        working-directory: packages/core
-        run: npm publish --provenance --access public
-
-      - name: Publish @teamco/ischeduler-antd
-        working-directory: packages/antd
-        run: npm publish --provenance --access public
-
-      - name: Publish @teamco/ischeduler-mui
-        working-directory: packages/mui
-        run: npm publish --provenance --access public
-
-      - name: Publish @teamco/ischeduler-shadcn
-        working-directory: packages/shadcn
+      - name: Publish @teamco/ischeduler-${{ matrix.package }}
+        working-directory: packages/${{ matrix.package }}
         run: npm publish --provenance --access public

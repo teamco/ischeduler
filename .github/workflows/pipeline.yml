@@ -68,47 +68,27 @@ jobs:
         run: npm run test
 
   # ---------------------------------------------------------
-  # 4. BUILD
+  # 4. BUILD (Matrix)
   # ---------------------------------------------------------
   build:
-    name: 'Build'
+    name: 'Build ${{ matrix.package }}'
     needs: [lint, test]
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [core, antd, mui, shadcn]
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
-      - name: Build core
-        working-directory: packages/core
+      - name: Build ${{ matrix.package }}
+        working-directory: packages/${{ matrix.package }}
         run: npm run build
-      - name: Build antd
-        working-directory: packages/antd
-        run: npm run build
-      - name: Build mui
-        working-directory: packages/mui
-        run: npm run build
-      - name: Build shadcn
-        working-directory: packages/shadcn
-        run: npm run build
-      - name: Upload core dist
+      - name: Upload ${{ matrix.package }} dist
         uses: actions/upload-artifact@v4
         with:
-          name: dist-core
-          path: packages/core/dist
-      - name: Upload antd dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-antd
-          path: packages/antd/dist
-      - name: Upload mui dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-mui
-          path: packages/mui/dist
-      - name: Upload shadcn dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-shadcn
-          path: packages/shadcn/dist
+          name: dist-${{ matrix.package }}
+          path: packages/${{ matrix.package }}/dist
   # ---------------------------------------------------------
   # 5. STORYBOOK
   # ---------------------------------------------------------
