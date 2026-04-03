@@ -1,5 +1,5 @@
 {
-  "name": "ischeduler-monorepo",
+  "name": "@teamco/ischeduler2",
   "private": false,
   "workspaces": [
     "packages/*"
