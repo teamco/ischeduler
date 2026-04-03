@@ -1,18 +1,18 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { 
-  Box, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Typography, 
-  Drawer, 
-  IconButton,
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  Box,
   Divider,
-  TablePagination
+  Drawer,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -25,13 +25,13 @@ import { HideColumns } from './internal/HideColumns';
 import { Toolbar } from './internal/Toolbar';
 import { columnsMetadata, TMuiColumn } from './metadata/schedulersList.metadata';
 import { indexable } from '../utils/table.util';
-import { 
-  useColumnsToggle, 
-  useSchedulerContext,
-  ESchedulerPrefix,
-  ECurrency,
-  IScheduler,
+import {
   DEFAULT_SCHEDULERS_LIMIT,
+  ECurrency,
+  ESchedulerPrefix,
+  IScheduler,
+  useColumnsToggle,
+  useSchedulerContext,
 } from '@teamco/ischeduler-core';
 
 export type SchedulersListProps = {
@@ -66,8 +66,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const visibleSchedulers = useMemo(() => {
-    const entitySchedulers = schedulers[schedulerType] ?? [];
-    let result = entitySchedulers;
+    let result = schedulers[schedulerType] ?? [];
     if (removedNewIds.size > 0) {
       result = result.filter((entity) => !entity.id || !removedNewIds.has(entity.id));
     }

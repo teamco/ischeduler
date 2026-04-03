@@ -1,8 +1,51 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React from 'react';
-import { SchedulerProvider, ESchedulerPrefix, ECurrency } from '@teamco/ischeduler-core';
+import React, { useState, useCallback } from 'react';
+import { SchedulerProvider, ESchedulerPrefix, ECurrency, type IScheduler } from '@teamco/ischeduler-core';
 import { SchedulersList } from '@teamco/ischeduler-mui';
-import { emptySchedulers, populatedSchedulers, mockCrudCallbacks } from '../antd/mocks/scheduler.mocks';
+import { emptySchedulers, populatedSchedulers } from '../antd/mocks/scheduler.mocks';
+
+const SchedulersListWithState = (props: { type: ESchedulerPrefix; currency?: keyof typeof ECurrency; initialData?: Record<ESchedulerPrefix, IScheduler[]> }) => {
+  const [schedulers, setSchedulers] = useState(props.initialData || emptySchedulers);
+
+  const onCreate = useCallback(async (type: ESchedulerPrefix, scheduler: IScheduler) => {
+    console.log('[MUI Story] onCreate:', type, scheduler);
+    await new Promise((r) => setTimeout(r, 500));
+    setSchedulers((prev) => ({
+      ...prev,
+      [type]: [...prev[type], { ...scheduler, id: `new-${Date.now()}` }],
+    }));
+  }, []);
+
+  const onUpdate = useCallback(async (type: ESchedulerPrefix, scheduler: IScheduler) => {
+    console.log('[MUI Story] onUpdate:', type, scheduler);
+    await new Promise((r) => setTimeout(r, 500));
+    setSchedulers((prev) => ({
+      ...prev,
+      [type]: prev[type].map((s) => (s.id === scheduler.id ? scheduler : s)),
+    }));
+  }, []);
+
+  const onDelete = useCallback(async (type: ESchedulerPrefix, id: string) => {
+    console.log('[MUI Story] onDelete:', type, id);
+    await new Promise((r) => setTimeout(r, 500));
+    setSchedulers((prev) => ({
+      ...prev,
+      [type]: prev[type].filter((s) => s.id !== id),
+    }));
+  }, []);
+
+  return (
+    <SchedulerProvider
+      schedulers={schedulers}
+      onCreate={onCreate}
+      onUpdate={onUpdate}
+      onDelete={onDelete}
+      permissions={{ canCreate: true, canUpdate: true, canDelete: true }}
+    >
+      <SchedulersList type={props.type} currency={props.currency as ECurrency} />
+    </SchedulerProvider>
+  );
+};
 
 const meta: Meta<typeof SchedulersList> = {
   title: 'MUI/SchedulersList',
@@ -22,14 +65,7 @@ export default meta;
 type Story = StoryObj<typeof SchedulersList>;
 
 export const Empty: Story = {
-  args: { type: ESchedulerPrefix.SALE },
-  decorators: [
-    (Story) => (
-      <SchedulerProvider schedulers={emptySchedulers} {...mockCrudCallbacks}>
-        <Story />
-      </SchedulerProvider>
-    ),
-  ],
+  render: () => <SchedulersListWithState type={ESchedulerPrefix.SALE} />,
   parameters: {
     docs: {
       description: {
@@ -40,14 +76,7 @@ export const Empty: Story = {
 };
 
 export const WithSaleSchedulers: Story = {
-  args: { type: ESchedulerPrefix.SALE },
-  decorators: [
-    (Story) => (
-      <SchedulerProvider schedulers={populatedSchedulers} {...mockCrudCallbacks}>
-        <Story />
-      </SchedulerProvider>
-    ),
-  ],
+  render: () => <SchedulersListWithState type={ESchedulerPrefix.SALE} initialData={populatedSchedulers} />,
   parameters: {
     docs: {
       description: {
@@ -58,14 +87,7 @@ export const WithSaleSchedulers: Story = {
 };
 
 export const WithDiscountSchedulers: Story = {
-  args: { type: ESchedulerPrefix.DISCOUNT, currency: ECurrency.USD },
-  decorators: [
-    (Story) => (
-      <SchedulerProvider schedulers={populatedSchedulers} {...mockCrudCallbacks}>
-        <Story />
-      </SchedulerProvider>
-    ),
-  ],
+  render: () => <SchedulersListWithState type={ESchedulerPrefix.DISCOUNT} currency={ECurrency.USD} initialData={populatedSchedulers} />,
   parameters: {
     docs: {
       description: {
