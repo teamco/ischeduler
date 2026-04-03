@@ -1,6 +1,6 @@
 {
   "name": "@teamco/ischeduler-shadcn",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "iScheduler UI components for React + shadcn/ui (Radix UI + Tailwind)",
   "license": "MIT",
   "repository": {
