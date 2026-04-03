@@ -205,6 +205,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
         size={600}
         open={editDrawerOpen}
         onClose={() => {
+          setDirty(false);
           setEditDrawerOpen(false);
           setEditingEntity(null);
         }}

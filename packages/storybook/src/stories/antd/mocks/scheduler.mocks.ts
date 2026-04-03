@@ -17,7 +17,7 @@ export const mockSaleScheduler: IScheduler = {
   },
   range: {
     startedAt: dayjs('2026-04-01'),
-    endReason: { type: EEndReasonType.DATE, expiredAt: dayjs('2026-12-31') },
+    endReason: { type: EEndReasonType.DATE, expiredAt: dayjs('2026-12-31'), occurrences: 1 },
   },
   discount: null,
   status: EStatus.ACTIVE,
@@ -40,7 +40,7 @@ export const mockDiscountScheduler: IScheduler = {
   },
   range: {
     startedAt: dayjs('2026-05-01'),
-    endReason: { type: EEndReasonType.NUMBER, expiredAt: null },
+    endReason: { type: EEndReasonType.NUMBER, expiredAt: null, occurrences: 10 },
   },
   discount: { type: 'PERCENT', value: 15 },
   status: EStatus.ACTIVE,
@@ -63,7 +63,7 @@ export const mockTrialScheduler: IScheduler = {
   },
   range: {
     startedAt: dayjs('2026-06-01'),
-    endReason: { type: EEndReasonType.FOREVER, expiredAt: null },
+    endReason: { type: EEndReasonType.FOREVER, expiredAt: null, occurrences: 1 },
   },
   discount: { type: 'FIXED', value: 5 },
   status: EStatus.PROCESSING,

@@ -63,24 +63,17 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     schedulerType,
   } = props;
 
-  const [endType, setEndType] = useState<string | null>(null);
-  const [periodType, setPeriodType] = useState<string | null>(null);
   const [startAt, setStartAt] = useState<string | null>(null);
-  const [lastEntityId, setLastEntityId] = useState<string | null>(null);
   const [occurs, setOccurs] = useState<string>('0');
 
-  const scheduler = formRef.getFieldValue(prefix);
+  const schedulerValue = Form.useWatch(prefix, formRef);
 
   const DEFAULT_SCHEDULER =
     schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER;
 
+  // Sync entity to form
   useEffect(() => {
-    formRef.resetFields();
-  }, [formRef]);
-
-  useEffect(() => {
-    if (entity && entity.id !== lastEntityId) {
-      // Set nested form values without lodash
+    if (entity) {
       const obj: Record<string, unknown> = {};
       let current: Record<string, unknown> = obj;
       for (let i = 0; i < prefix.length - 1; i++) {
@@ -89,34 +82,34 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
       }
       current[prefix[prefix.length - 1]] = entity;
       formRef.setFieldsValue(obj);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLastEntityId(entity.id ?? null);
+    } else {
+      formRef.resetFields();
     }
-  }, [entity, formRef, lastEntityId, prefix]);
+  }, [entity, formRef, prefix]);
 
+  // Sync occurs text whenever relevant form values change
   useEffect(() => {
-    const _periodType = formRef.getFieldValue(mergeNames(prefix, CNsDuration, 'type'));
-    const _periodValue = formRef.getFieldValue(mergeNames(prefix, CNsDuration, 'period'));
-    const _startAt = formRef.getFieldValue(mergeNames(prefix, 'range', 'startedAt'));
+    if (!schedulerValue) return;
 
-    if (_startAt) handleChangeStartDate(_startAt, setStartAt);
+    const _startAt = schedulerValue.range?.startedAt;
+    if (_startAt) {
+      handleChangeStartDate(_startAt, setStartAt);
+    }
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPeriodType(_periodType);
-    if (_periodType && _periodValue) {
+    const _duration = schedulerValue.duration;
+    if (_duration?.type && _duration?.period) {
       handleDurationValueChange(
-        { type: _periodType, period: _periodValue },
-        entity ?? (DEFAULT_SCHEDULER as IScheduler),
+        _duration,
+        schedulerValue as IScheduler,
         setOccurs,
         t,
       );
     }
+  }, [schedulerValue, t]);
 
-    const _endReason = formRef.getFieldValue(mergeNames(prefix, 'range', 'endReason', 'type'));
-    setEndType(_endReason);
-  }, [DEFAULT_SCHEDULER, entity, formRef, prefix, t]);
+  const endType = schedulerValue?.range?.endReason?.type;
+  const periodType = schedulerValue?.duration?.type;
 
-  // Build initial values without lodash
   const buildInitialValues = useMemo(() => {
     const obj: Record<string, unknown> = {};
     let current: Record<string, unknown> = obj;
@@ -129,7 +122,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
   }, [DEFAULT_SCHEDULER, prefix]);
 
   return (
-    <Space>
+    <Space orientation="vertical" style={{ width: '100%' }}>
       <Form
         layout="vertical"
         autoComplete="off"
@@ -184,29 +177,6 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
             <Duration
               label={t('scheduler.duration')}
               disabled={disabled || loading}
-              onTypeChange={(value) => {
-                setPeriodType(value);
-                const period = scheduler?.duration?.period;
-                if (period != null) {
-                  handleDurationValueChange(
-                    { type: value, period },
-                    scheduler,
-                    setOccurs,
-                    t,
-                  );
-                }
-              }}
-              onValueChange={(durationValue) => {
-                const type = scheduler?.duration?.type;
-                if (durationValue && type) {
-                  handleDurationValueChange(
-                    { type, period: durationValue },
-                    scheduler,
-                    setOccurs,
-                    t,
-                  );
-                }
-              }}
               prefix={prefix}
               namespace={CNsDuration}
               required={true}
@@ -220,11 +190,11 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
               rules={[requiredField(t('scheduler.startedAt'))]}
             >
               <DatePicker
-                onChange={(value) => value && handleChangeStartDate(value, setStartAt)}
                 showTime
                 format={DEFAULT_DATE_TIME_FORMAT}
                 disabledDate={(current) => getDisabledDate(current)}
                 disabled={disabled || loading}
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
@@ -275,7 +245,6 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
             >
               <Select
                 disabled={disabled}
-                onChange={(value: string) => setEndType(value)}
                 options={[
                   t('scheduler.duration.end.day'),
                   t('scheduler.duration.end.after'),
