@@ -17,7 +17,7 @@ jobs:
   # 1. BUILD & PUBLISH (Matrix)
   # ---------------------------------------------------------
   publish:
-    name: 'Publish ${{ matrix.package }}'
+    name: 'Build & Publish ${{ matrix.package }}'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
