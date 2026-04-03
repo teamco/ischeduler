@@ -1,6 +1,6 @@
 {
   "name": "ischeduler-monorepo",
-  "private": true,
+  "private": false,
   "workspaces": [
     "packages/*"
   ],
