@@ -188,24 +188,18 @@ npm install @teamco/ischeduler-core @teamco/ischeduler-shadcn
 
 ### Step 2 — Update imports
 
-Subpath imports (`@teamco/ischeduler/core`, `@teamco/ischeduler/antd`, etc.) are replaced by direct package names:
-
 ```diff
-- import { SchedulerProvider, ESchedulerPrefix } from '@teamco/ischeduler/core';
-- import { SchedulersList } from '@teamco/ischeduler/antd';
 + import { SchedulerProvider, ESchedulerPrefix } from '@teamco/ischeduler-core';
 + import { SchedulersList } from '@teamco/ischeduler-antd';
 ```
 
 For MUI:
 ```diff
-- import { Scheduler } from '@teamco/ischeduler/mui';
 + import { Scheduler } from '@teamco/ischeduler-mui';
 ```
 
 For shadcn/ui:
 ```diff
-- import { SchedulerDrawerButton } from '@teamco/ischeduler/shadcn';
 + import { SchedulerDrawerButton } from '@teamco/ischeduler-shadcn';
 ```
 
