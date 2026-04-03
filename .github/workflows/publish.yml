@@ -101,23 +101,15 @@ jobs:
       - name: Publish @teamco/ischeduler-core
         working-directory: packages/core
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @teamco/ischeduler-antd
         working-directory: packages/antd
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @teamco/ischeduler-mui
         working-directory: packages/mui
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @teamco/ischeduler-shadcn
         working-directory: packages/shadcn
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
