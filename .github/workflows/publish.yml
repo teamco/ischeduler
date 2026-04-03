@@ -31,6 +31,19 @@ jobs:
         working-directory: packages/${{ matrix.package }}
         run: npm run build
 
+      - name: Check if version exists
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view $PACKAGE_NAME@$VERSION version 2>/dev/null; then
+            echo "Version $VERSION already published. Skipping."
+            echo "SKIP_PUBLISH=true" >> $GITHUB_ENV
+          else
+            echo "SKIP_PUBLISH=false" >> $GITHUB_ENV
+          fi
+
       - name: Publish @teamco/ischeduler-${{ matrix.package }}
+        if: env.SKIP_PUBLISH == 'false'
         working-directory: packages/${{ matrix.package }}
         run: npm publish --provenance --access public
