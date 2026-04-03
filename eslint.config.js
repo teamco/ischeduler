@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
@@ -10,10 +13,8 @@ export default [
   {
     ignores: ['dist/**', '**/*.d.ts'],
   },
-
   // 2. Base JavaScript/TypeScript configuration
   js.configs.recommended,
-
   // 3. TypeScript ESLint recommended config + custom TS rule
   {
     files: ['**/*.{ts,tsx}'],
@@ -36,9 +37,9 @@ export default [
     rules: {
       ...tsPlugin.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
-
   // 4. React plugin recommended config + custom React rule
   {
     files: ['**/*.{jsx,tsx}'],
@@ -53,9 +54,9 @@ export default [
     rules: {
       ...reactPlugin.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
     },
   },
-
   // 5. React Hooks plugin recommended config
   {
     files: ['**/*.{jsx,tsx}'],
@@ -66,4 +67,14 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
     },
   },
+  // 6. Node.js globals for CJS and JS config files
+  {
+    files: ['**/*.cjs', '**/tailwind.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  ...storybook.configs['flat/recommended'],
 ];
