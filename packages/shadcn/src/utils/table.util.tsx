@@ -8,8 +8,7 @@ export const indexable = (data: IScheduler[]) => {
   }));
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const indexColumn = (t: (key: string) => string) => ({
+export const indexColumn = () => ({
   title: '#',
   dataIndex: 'index',
   key: 'index',

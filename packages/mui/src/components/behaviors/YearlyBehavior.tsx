@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, Dispatch, SetStateAction } from 'react';
+import React, { useMemo, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { Box, Tooltip } from '@mui/material';
 import { CheckboxButton } from '../internal/CheckboxButton';
 import { MonthlyBehavior } from './MonthlyBehavior';
@@ -34,8 +34,10 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     onWeeklyChange
   } = props;
   const schedulerRef = useRef(scheduler);
-  // eslint-disable-next-line react-hooks/refs
-  schedulerRef.current = scheduler;
+
+  useEffect(() => {
+    schedulerRef.current = scheduler;
+  }, [scheduler]);
 
   const longMonths = useMemo(
     () =>

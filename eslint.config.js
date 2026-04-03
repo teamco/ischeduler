@@ -54,6 +54,7 @@ export default [
     rules: {
       ...reactPlugin.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
     },
   },
   // 5. React Hooks plugin recommended config
@@ -66,9 +67,9 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
     },
   },
-  // 6. Node.js globals for CJS files
+  // 6. Node.js globals for CJS and JS config files
   {
-    files: ['**/*.cjs'],
+    files: ['**/*.cjs', '**/tailwind.config.js'],
     languageOptions: {
       globals: {
         ...globals.node,
