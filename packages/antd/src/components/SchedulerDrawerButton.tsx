@@ -30,7 +30,7 @@ export type SchedulerDrawerButtonProps = {
   isCreating: boolean;
   /** Set isCreating state */
   setIsCreating: (isCreating: boolean) => void;
-  /** Override default button appearance. By default renders as a link. Pass e.g. `{ type: 'primary' }` for a visible button. */
+  /** Override the default button appearance. By default renders as a link. Pass e.g. `{ type: 'primary' }` for a visible button. */
   buttonProps?: Omit<ButtonProps, 'disabled' | 'onClick'>;
 };
 
@@ -44,7 +44,13 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   setIsCreating,
   buttonProps,
 }) => {
-  const { t, loading, permissions, onCreate } = useSchedulerContext();
+  const {
+    t,
+    loading,
+    limit = DEFAULT_SCHEDULERS_LIMIT,
+    permissions,
+    onCreate,
+  } = useSchedulerContext();
   const [formRef] = Form.useForm();
   const [open, setOpen] = useState(false);
 
@@ -95,15 +101,17 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         color="default"
         variant="link"
         {...buttonProps}
-        disabled={disabled || loading}
+        loading={loading || isCreating}
+        disabled={disabled}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          setDirty(false);
           setOpen(true);
         }}
       >
         <Tooltip
-          title={disabled ? t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT }) : undefined}
+          title={disabled ? t('scheduler.limited', { limit }) : undefined}
         >
           {t('scheduler')}
         </Tooltip>
@@ -117,7 +125,10 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         }
         size={600}
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setDirty(false);
+          setOpen(false);
+        }}
         extra={
           <SaveButton
             size="small"

@@ -52,7 +52,13 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   onOpenChange,
   showButton = true,
 }) => {
-  const { t, loading, permissions, onCreate } = useSchedulerContext();
+  const {
+    t,
+    loading,
+    permissions,
+    onCreate,
+    limit = DEFAULT_SCHEDULERS_LIMIT,
+  } = useSchedulerContext();
   const [internalOpen, setInternalOpen] = useState(false);
 
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -117,7 +123,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
     <>
       {showButton && (
         <Tooltip
-          title={disabled ? t('scheduler.limited', { limit: DEFAULT_SCHEDULERS_LIMIT }) : ''}
+          title={disabled ? t('scheduler.limited', { limit }) : ''}
         >
           <span>
             <Button

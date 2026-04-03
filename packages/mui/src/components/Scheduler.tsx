@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -55,17 +55,25 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     schedulerType,
   } = props;
 
-  const DEFAULT_SCHEDULER =
-    schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER;
+  const DEFAULT_SCHEDULER = useMemo(() =>
+    schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER
+  , [schedulerType]);
 
   const [internalValue, setInternalValue] = useState<IScheduler>(
-    () => (DEFAULT_SCHEDULER as IScheduler),
+    () => (value ?? DEFAULT_SCHEDULER as IScheduler),
   );
 
   const scheduler = value ?? internalValue;
 
   const [occurs, setOccurs] = useState<string>('0');
   const [startAt, setStartAt] = useState<string | null>(null);
+
+  // Sync state when props change (Derived state pattern)
+  const [prevValue, setPrevValue] = useState<IScheduler | undefined>(value);
+  if (value !== prevValue) {
+    setInternalValue(value ?? DEFAULT_SCHEDULER as IScheduler);
+    setPrevValue(value);
+  }
 
   useEffect(() => {
     if (scheduler.range?.startedAt) {
@@ -80,15 +88,11 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
         t,
       );
     }
-    // Only re-run when value identity changes, not on every render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, t]);
+  }, [scheduler, t]);
 
   const handleFieldChange = (path: string, fieldValue: unknown) => {
     const parts = path.split('.');
 
-    // Immutable set-by-path: shallow-copies only the objects along the path,
-    // leaving dayjs instances and other non-plain values intact.
     const setByPath = (obj: Record<string, unknown>, keys: string[], val: unknown): Record<string, unknown> => {
       if (keys.length === 1) {
         return { ...obj, [keys[0]]: val };
@@ -139,7 +143,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                   size="small"
                   type="number"
                   label={t('scheduler.meta.duration')}
-                  value={scheduler.discount?.value || ''}
+                  value={scheduler.discount?.value ?? ''}
                   disabled={disabled || loading}
                   onChange={(e) => handleFieldChange('discount.value', parseInt(e.target.value, 10))}
                 />

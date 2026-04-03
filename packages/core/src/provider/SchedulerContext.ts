@@ -20,6 +20,9 @@ export interface SchedulerContextValue {
   /** Locale code (e.g. `"en-US"`) */
   locale?: string;
 
+  /** Maximum number of schedulers allowed */
+  limit?: number;
+
   // CRUD callbacks
   /** Create a new scheduler */
   onCreate?: (type: ESchedulerPrefix, scheduler: IScheduler) => Promise<void>;

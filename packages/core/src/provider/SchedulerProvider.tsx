@@ -13,6 +13,8 @@ export interface SchedulerProviderProps {
   disabled?: boolean;
   /** Locale code passed to child components (e.g. `"en-US"`) */
   locale?: string;
+  /** Maximum number of schedulers allowed. @default DEFAULT_SCHEDULERS_LIMIT */
+  limit?: number;
   /** Called when a new scheduler is created via the drawer form */
   onCreate?: (type: ESchedulerPrefix, scheduler: IScheduler) => Promise<void>;
   /** Called when an existing scheduler is updated via the edit drawer */
@@ -37,6 +39,7 @@ export const SchedulerProvider = (props: SchedulerProviderProps) => {
     loading = false,
     disabled = false,
     locale,
+    limit,
     onCreate,
     onUpdate,
     onDelete,
@@ -61,6 +64,7 @@ export const SchedulerProvider = (props: SchedulerProviderProps) => {
       loading,
       disabled,
       locale,
+      limit,
       t,
       permissions: {
         canCreate: permissions?.canCreate ?? true,
@@ -80,6 +84,7 @@ export const SchedulerProvider = (props: SchedulerProviderProps) => {
       loading,
       disabled,
       locale,
+      limit,
       t,
       permissions,
       onCreate,

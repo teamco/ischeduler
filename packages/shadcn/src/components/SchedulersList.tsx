@@ -42,6 +42,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
   const {
     schedulers,
     loading,
+    limit = DEFAULT_SCHEDULERS_LIMIT,
     disabled: ctxDisabled,
     t,
     permissions,
@@ -66,7 +67,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     return indexable(result);
   }, [entitySchedulers, removedNewIds]);
 
-  const limited = visibleSchedulers.length >= DEFAULT_SCHEDULERS_LIMIT;
+  const limited = visibleSchedulers.length >= limit;
 
   const handleEdit = (entity: IScheduler) => {
     setEditingEntity(JSON.parse(JSON.stringify(entity)));

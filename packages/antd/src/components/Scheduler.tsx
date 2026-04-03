@@ -68,8 +68,11 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
 
   const schedulerValue = Form.useWatch(prefix, formRef);
 
-  const DEFAULT_SCHEDULER =
-    schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER;
+  const DEFAULT_SCHEDULER = useMemo(
+    () =>
+      schedulerType === ESchedulerPrefix.SALE ? DEFAULT_SALE_SCHEDULER : DEFAULT_DISCOUNT_SCHEDULER,
+    [schedulerType],
+  );
 
   // Sync entity to form
   useEffect(() => {

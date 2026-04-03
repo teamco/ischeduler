@@ -32,6 +32,7 @@ function App() {
   return (
     <SchedulerProvider
       schedulers={/* your schedulers state */}
+      limit={10} // Optional: maximum number of schedulers allowed per type
       onCreate={/* create callback */}
       onUpdate={/* update callback */}
       onDelete={/* delete callback */}
