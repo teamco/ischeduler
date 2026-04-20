@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { Form } from 'antd';
 import dayjs from 'dayjs';
@@ -59,7 +59,7 @@ const Wrapper: React.FC<{ setDirty: (v: boolean) => void }> = ({ setDirty }) => 
         prefix={[CScheduler, ESchedulerPrefix.DISCOUNT]}
         schedulerType={ESchedulerPrefix.DISCOUNT}
         durationTypes={['DAY', 'WEEK', 'MONTH', 'YEAR']}
-        discountTypes={['PERCENT', 'AMOUNT']}
+        discountTypes={['PERCENT', 'FIXED']}
         entity={entity}
         setDirty={setDirty}
       />
@@ -78,7 +78,7 @@ const DrawerLike: React.FC = () => {
         prefix={[CScheduler, ESchedulerPrefix.DISCOUNT]}
         schedulerType={ESchedulerPrefix.DISCOUNT}
         durationTypes={['DAY', 'WEEK', 'MONTH', 'YEAR']}
-        discountTypes={['PERCENT', 'AMOUNT']}
+        discountTypes={['PERCENT', 'FIXED']}
         entity={entity}
         setDirty={setDirty}
       />
