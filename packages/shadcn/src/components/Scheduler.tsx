@@ -119,7 +119,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
       {isDiscount && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-2">
-            <Label>{t('scheduler.meta.duration')}</Label>
+            <Label>{t('scheduler.meta.discount')}</Label>
             <div className="flex gap-2">
               <Select
                 value={scheduler.discount?.type || ''}
@@ -127,7 +127,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                 disabled={disabled || loading}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder={t('scheduler.meta.duration')} />
+                  <SelectValue placeholder={t('scheduler.meta.discount')} />
                 </SelectTrigger>
                 <SelectContent>
                   {discountTypes.map((type) => (

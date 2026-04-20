@@ -78,6 +78,7 @@ const enUS: SchedulerTranslations = {
   'scheduler.actions.manage': 'Manage Scheduler',
   'scheduler.meta.assignedTo': 'Assigned To',
   'scheduler.meta.duration': 'Duration',
+  'scheduler.meta.discount': 'Discount',
   'scheduler.meta.period': 'Period',
   'scheduler.limited': 'The Scheduler is limited to: {{limit}}',
   'scheduler.info.helper': 'Set the scheduler to set a sale period.',

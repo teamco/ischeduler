@@ -70,7 +70,7 @@ export const columnsMetadata = (props: TArgs): TShadcnColumn[] => {
       },
     }),
     [ESchedulerPrefix.DISCOUNT, ESchedulerPrefix.TRIAL_DISCOUNT].includes(schedulerType)
-      ? col('discount', t('scheduler.meta.duration'), {
+      ? col('discount', t('scheduler.meta.discount'), {
           className: "w-[120px]",
           format: (discount: TDiscount) => {
             if (!discount) return '—';

@@ -11,7 +11,7 @@ export const yearHandler = (
 ) => {
   const msg = handleMsg('scheduler.year', 'scheduler.years', durationValue, t);
 
-  const { months } = scheduler.repeat.yearly;
+  const months = scheduler.repeat?.yearly?.months;
 
   if (months) {
     const _every = t('scheduler.separator.every');
