@@ -120,5 +120,24 @@ describe('handlers', () => {
       );
       expect(setOccurs).toHaveBeenCalled();
     });
+
+    it('should not throw when YEAR selected but repeat.yearly is undefined', () => {
+      const setOccurs = vi.fn();
+      const schedulerWithoutYearly = {
+        ...mockScheduler,
+        repeat: {
+          weekly: { days: [] },
+          monthly: { type: 'DAY' as const, monthDay: 1 },
+        } as IScheduler['repeat'],
+      };
+      expect(() =>
+        handleDurationValueChange(
+          { type: 'YEAR', period: 1 },
+          schedulerWithoutYearly,
+          setOccurs,
+          t,
+        ),
+      ).not.toThrow();
+    });
   });
 });
