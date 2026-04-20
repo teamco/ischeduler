@@ -5,11 +5,9 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   plugins: [
     dts({
-      tsconfigPath: './tsconfig.build.json',
-      rollupTypes: false,
+      tsConfigFilePath: './tsconfig.build.json',
       insertTypesEntry: true,
-      outDir: 'dist',
-      pathsToAliases: false,
+      outputDir: 'dist',
     }),
   ],
   build: {
@@ -20,7 +18,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format) => `index.${format}.js`,
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: (id) =>
         /^(react|react-dom|react\/jsx-runtime|dayjs|@mui\/|@emotion\/|@teamco\/ischeduler)/.test(id),
       output: {

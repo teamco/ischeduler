@@ -5,10 +5,9 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   plugins: [
     dts({
-      tsconfigPath: './tsconfig.build.json',
-      rollupTypes: true,
+      tsConfigFilePath: './tsconfig.build.json',
       insertTypesEntry: true,
-      outDir: 'dist',
+      outputDir: 'dist',
     }),
   ],
   build: {
@@ -19,7 +18,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format) => `index.${format}.js`,
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'dayjs'],
       output: [
         {
@@ -31,7 +30,6 @@ export default defineConfig({
           format: 'cjs',
           entryFileNames: 'index.cjs.js',
           exports: 'named',
-          interop: 'auto',
         },
       ],
     },
