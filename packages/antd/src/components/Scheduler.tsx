@@ -132,7 +132,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
         form={formRef}
         className={styles.scheduler}
         onFinish={onFinish}
-        onFieldsChange={() => setDirty(true)}
+        onValuesChange={() => setDirty(true)}
         initialValues={buildInitialValues}
       >
         {[ESchedulerPrefix.DISCOUNT, ESchedulerPrefix.TRIAL_DISCOUNT].includes(schedulerType) && (
