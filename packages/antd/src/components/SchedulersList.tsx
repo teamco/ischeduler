@@ -173,8 +173,6 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
                   {
                     label: (
                       <SchedulerDrawerButton
-                        setDirty={setDirty}
-                        dirty={dirty}
                         isCreating={isCreating || loading}
                         setIsCreating={setIsCreating}
                         schedulerType={schedulerType}
@@ -213,6 +211,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
         }
         size={600}
         open={editDrawerOpen}
+        destroyOnClose
         onClose={() => {
           setDirty(false);
           setEditDrawerOpen(false);
@@ -230,7 +229,6 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
       >
         {editDrawerOpen && (
           <Scheduler
-            setDirty={setDirty}
             formRef={editFormRef}
             prefix={prefix}
             entity={editingEntity}

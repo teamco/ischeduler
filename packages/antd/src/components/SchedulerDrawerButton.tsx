@@ -22,10 +22,6 @@ export type SchedulerDrawerButtonProps = {
   disabled?: boolean;
   /** Called after a scheduler is successfully created via the drawer form */
   onSuccess?: (scheduler: IScheduler) => void;
-  /** Set dirty state */
-  setDirty: (dirty: boolean) => void;
-  /** Dirty state */
-  dirty: boolean;
   /** isCreating state */
   isCreating: boolean;
   /** Set isCreating state */
@@ -38,8 +34,6 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   schedulerType,
   disabled,
   onSuccess,
-  setDirty,
-  dirty,
   isCreating,
   setIsCreating,
   buttonProps,
@@ -64,6 +58,10 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
     [],
   );
 
+  // Subscribe to form changes to ensure the SaveButton re-renders when 'dirty' prop changes.
+  // This helps when the component is rendered in a memoized context like a table toolbar.
+  Form.useWatch([], formRef);
+
   if (!permissions.canCreate) return null;
 
   const handleSave = async () => {
@@ -85,7 +83,6 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
 
       onSuccess?.(newScheduler);
       setOpen(false);
-      setDirty(false);
       formRef.resetFields();
     } catch {
       // Form validation handles errors
@@ -106,13 +103,11 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setDirty(false);
+          formRef.resetFields();
           setOpen(true);
         }}
       >
-        <Tooltip
-          title={disabled ? t('scheduler.limited', { limit }) : undefined}
-        >
+        <Tooltip title={disabled ? t('scheduler.limited', { limit }) : undefined}>
           {t('scheduler')}
         </Tooltip>
       </Button>
@@ -125,28 +120,29 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         }
         size={600}
         open={open}
+        destroyOnHidden
         onClose={() => {
-          setDirty(false);
           setOpen(false);
         }}
         extra={
           <SaveButton
             size="small"
             loading={loading || isCreating}
-            disabled={disabled || !dirty}
+            disabled={disabled}
             onClick={handleSave}
           />
         }
       >
-        <Scheduler
-          setDirty={setDirty}
-          formRef={formRef}
-          prefix={prefix}
-          schedulerType={schedulerType}
-          durationTypes={durationTypes}
-          discountTypes={discountTypes}
-          disabled={disabled}
-        />
+        {open && (
+          <Scheduler
+            formRef={formRef}
+            prefix={prefix}
+            schedulerType={schedulerType}
+            durationTypes={durationTypes}
+            discountTypes={discountTypes}
+            disabled={disabled}
+          />
+        )}
       </Drawer>
     </>
   );

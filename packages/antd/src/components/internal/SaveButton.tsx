@@ -46,6 +46,7 @@ export const SaveButton: React.FC<TSaveButton> = (props) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     if (formRef && htmlType === 'submit') {
       formRef.submit();
     }

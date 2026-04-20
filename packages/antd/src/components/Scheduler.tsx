@@ -43,8 +43,6 @@ type TSchedulerProps = {
   discountTypes?: (keyof typeof EDiscountType)[];
   /** Available duration type options (HOUR, DAY, WEEK, MONTH, YEAR, FOREVER). @default [] */
   durationTypes?: (keyof typeof EDurationTypes)[];
-  /** Callback to set the dirty state. */
-  setDirty: (dirty: boolean) => void;
 };
 
 export const Scheduler: React.FC<TSchedulerProps> = (props) => {
@@ -55,7 +53,6 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     prefix,
     entity,
     onFinish,
-    setDirty,
     disabled = false,
     durationTypes = [],
     discountTypes = [],
@@ -101,12 +98,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
 
     const _duration = schedulerValue.duration;
     if (_duration?.type && _duration?.period) {
-      handleDurationValueChange(
-        _duration,
-        schedulerValue as IScheduler,
-        setOccurs,
-        t,
-      );
+      handleDurationValueChange(_duration, schedulerValue as IScheduler, setOccurs, t);
     }
   }, [schedulerValue, t]);
 
@@ -132,7 +124,6 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
         form={formRef}
         className={styles.scheduler}
         onFinish={onFinish}
-        onValuesChange={() => setDirty(true)}
         initialValues={buildInitialValues}
       >
         {[ESchedulerPrefix.DISCOUNT, ESchedulerPrefix.TRIAL_DISCOUNT].includes(schedulerType) && (

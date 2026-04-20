@@ -40,11 +40,15 @@ export const handleChangeStartDate = (
   value: Dayjs,
   setStartAt: Dispatch<SetStateAction<string | null>>,
 ) => {
+  const transform = (value: number) => (value < 10 ? '0' + value : value).toString();
+
   const _m = dayjs(value);
+  const _hour = _m.hour();
+  const _minute = _m.minute();
   const _startAt = [
     _m.format('dddd'),
     `${_m.date()} ${_m.format('MMMM')} ${_m.format('YYYY')}`,
-    `at ${_m.hour()}:${_m.minute()}`,
+    `at ${transform(_hour)}:${transform(_minute)}`,
   ].join(', ');
 
   setStartAt(_startAt);
