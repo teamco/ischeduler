@@ -77,7 +77,7 @@ export const columnsMetadata = (
     schedulerType,
   )
     ? {
-        title: t('scheduler.meta.duration'),
+        title: t('scheduler.meta.discount'),
         dataIndex: 'discount',
         key: 'discount',
         width: 150,

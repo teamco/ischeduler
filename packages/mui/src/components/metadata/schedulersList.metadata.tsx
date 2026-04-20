@@ -80,7 +80,7 @@ export const columnsMetadata = (props: TArgs): TMuiColumn[] => {
       ? {
           id: 'discount',
           key: 'discount',
-          label: t('scheduler.meta.duration'),
+          label: t('scheduler.meta.discount'),
           minWidth: 120,
           format: (discount: unknown) => {
             const d = discount as TDiscount;

@@ -124,10 +124,10 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>{t('scheduler.meta.duration')}</InputLabel>
+                  <InputLabel>{t('scheduler.meta.discount')}</InputLabel>
                   <Select
                     value={scheduler.discount?.type || ''}
-                    label={t('scheduler.meta.duration')}
+                    label={t('scheduler.meta.discount')}
                     disabled={disabled || loading}
                     onChange={(e) => handleFieldChange('discount.type', e.target.value)}
                   >
@@ -142,7 +142,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                   fullWidth
                   size="small"
                   type="number"
-                  label={t('scheduler.meta.duration')}
+                  label={t('scheduler.meta.discount')}
                   value={scheduler.discount?.value ?? ''}
                   disabled={disabled || loading}
                   onChange={(e) => handleFieldChange('discount.value', parseInt(e.target.value, 10))}

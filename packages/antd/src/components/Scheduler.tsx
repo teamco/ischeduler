@@ -138,12 +138,12 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
         {[ESchedulerPrefix.DISCOUNT, ESchedulerPrefix.TRIAL_DISCOUNT].includes(schedulerType) && (
           <Row gutter={[24, 24]}>
             <Col span={12}>
-              <Form.Item label={t('scheduler.meta.duration')}>
+              <Form.Item label={t('scheduler.meta.discount')}>
                 <Space.Compact>
                   <Form.Item
                     noStyle
                     name={mergeNames(prefix, CNsDiscount, 'type')}
-                    rules={[requiredField(t('scheduler.meta.duration'), true)]}
+                    rules={[requiredField(t('scheduler.meta.discount'), true)]}
                   >
                     <Select
                       style={{ width: 150 }}
@@ -158,7 +158,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                   <Form.Item
                     noStyle
                     name={mergeNames(prefix, CNsDiscount, 'value')}
-                    rules={[requiredField(t('scheduler.meta.duration'), true)]}
+                    rules={[requiredField(t('scheduler.meta.discount'), true)]}
                   >
                     <InputNumber
                       min={1}
