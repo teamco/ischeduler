@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 
 import { Scheduler } from '@ischeduler-antd/components/Scheduler';
+import { SaveButton } from '@ischeduler-antd/components/internal/SaveButton';
 import {
   SchedulerContext,
   CScheduler,
@@ -66,6 +67,25 @@ const Wrapper: React.FC<{ setDirty: (v: boolean) => void }> = ({ setDirty }) => 
   );
 };
 
+const DrawerLike: React.FC = () => {
+  const [form] = Form.useForm();
+  const [dirty, setDirty] = React.useState(false);
+  return (
+    <SchedulerContext.Provider value={ctxValue}>
+      <SaveButton isEdit={false} disabled={!dirty} />
+      <Scheduler
+        formRef={form}
+        prefix={[CScheduler, ESchedulerPrefix.DISCOUNT]}
+        schedulerType={ESchedulerPrefix.DISCOUNT}
+        durationTypes={['DAY', 'WEEK', 'MONTH', 'YEAR']}
+        discountTypes={['PERCENT', 'AMOUNT']}
+        entity={entity}
+        setDirty={setDirty}
+      />
+    </SchedulerContext.Provider>
+  );
+};
+
 describe('Scheduler dirty tracking', () => {
   it('calls setDirty(true) when a form field value changes', async () => {
     const setDirty = vi.fn();
@@ -88,5 +108,25 @@ describe('Scheduler dirty tracking', () => {
     const setDirty = vi.fn();
     render(<Wrapper setDirty={setDirty} />);
     expect(setDirty).not.toHaveBeenCalled();
+  });
+
+  it('save button is disabled initially and enabled after a field change', async () => {
+    const { container } = render(<DrawerLike />);
+
+    const saveBtn = container.querySelector('button.ant-btn') as HTMLButtonElement;
+    expect(saveBtn).toBeTruthy();
+    expect(saveBtn).toBeDisabled();
+
+    const input = container.querySelector(
+      'input#scheduler_discount_discount_value',
+    ) as HTMLInputElement;
+    expect(input).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.change(input, { target: { value: '42' } });
+      fireEvent.blur(input);
+    });
+
+    expect(saveBtn).not.toBeDisabled();
   });
 });
