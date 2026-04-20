@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
-import { render, fireEvent, act } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { Form } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -50,10 +50,11 @@ const entity: IScheduler = {
   metadata: { createdAt: dayjs('2026-01-01'), updatedAt: dayjs('2026-01-01') },
 };
 
-const Wrapper: React.FC<{ setDirty: (v: boolean) => void }> = ({ setDirty }) => {
+const DrawerLike: React.FC<{ disabled: boolean }> = ({ disabled }) => {
   const [form] = Form.useForm();
   return (
     <SchedulerContext.Provider value={ctxValue}>
+      <SaveButton isEdit={false} disabled={disabled} />
       <Scheduler
         formRef={form}
         prefix={[CScheduler, ESchedulerPrefix.DISCOUNT]}
@@ -61,72 +62,25 @@ const Wrapper: React.FC<{ setDirty: (v: boolean) => void }> = ({ setDirty }) => 
         durationTypes={['DAY', 'WEEK', 'MONTH', 'YEAR']}
         discountTypes={['PERCENT', 'FIXED']}
         entity={entity}
-        setDirty={setDirty}
       />
     </SchedulerContext.Provider>
   );
 };
 
-const DrawerLike: React.FC = () => {
-  const [form] = Form.useForm();
-  const [dirty, setDirty] = React.useState(false);
-  return (
-    <SchedulerContext.Provider value={ctxValue}>
-      <SaveButton isEdit={false} disabled={!dirty} />
-      <Scheduler
-        formRef={form}
-        prefix={[CScheduler, ESchedulerPrefix.DISCOUNT]}
-        schedulerType={ESchedulerPrefix.DISCOUNT}
-        durationTypes={['DAY', 'WEEK', 'MONTH', 'YEAR']}
-        discountTypes={['PERCENT', 'FIXED']}
-        entity={entity}
-        setDirty={setDirty}
-      />
-    </SchedulerContext.Provider>
-  );
-};
+describe('Scheduler disabled tracking', () => {
+  it('save button is enabled initially', async () => {
+    const { container } = render(<DrawerLike disabled={false} />);
 
-describe('Scheduler dirty tracking', () => {
-  it('calls setDirty(true) when a form field value changes', async () => {
-    const setDirty = vi.fn();
-    const { container } = render(<Wrapper setDirty={setDirty} />);
-
-    const input = container.querySelector(
-      'input#scheduler_discount_discount_value',
-    ) as HTMLInputElement;
-    expect(input).toBeTruthy();
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: '42' } });
-      fireEvent.blur(input);
-    });
-
-    expect(setDirty).toHaveBeenCalledWith(true);
+    const saveBtn = container.querySelector('button.ant-btn') as HTMLButtonElement;
+    expect(saveBtn).toBeTruthy();
+    expect(saveBtn).not.toBeDisabled();
   });
 
-  it('does not call setDirty on initial mount', () => {
-    const setDirty = vi.fn();
-    render(<Wrapper setDirty={setDirty} />);
-    expect(setDirty).not.toHaveBeenCalled();
-  });
-
-  it('save button is disabled initially and enabled after a field change', async () => {
-    const { container } = render(<DrawerLike />);
+  it('save button is disabled initially', async () => {
+    const { container } = render(<DrawerLike disabled={true} />);
 
     const saveBtn = container.querySelector('button.ant-btn') as HTMLButtonElement;
     expect(saveBtn).toBeTruthy();
     expect(saveBtn).toBeDisabled();
-
-    const input = container.querySelector(
-      'input#scheduler_discount_discount_value',
-    ) as HTMLInputElement;
-    expect(input).toBeTruthy();
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: '42' } });
-      fireEvent.blur(input);
-    });
-
-    expect(saveBtn).not.toBeDisabled();
   });
 });

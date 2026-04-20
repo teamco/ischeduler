@@ -20,7 +20,6 @@ const SchedulerWithForm = (args: { schedulerType: ESchedulerPrefix; disabled?: b
       durationTypes={durationTypes}
       discountTypes={discountTypes}
       disabled={args.disabled}
-      setDirty={() => {}}
     />
   );
 };

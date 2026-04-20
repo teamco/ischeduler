@@ -5,9 +5,11 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   plugins: [
     dts({
-      tsConfigFilePath: './tsconfig.build.json',
+      tsconfigPath: './tsconfig.build.json',
+      rollupTypes: false,
       insertTypesEntry: true,
-      outputDir: 'dist',
+      outDir: 'dist',
+      pathsToAliases: false,
     }),
   ],
   build: {
@@ -20,7 +22,9 @@ export default defineConfig({
     },
     rolldownOptions: {
       external: (id) =>
-        /^(react|react-dom|react\/jsx-runtime|dayjs|@mui\/|@emotion\/|@teamco\/ischeduler)/.test(id),
+        /^(react|react-dom|react\/jsx-runtime|dayjs|@mui\/|@emotion\/|@teamco\/ischeduler)/.test(
+          id,
+        ),
       output: {
         globals: {
           react: 'React',

@@ -56,8 +56,8 @@
     "dayjs": "^1.11.20",
     "jsdom": "^29.0.0",
     "less": "^4.6.4",
-    "vite": "^8.0.3",
-    "vite-plugin-dts": "^1.0.5",
+    "vite": "^8.0.9",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.0"
   }
 }

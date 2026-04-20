@@ -11,7 +11,6 @@ const { Paragraph } = Typography;
 
 const BasicSaleDemo = () => {
   const [lastSaved, setLastSaved] = useState<IScheduler | null>(null);
-  const [dirty, setDirty] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const onCreate = useCallback(async (type: ESchedulerPrefix, scheduler: IScheduler) => {
@@ -28,8 +27,6 @@ const BasicSaleDemo = () => {
           <SchedulerDrawerButton
             schedulerType={ESchedulerPrefix.SALE}
             onSuccess={(s) => setLastSaved(s)}
-            dirty={dirty}
-            setDirty={setDirty}
             isCreating={isCreating}
             setIsCreating={setIsCreating}
             buttonProps={{ color: 'primary', variant: 'solid', style: {} }}
@@ -55,7 +52,6 @@ const TYPE_OPTIONS = [
 const TypeSelectorDemo = () => {
   const [schedulerType, setSchedulerType] = useState<ESchedulerPrefix>(ESchedulerPrefix.SALE);
   const [lastSaved, setLastSaved] = useState<IScheduler | null>(null);
-  const [dirty, setDirty] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const onCreate = useCallback(async (type: ESchedulerPrefix, scheduler: IScheduler) => {
@@ -65,7 +61,6 @@ const TypeSelectorDemo = () => {
   const handleTypeChange = (value: ESchedulerPrefix) => {
     setSchedulerType(value);
     setLastSaved(null);
-    setDirty(false);
     setIsCreating(false);
   };
 
@@ -89,8 +84,6 @@ const TypeSelectorDemo = () => {
             key={schedulerType}
             schedulerType={schedulerType}
             onSuccess={(s) => setLastSaved(s)}
-            dirty={dirty}
-            setDirty={setDirty}
             isCreating={isCreating}
             setIsCreating={setIsCreating}
             buttonProps={{ color: 'primary', variant: 'solid', style: {} }}
