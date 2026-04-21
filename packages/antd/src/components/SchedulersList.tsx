@@ -68,7 +68,6 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
   const entitySchedulers = schedulers[schedulerType] ?? [];
 
   const [removedNewIds, setRemovedNewIds] = useState<Set<string>>(new Set());
-  const [dirty, setDirty] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const visibleSchedulers = useMemo(() => {
@@ -115,7 +114,6 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
 
       setEditDrawerOpen(false);
       setEditingEntity(null);
-      setDirty(false);
       editFormRef.resetFields();
       onRefresh?.();
     } catch {
@@ -211,9 +209,8 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
         }
         size={600}
         open={editDrawerOpen}
-        destroyOnClose
+        destroyOnHidden
         onClose={() => {
-          setDirty(false);
           setEditDrawerOpen(false);
           setEditingEntity(null);
         }}
@@ -222,7 +219,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
             size="small"
             isEdit={!!editingEntity}
             loading={loading || isCreating}
-            disabled={disabled || !dirty || limited}
+            disabled={disabled || limited}
             onClick={handleEditSave}
           />
         }

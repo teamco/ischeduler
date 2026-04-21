@@ -58,10 +58,6 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
     [],
   );
 
-  // Subscribe to form changes to ensure the SaveButton re-renders when 'dirty' prop changes.
-  // This helps when the component is rendered in a memoized context like a table toolbar.
-  Form.useWatch([], formRef);
-
   if (!permissions.canCreate) return null;
 
   const handleSave = async () => {
