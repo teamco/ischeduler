@@ -88,16 +88,13 @@ runs:
         echo "tag=$TAG" >> $GITHUB_OUTPUT
 
         # 4b. Sync workspace package versions
-        for pkg in apps/client apps/api libs/shared; do
-          if [ -f "$pkg/package.json" ]; then
-            cd "$pkg"
-            npm version "$NEW_V" --no-git-tag-version
-            cd -
-          fi
-        done
+        npm version "$NEW_V" --no-git-tag-version --workspaces
 
         # 5. Stage versioned files
-        git add package.json package-lock.json apps/client/package.json apps/api/package.json libs/shared/package.json 2>/dev/null || git add package.json
+        git add package.json package-lock.json
+        npm query .workspace | grep '"location":' | cut -d '"' -f 4 | while read -r loc; do
+          git add "$loc/package.json"
+        done
 
         # 6. Create commit message using the processed list
         printf "ci: %s version bump to %s [skip ci]\n\nChanges:\n\n%s\n" "$BUMP_TYPE" "$TAG" "$PROCESSED_COMMITS" > .commit_msg
