@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Drawer, Form, Table, type TableProps } from 'antd';
 import { ScheduleTwoTone } from '@ant-design/icons';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 
 import { Scheduler } from '../components/Scheduler';
 import { SaveButton } from '../components/internal/SaveButton';
@@ -91,12 +91,12 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
     [],
   );
 
-  const handleEdit = (entity: IScheduler) => {
+  const handleEdit = useCallback((entity: IScheduler) => {
     setEditingEntity(entity);
     setEditDrawerOpen(true);
-  };
+  }, []);
 
-  const handleEditSave = async () => {
+  const handleEditSave = useCallback(async () => {
     try {
       await editFormRef.validateFields();
       const formValue = editFormRef.getFieldValue(prefix);
@@ -119,35 +119,52 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
     } catch {
       // Form validation handles errors
     }
-  };
+  }, [editFormRef, prefix, editingEntity, schedulerType, onUpdate, onRefresh]);
 
-  const handleDelete = async (entity: IScheduler) => {
-    if (entity.id?.startsWith('new-')) {
-      setRemovedNewIds((prev) => {
-        const next = new Set(prev);
-        if (entity.id) next.add(entity.id);
-        return next;
-      });
-      return;
-    }
+  const handleDelete = useCallback(
+    async (entity: IScheduler) => {
+      if (entity.id?.startsWith('new-')) {
+        setRemovedNewIds((prev) => {
+          const next = new Set(prev);
+          if (entity.id) next.add(entity.id);
+          return next;
+        });
+        return;
+      }
 
-    if (onDelete && entity.id) {
-      await onDelete(schedulerType, entity.id);
-      onRefresh?.();
-    } else {
-      console.warn('No onDelete handler provided');
-    }
-  };
+      if (onDelete && entity.id) {
+        await onDelete(schedulerType, entity.id);
+        onRefresh?.();
+      } else {
+        console.warn('No onDelete handler provided');
+      }
+    },
+    [onDelete, schedulerType, onRefresh],
+  );
 
-  const columns: TableProps<IScheduler>['columns'] = columnsMetadata({
-    disabled,
-    schedulerType,
-    entities: visibleSchedulers,
-    currency,
-    t,
-    onEdit: permissions.canUpdate ? handleEdit : undefined,
-    onDelete: permissions.canDelete ? handleDelete : undefined,
-  });
+  const columns: TableProps<IScheduler>['columns'] = useMemo(
+    () =>
+      columnsMetadata({
+        disabled,
+        schedulerType,
+        entities: visibleSchedulers,
+        currency,
+        t,
+        onEdit: permissions.canUpdate ? handleEdit : undefined,
+        onDelete: permissions.canDelete ? handleDelete : undefined,
+      }),
+    [
+      disabled,
+      schedulerType,
+      visibleSchedulers,
+      currency,
+      t,
+      permissions.canUpdate,
+      permissions.canDelete,
+      handleEdit,
+      handleDelete,
+    ],
+  );
 
   const { filteredColumns, columnsList, selectedColumns, setSelectedColumns } = useColumnsToggle(
     columns as any[],

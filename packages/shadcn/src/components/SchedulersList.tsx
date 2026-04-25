@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 import { Button } from './ui/button';
@@ -69,13 +69,13 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
 
   const limited = visibleSchedulers.length >= limit;
 
-  const handleEdit = (entity: IScheduler) => {
+  const handleEdit = useCallback((entity: IScheduler) => {
     setEditingEntity(JSON.parse(JSON.stringify(entity)));
     setEditDrawerOpen(true);
     setDirty(false);
-  };
+  }, []);
 
-  const handleEditSave = async () => {
+  const handleEditSave = useCallback(async () => {
     if (!editingEntity || !onUpdate) return;
     try {
       await onUpdate(schedulerType, editingEntity);
@@ -86,24 +86,26 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     } catch (error) {
       console.error('Failed to update scheduler:', error);
     }
-  };
+  }, [editingEntity, onUpdate, schedulerType, onRefresh]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleDelete = async (entity: IScheduler) => {
-    if (entity.id?.startsWith('new-')) {
-      setRemovedNewIds((prev) => {
-        const next = new Set(prev);
-        if (entity.id) next.add(entity.id);
-        return next;
-      });
-      return;
-    }
+  const handleDelete = useCallback(
+    async (entity: IScheduler) => {
+      if (entity.id?.startsWith('new-')) {
+        setRemovedNewIds((prev) => {
+          const next = new Set(prev);
+          if (entity.id) next.add(entity.id);
+          return next;
+        });
+        return;
+      }
 
-    if (onDelete && entity.id) {
-      await onDelete(schedulerType, entity.id);
-      onRefresh?.();
-    }
-  };
+      if (onDelete && entity.id) {
+        await onDelete(schedulerType, entity.id);
+        onRefresh?.();
+      }
+    },
+    [onDelete, schedulerType, onRefresh],
+  );
 
   const columns = useMemo(
     () =>
@@ -124,6 +126,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
       t,
       permissions.canUpdate,
       permissions.canDelete,
+      handleEdit,
       handleDelete,
     ],
   );

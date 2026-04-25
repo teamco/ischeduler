@@ -92,7 +92,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     setEditDrawerDirty(false);
   }, []);
 
-  const handleEditSave = async () => {
+  const handleEditSave = useCallback(async () => {
     if (!editingEntity || !onUpdate) return;
     try {
       await onUpdate(schedulerType, editingEntity);
@@ -103,7 +103,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     } catch (error) {
       console.error('Failed to update scheduler:', error);
     }
-  };
+  }, [editingEntity, onUpdate, schedulerType, onRefresh]);
 
   const handleDelete = useCallback(
     async (entity: IScheduler) => {
