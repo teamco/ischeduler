@@ -12,6 +12,7 @@ permissions:
   pages: write
   id-token: write
   security-events: write
+  actions: read
 
 jobs:
   lint:
@@ -117,7 +118,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # ---------------------------------------------------------
-  # 6. RELEASE (Bump & Publish)
+  # 6. RELEASE (Bump & GitHub Release)
   # ---------------------------------------------------------
   release:
     name: 'Release'
@@ -131,6 +132,15 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
       - uses: ./.github/actions/setup
       - name: Release Management
+        id: release_management
         uses: ./.github/actions/bump
         with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release_management.outputs.tag }}
+          name: ${{ steps.release_management.outputs.tag }}
+          body: ${{ steps.release_management.outputs.release_body }}
+          generate_release_notes: false
+          token: ${{ secrets.REPO_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
