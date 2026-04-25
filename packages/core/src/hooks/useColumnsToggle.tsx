@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type React from 'react';
 import type { ICommonDataType } from '../types';
 
@@ -44,9 +44,6 @@ export const useColumnsToggle = (
   setSelectedColumns: React.Dispatch<React.SetStateAction<string[]>>;
   filteredColumns: TColumn[];
 } => {
-  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
-  const initializedRef = useRef(false);
-
   const columnsList = useMemo<ISelectItemProps[]>(
     () =>
       columns
@@ -58,15 +55,10 @@ export const useColumnsToggle = (
     [columns],
   );
 
-  useEffect(() => {
-    if (!initializedRef.current && columnsList.length > 0) {
-      const hiddenSet = new Set(hiddenByDefault.map(String));
-      const concealable = columnsList.map((c) => c.value);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedColumns(concealable.filter((c) => !hiddenSet.has(c)));
-      initializedRef.current = true;
-    }
-  }, [columnsList, hiddenByDefault]);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(() => {
+    const hiddenSet = new Set(hiddenByDefault.map(String));
+    return columnsList.map((c) => c.value).filter((c) => !hiddenSet.has(c));
+  });
 
   const filteredColumns = useMemo<TColumn[]>(
     () => filterOutColumns(columns, selectedColumns),
