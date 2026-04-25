@@ -1,6 +1,6 @@
 {
   "name": "@teamco/ischeduler-antd",
-  "version": "2.0.16",
+  "version": "0.3.0",
   "description": "iScheduler UI components for React + Ant Design",
   "license": "MIT",
   "repository": {
