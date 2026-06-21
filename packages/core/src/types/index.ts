@@ -146,11 +146,19 @@ export type TSchedulerDuration = {
   period: number;
 };
 
-export type TSchedulerRange = {
-  startedAt: dayjs.Dayjs | string;
+/**
+ * Default date representation for scheduler dates. The date-bearing types below
+ * are generic over `D` so a consumer can specialize them (e.g. to a Firestore
+ * `Timestamp`) while the package's own UI components keep the `Dayjs | string`
+ * default.
+ */
+export type TSchedulerDate = dayjs.Dayjs | string;
+
+export type TSchedulerRange<D = TSchedulerDate> = {
+  startedAt: D;
   endReason: {
     type: EEndReasonType;
-    expiredAt: dayjs.Dayjs | string | null;
+    expiredAt: D | null;
     occurrences?: number;
   };
 };
@@ -169,22 +177,22 @@ export type TSchedulerRepeat = {
   };
 };
 
-export interface ISchedulerMetadata {
-  createdAt?: string | dayjs.Dayjs;
-  updatedAt?: string | dayjs.Dayjs;
+export interface ISchedulerMetadata<D = TSchedulerDate> {
+  createdAt?: D;
+  updatedAt?: D;
   createdBy?: string;
   updatedBy?: string;
 }
 
-export interface IScheduler {
+export interface IScheduler<D = TSchedulerDate> {
   id?: string;
   type: ESchedulerPrefix;
   duration: TSchedulerDuration;
   repeat: TSchedulerRepeat;
-  range: TSchedulerRange;
+  range: TSchedulerRange<D>;
   discount?: TDiscount | null;
   status?: EStatus;
-  metadata?: ISchedulerMetadata;
+  metadata?: ISchedulerMetadata<D>;
 }
 
 // ============================================================
@@ -195,18 +203,19 @@ type TConditionalDiscount<P extends ESchedulerPrefix> = P extends ESchedulerPref
   ? { [CNsDiscount]?: null }
   : { [CNsDiscount]?: TDiscount };
 
-export type TScheduler<P extends ESchedulerPrefix> = IScheduler & TConditionalDiscount<P>;
+export type TScheduler<P extends ESchedulerPrefix, D = TSchedulerDate> = IScheduler<D> &
+  TConditionalDiscount<P>;
 
-export type RequiredSchedulers = {
-  [K in Exclude<ESchedulerPrefix, ESchedulerPrefix.TRIAL_DISCOUNT>]: TScheduler<K>[];
+export type RequiredSchedulers<D = TSchedulerDate> = {
+  [K in Exclude<ESchedulerPrefix, ESchedulerPrefix.TRIAL_DISCOUNT>]: TScheduler<K, D>[];
 };
 
-export type OptionalSchedulers = {
-  [ESchedulerPrefix.TRIAL_DISCOUNT]?: TScheduler<ESchedulerPrefix.TRIAL_DISCOUNT>[];
+export type OptionalSchedulers<D = TSchedulerDate> = {
+  [ESchedulerPrefix.TRIAL_DISCOUNT]?: TScheduler<ESchedulerPrefix.TRIAL_DISCOUNT, D>[];
 };
 
-export type TSchedulers = {
-  [CScheduler]: RequiredSchedulers & OptionalSchedulers;
+export type TSchedulers<D = TSchedulerDate> = {
+  [CScheduler]: RequiredSchedulers<D> & OptionalSchedulers<D>;
 };
 
 // ============================================================
