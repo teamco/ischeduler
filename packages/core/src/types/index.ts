@@ -96,7 +96,7 @@ export enum EMonths {
   MAY = 'May',
   JUNE = 'June',
   JULY = 'July',
-  AUGUST = 'AUGUST',
+  AUGUST = 'August',
   SEPTEMBER = 'September',
   OCTOBER = 'October',
   NOVEMBER = 'November',
