@@ -14,22 +14,26 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        types: resolve(__dirname, 'src/types-entry.ts'),
+      },
       name: 'iSchedulerCore',
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'cjs' ? 'cjs' : 'es.js'}`,
     },
     rolldownOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'dayjs'],
       output: [
         {
           format: 'es',
-          entryFileNames: 'index.es.js',
+          entryFileNames: (chunk) =>
+            chunk.name === 'types' ? 'types.es.js' : 'index.es.js',
           exports: 'named',
         },
         {
           format: 'cjs',
-          entryFileNames: 'index.cjs',
+          entryFileNames: (chunk) =>
+            chunk.name === 'types' ? 'types.cjs' : 'index.cjs',
           exports: 'named',
         },
       ],
