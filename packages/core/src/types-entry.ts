@@ -4,6 +4,6 @@
  * Does NOT export React components (SchedulerProvider, useColumnsToggle, etc.).
  * Import via: @teamco/ischeduler-core/types
  */
-export * from './types';
-export * from './utils';
-export * from './i18n';
+export * from './types/index';
+export * from './utils/index';
+export * from './i18n/index';

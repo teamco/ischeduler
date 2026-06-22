@@ -1,11 +1,11 @@
 // Types
-export * from './types';
+export * from './types/index';
 
 // i18n
-export * from './i18n';
+export * from './i18n/index';
 
 // Utils
-export * from './utils';
+export * from './utils/index';
 
 // Handlers
 export * from './handlers';
