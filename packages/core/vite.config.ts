@@ -17,7 +17,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'iSchedulerCore',
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format}.js`,
+      fileName: (format) => `index.${format === 'cjs' ? 'cjs' : 'es.js'}`,
     },
     rolldownOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'dayjs'],
@@ -29,7 +29,7 @@ export default defineConfig({
         },
         {
           format: 'cjs',
-          entryFileNames: 'index.cjs.js',
+          entryFileNames: 'index.cjs',
           exports: 'named',
         },
       ],

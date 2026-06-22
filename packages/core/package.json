@@ -19,14 +19,14 @@
     "core"
   ],
   "type": "module",
-  "main": "dist/index.cjs.js",
+  "main": "dist/index.cjs",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs.js",
+      "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
   },
