@@ -16,7 +16,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
-        types: resolve(__dirname, 'src/types-entry.ts'),
+        'types-api': resolve(__dirname, 'src/types-entry.ts'),
       },
       name: 'iSchedulerCore',
       formats: ['es', 'cjs'],
@@ -27,13 +27,13 @@ export default defineConfig({
         {
           format: 'es',
           entryFileNames: (chunk) =>
-            chunk.name === 'types' ? 'types.es.js' : 'index.es.js',
+            chunk.name === 'types-api' ? 'types.es.js' : 'index.es.js',
           exports: 'named',
         },
         {
           format: 'cjs',
           entryFileNames: (chunk) =>
-            chunk.name === 'types' ? 'types.cjs' : 'index.cjs',
+            chunk.name === 'types-api' ? 'types.cjs' : 'index.cjs',
           exports: 'named',
         },
       ],
