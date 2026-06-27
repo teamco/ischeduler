@@ -8,6 +8,8 @@ import {
   Select,
   MenuItem,
   TextField,
+  Divider,
+  Paper,
 } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -176,6 +178,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
           </Grid>
         </Grid>
 
+        <Divider />
+
         {scheduler.duration?.type === 'WEEK' && (
           <WeeklyBehavior
             value={scheduler.repeat?.weekly?.days}
@@ -209,6 +213,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
             onWeeklyChange={(days) => handleFieldChange('repeat.weekly.days', days)}
           />
         )}
+
+        <Divider />
 
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
@@ -251,13 +257,18 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
           </Grid>
         </Grid>
 
-        <Typography
-          variant="body2"
-          sx={{ fontStyle: 'italic', color: 'text.secondary' }}
-          dangerouslySetInnerHTML={{
-            __html: t('scheduler.result', { occurs, startAt: startAt ?? '' }),
-          }}
-        />
+        <Paper
+          variant="outlined"
+          sx={{ px: 2, py: 1.5, bgcolor: 'action.hover', borderRadius: 2 }}
+        >
+          <Typography
+            variant="body2"
+            sx={{ color: 'text.primary', lineHeight: 1.6 }}
+            dangerouslySetInnerHTML={{
+              __html: t('scheduler.result', { occurs, startAt: startAt ?? '' }),
+            }}
+          />
+        </Paper>
       </Box>
     </LocalizationProvider>
   );
