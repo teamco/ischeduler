@@ -18,7 +18,9 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'iSchedulerShadcn',
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format}.js`,
+      // CJS output must use .cjs ext — package is "type": "module", so a
+      // .js file would be parsed as ESM and break on `exports`.
+      fileName: (format) => (format === 'es' ? 'index.es.js' : 'index.cjs'),
     },
     rolldownOptions: {
       external: [
