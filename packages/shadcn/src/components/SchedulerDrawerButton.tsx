@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Button, ButtonProps } from './ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { CalendarDays, X } from 'lucide-react';
 import {
@@ -124,22 +124,15 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         </TooltipProvider>
       )}
 
-      <SheetContent className="w-full sm:max-w-[600px] flex flex-col p-0">
+      <SheetContent className="w-full sm:max-w-[600px] flex flex-col p-0 border-l-2 border-l-primary">
         <SheetHeader className="flex flex-row items-center justify-between space-y-0 px-6 py-4 border-b shrink-0">
           <div className="flex items-center gap-2">
             <CalendarDays className="h-5 w-5 text-primary" />
             <SheetTitle>{t('scheduler')}</SheetTitle>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
-              <X className="h-4 w-4" />
-            </Button>
-            <SaveButton
-              loading={loading || isCreating}
-              disabled={disabled || !dirty}
-              onClick={handleSave}
-            />
-          </div>
+          <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+            <X className="h-4 w-4" />
+          </Button>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-6 py-6">
@@ -153,6 +146,24 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
             disabled={disabled}
           />
         </div>
+
+        <SheetFooter className="px-6 py-4 border-t shrink-0 flex flex-row gap-2 sm:justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setOpen(false);
+              setDirty(false);
+            }}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <SaveButton
+            loading={loading || isCreating}
+            disabled={disabled || !dirty}
+            onClick={handleSave}
+          />
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );
