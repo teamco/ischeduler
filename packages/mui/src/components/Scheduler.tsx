@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   FormControl,
   InputLabel,
   Select,
@@ -122,40 +121,36 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
         {isDiscount && (
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>{t('scheduler.meta.discount')}</InputLabel>
-                  <Select
-                    value={scheduler.discount?.type || ''}
-                    label={t('scheduler.meta.discount')}
-                    disabled={disabled || loading}
-                    onChange={(e) => handleFieldChange('discount.type', e.target.value)}
-                  >
-                    {discountTypes.map((type) => (
-                      <MenuItem key={String(type)} value={type as string}>
-                        {EDiscountType[type]}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <TextField
-                  fullWidth
-                  size="small"
-                  type="number"
-                  label={t('scheduler.meta.discount')}
-                  value={scheduler.discount?.value ?? ''}
-                  disabled={disabled || loading}
-                  onChange={(e) => handleFieldChange('discount.value', parseInt(e.target.value, 10))}
-                />
-              </Box>
-            </Grid>
-          </Grid>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>{t('scheduler.meta.discount')}</InputLabel>
+              <Select
+                value={scheduler.discount?.type || ''}
+                label={t('scheduler.meta.discount')}
+                disabled={disabled || loading}
+                onChange={(e) => handleFieldChange('discount.type', e.target.value)}
+              >
+                {discountTypes.map((type) => (
+                  <MenuItem key={String(type)} value={type as string}>
+                    {EDiscountType[type]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              size="small"
+              type="number"
+              label={t('scheduler.meta.discount')}
+              value={scheduler.discount?.value ?? ''}
+              disabled={disabled || loading}
+              onChange={(e) => handleFieldChange('discount.value', parseInt(e.target.value, 10))}
+            />
+          </Box>
         )}
 
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 6 }}>
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+          <Box sx={{ flex: '1 1 180px', minWidth: 0 }}>
             <Duration
               label={t('scheduler.duration')}
               disabled={disabled || loading}
@@ -166,8 +161,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
               onTypeChange={(type) => handleFieldChange('duration.type', type)}
               onValueChange={(period) => handleFieldChange('duration.period', period)}
             />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          </Box>
+          <Box sx={{ flex: '1 1 180px', minWidth: 0 }}>
             <DateTimePicker
               label={t('scheduler.startedAt')}
               value={dayjs(scheduler.range?.startedAt)}
@@ -175,8 +170,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
               disabled={disabled || loading}
               slotProps={{ textField: { size: 'small', fullWidth: true } }}
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Divider />
 
@@ -216,8 +211,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
 
         <Divider />
 
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 6 }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 1 }}>
+          <Box sx={{ flex: '1 1 180px', minWidth: 0 }}>
             <FormControl fullWidth size="small">
               <InputLabel>{t('scheduler.duration.end')}</InputLabel>
               <Select
@@ -237,8 +232,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          </Box>
+          <Box sx={{ flex: '1 1 180px', minWidth: 0 }}>
             {scheduler.range?.endReason?.type === CEndReasonTypes[0] && (
               <OnThisDayBehavior
                 value={dayjs(scheduler.range?.endReason?.expiredAt)}
@@ -254,8 +249,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                 disabled={disabled}
               />
             )}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Paper
           variant="outlined"
