@@ -75,6 +75,7 @@
     "@teamco/ischeduler-core": "*",
     "dayjs": "^1.11.21",
     "jsdom": "^29.1.1",
+    "tw-animate-css": "^1",
     "vite": "^8.1.0",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.9"
