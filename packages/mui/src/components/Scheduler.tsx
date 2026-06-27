@@ -120,7 +120,7 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, py: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
         {isDiscount && (
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
