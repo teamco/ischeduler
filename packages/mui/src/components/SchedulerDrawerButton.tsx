@@ -78,6 +78,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   // Reset value when drawer opens
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSchedulerValue(DEFAULT_SCHEDULER as IScheduler);
     }
   }, [open, DEFAULT_SCHEDULER]);

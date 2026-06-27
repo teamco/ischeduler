@@ -51,16 +51,6 @@ export const WeeklyBehavior: React.FC<TWeeklyBehaviorProps> = (props) => {
   const fieldNames = mergeNames([...prefix, ...namespaces], 'days');
   const prevSelectionRef = useRef<string[]>([]);
 
-  // On mount, read initial value and update occurs text
-  useEffect(() => {
-    const selected = formRef.getFieldValue(fieldNames);
-    if (Array.isArray(selected) && selected.length) {
-      prevSelectionRef.current = selected;
-      updateOccursText();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formRef]);
-
   const updateOccursText = useCallback(() => {
     const scheduler = formRef.getFieldValue(prefix);
     if (scheduler?.duration) {
@@ -72,6 +62,16 @@ export const WeeklyBehavior: React.FC<TWeeklyBehaviorProps> = (props) => {
       );
     }
   }, [formRef, prefix, setOccurs, t]);
+
+  // On mount, read initial value and update occurs text
+  useEffect(() => {
+    const selected = formRef.getFieldValue(fieldNames);
+    if (Array.isArray(selected) && selected.length) {
+      prevSelectionRef.current = selected;
+      updateOccursText();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formRef]);
 
   const longDays = useMemo(
     () =>

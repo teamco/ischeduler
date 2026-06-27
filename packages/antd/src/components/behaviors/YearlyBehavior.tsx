@@ -58,25 +58,6 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     [t],
   );
 
-  useEffect(
-    () => {
-      const selected = formRef.getFieldValue(fieldNames);
-      if (selected) onChangePeriod(selected);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formRef],
-  );
-
-  const months = Object.keys(EMonths).map((month, idx) => ({
-    key: `${month}-${idx}`,
-    label: shortFormat ? (
-      <Tooltip title={longMonths[idx]}>{shortMonths[idx]}</Tooltip>
-    ) : (
-      longMonths[idx]
-    ),
-    value: month,
-  }));
-
   const onChangePeriod = (values: string[]) => {
     let selected = [...values];
 
@@ -99,6 +80,26 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
       t,
     );
   };
+
+  useEffect(
+    () => {
+      const selected = formRef.getFieldValue(fieldNames);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (selected) onChangePeriod(selected);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [formRef],
+  );
+
+  const months = Object.keys(EMonths).map((month, idx) => ({
+    key: `${month}-${idx}`,
+    label: shortFormat ? (
+      <Tooltip title={longMonths[idx]}>{shortMonths[idx]}</Tooltip>
+    ) : (
+      longMonths[idx]
+    ),
+    value: month,
+  }));
 
   return (
     <div className={styles.yearWrapper}>

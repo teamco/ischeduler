@@ -11,7 +11,7 @@ import globals from 'globals';
 export default [
   // 1. Ignore the dist directory
   {
-    ignores: ['dist/**', '**/*.d.ts', 'eslint.config.cjs', '.remember/**', '.pnp.cjs', 'tmp/**'],
+    ignores: ['**/dist/**', '**/*.d.ts', 'eslint.config.cjs', '.remember/**', '.pnp.cjs', 'tmp/**'],
   },
   // 2. Base JavaScript/TypeScript configuration
   js.configs.recommended,
