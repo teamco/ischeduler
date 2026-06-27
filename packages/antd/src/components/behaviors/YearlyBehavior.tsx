@@ -2,6 +2,7 @@ import { Form, type FormInstance, Tooltip } from 'antd';
 import React, {
   type Dispatch,
   type SetStateAction,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -39,8 +40,29 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     disabled,
   } = props;
 
-  const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
   const fieldNames = mergeNames([...prefix, ...namespaces], 'months');
+  const [selectedMonths, setSelectedMonths] = useState<string[]>(() => {
+    const initial = formRef.getFieldValue(fieldNames);
+    return Array.isArray(initial) && initial.length ? initial : [];
+  });
+
+  const updateOccursText = useCallback(() => {
+    const scheduler = formRef.getFieldValue(prefix);
+    if (scheduler?.duration) {
+      handleDurationValueChange(
+        { type: scheduler.duration.type, period: scheduler.duration.period },
+        scheduler,
+        setOccurs,
+        t,
+      );
+    }
+  }, [formRef, prefix, setOccurs, t]);
+
+  useEffect(() => {
+    if (selectedMonths.length) {
+      updateOccursText();
+    }
+  }, [selectedMonths, updateOccursText]);
 
   const longMonths = useMemo(
     () =>
@@ -58,25 +80,6 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     [t],
   );
 
-  useEffect(
-    () => {
-      const selected = formRef.getFieldValue(fieldNames);
-      if (selected) onChangePeriod(selected);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formRef],
-  );
-
-  const months = Object.keys(EMonths).map((month, idx) => ({
-    key: `${month}-${idx}`,
-    label: shortFormat ? (
-      <Tooltip title={longMonths[idx]}>{shortMonths[idx]}</Tooltip>
-    ) : (
-      longMonths[idx]
-    ),
-    value: month,
-  }));
-
   const onChangePeriod = (values: string[]) => {
     let selected = [...values];
 
@@ -90,15 +93,17 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
 
     setSelectedMonths(selected);
     setNestedDynamicFields(formRef, fieldNames.join('.'), selected);
-
-    const scheduler = formRef.getFieldValue(prefix);
-    handleDurationValueChange(
-      { type: scheduler.duration.type, period: scheduler.duration.period },
-      scheduler,
-      setOccurs,
-      t,
-    );
   };
+
+  const months = Object.keys(EMonths).map((month, idx) => ({
+    key: `${month}-${idx}`,
+    label: shortFormat ? (
+      <Tooltip title={longMonths[idx]}>{shortMonths[idx]}</Tooltip>
+    ) : (
+      longMonths[idx]
+    ),
+    value: month,
+  }));
 
   return (
     <div className={styles.yearWrapper}>

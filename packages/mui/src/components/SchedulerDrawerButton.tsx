@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Button,
   Drawer,
@@ -75,16 +75,10 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
 
   const [schedulerValue, setSchedulerValue] = useState<IScheduler>(DEFAULT_SCHEDULER as IScheduler);
 
-  // Reset value when drawer opens
-  useEffect(() => {
-    if (open) {
-      setSchedulerValue(DEFAULT_SCHEDULER as IScheduler);
-    }
-  }, [open, DEFAULT_SCHEDULER]);
-
   if (!permissions.canCreate) return null;
 
   const handleOpen = () => {
+    setSchedulerValue(DEFAULT_SCHEDULER as IScheduler);
     setOpen(true);
   };
 

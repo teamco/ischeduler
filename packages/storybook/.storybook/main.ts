@@ -31,6 +31,22 @@ const config: StorybookConfig = {
           less: { javascriptEnabled: true },
         },
       },
+      optimizeDeps: {
+        include: [
+          '@mui/material',
+          '@mui/icons-material',
+          '@mui/x-date-pickers',
+          '@emotion/react',
+          '@emotion/styled',
+          '@emotion/cache',
+        ],
+      },
+      build: {
+        commonjsOptions: {
+          include: [/node_modules/],
+          transformMixedEsModules: true,
+        },
+      },
     }),
 };
 
