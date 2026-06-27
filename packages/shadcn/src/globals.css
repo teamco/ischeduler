@@ -21,6 +21,10 @@
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme' layer(theme);
 @import 'tailwindcss/utilities' layer(utilities);
+/* Animation utilities (animate-in, fade-in-0, zoom-in-95, slide-in-from-*)
+ * used by the Radix-backed overlays (Dialog/Dropdown/Popover/Tooltip).
+ * Ships them in dist/index.css so consumers need no plugin or @source. */
+@import 'tw-animate-css';
 
 @theme inline {
   --color-background: hsl(var(--background));
