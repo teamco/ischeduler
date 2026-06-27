@@ -38,28 +38,28 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,less}\""
   },
   "peerDependencies": {
-    "@ant-design/icons": "^6.1.0",
+    "@ant-design/icons": "^6.3.1",
     "@teamco/ischeduler-core": "*",
-    "antd": "^6.3.5",
-    "dayjs": "^1.11.20",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "antd": "^6.4.5",
+    "dayjs": "^1.11.21",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "dependencies": {
     "classnames": "^2.5.1"
   },
   "devDependencies": {
-    "@ant-design/icons": "^6.1.1",
+    "@ant-design/icons": "^6.3.1",
     "@teamco/ischeduler-core": "*",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "antd": "^6.3.6",
-    "dayjs": "^1.11.20",
-    "jsdom": "^29.0.0",
-    "less": "^4.6.4",
-    "vite": "^8.0.9",
+    "antd": "^6.4.5",
+    "dayjs": "^1.11.21",
+    "jsdom": "^29.1.1",
+    "less": "^4.6.7",
+    "vite": "^8.1.0",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.9"
   }
 }

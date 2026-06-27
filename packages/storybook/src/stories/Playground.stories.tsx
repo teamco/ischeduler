@@ -18,8 +18,7 @@ import { SchedulersList as ShadcnList } from '@teamco/ischeduler-shadcn';
 // Mocks
 import { populatedSchedulers } from './antd/mocks/scheduler.mocks';
 
-// Styles (pre-compiled shadcn Tailwind CSS)
-import '../styles/shadcn-compiled.css';
+import '../styles/shadcn-input.css';
 
 type TAdapter = 'antd' | 'mui' | 'shadcn';
 

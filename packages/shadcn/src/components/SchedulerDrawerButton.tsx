@@ -25,6 +25,9 @@ export type SchedulerDrawerButtonProps = {
   isCreating: boolean;
   setIsCreating: (isCreating: boolean) => void;
   buttonProps?: Partial<ButtonProps>;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showButton?: boolean;
 };
 
 export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
@@ -36,6 +39,9 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   isCreating,
   setIsCreating,
   buttonProps,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  showButton = true,
 }) => {
   const {
     t,
@@ -44,7 +50,13 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
     onCreate,
     limit = DEFAULT_SCHEDULERS_LIMIT,
   } = useSchedulerContext();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled
+    ? (controlledOnOpenChange ?? setInternalOpen)
+    : setInternalOpen;
 
   const DEFAULT_SCHEDULER = useMemo(
     () =>
@@ -93,25 +105,27 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm" disabled={disabled || loading} {...buttonProps}>
-                {t('scheduler')}
-              </Button>
-            </SheetTrigger>
-          </TooltipTrigger>
-          {disabled && (
-            <TooltipContent>
-              <p>{t('scheduler.limited', { limit })}</p>
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
+      {showButton && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" disabled={disabled || loading} {...buttonProps}>
+                  {t('scheduler')}
+                </Button>
+              </SheetTrigger>
+            </TooltipTrigger>
+            {disabled && (
+              <TooltipContent>
+                <p>{t('scheduler.limited', { limit })}</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+      )}
 
-      <SheetContent className="w-full sm:max-w-[600px] overflow-y-auto">
-        <SheetHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
+      <SheetContent className="w-full sm:max-w-[600px] flex flex-col p-0">
+        <SheetHeader className="flex flex-row items-center justify-between space-y-0 px-6 py-4 border-b shrink-0">
           <div className="flex items-center gap-2">
             <CalendarDays className="h-5 w-5 text-primary" />
             <SheetTitle>{t('scheduler')}</SheetTitle>
@@ -128,7 +142,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
           </div>
         </SheetHeader>
 
-        <div className="mt-6">
+        <div className="flex-1 overflow-y-auto px-6 py-6">
           <Scheduler
             schedulerType={schedulerType}
             value={schedulerValue}

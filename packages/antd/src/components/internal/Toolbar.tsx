@@ -10,6 +10,7 @@ import type { ItemType } from 'antd/es/menu/interface';
 type TToolbarProps = {
   children?: React.ReactNode;
   items?: ItemType[];
+  extraItems?: ItemType[];
   onRefresh?: () => void;
   size?: SizeType;
 };
@@ -17,9 +18,9 @@ type TToolbarProps = {
 export const Toolbar = (props: TToolbarProps): React.JSX.Element => {
   const { loading, t } = useSchedulerContext();
 
-  const { children, items = [], size = 'middle', onRefresh } = props;
+  const { children, items = [], extraItems = [], size = 'middle', onRefresh } = props;
 
-  let baseItems: MenuProps['items'] = onRefresh
+  const refreshItem: ItemType[] = onRefresh
     ? [
         {
           key: 'refresh',
@@ -30,9 +31,16 @@ export const Toolbar = (props: TToolbarProps): React.JSX.Element => {
       ]
     : [];
 
-  if (items?.length) {
-    baseItems = items.concat([{ type: 'divider' }, ...baseItems]);
-  }
+  const hasItems = items.length > 0;
+  const hasExtra = extraItems.length > 0;
+  const hasRefresh = refreshItem.length > 0;
+
+  let baseItems: MenuProps['items'] = [];
+  if (hasItems) baseItems = [...items];
+  if (hasItems && hasExtra) baseItems = [...baseItems, { type: 'divider' }];
+  if (hasExtra) baseItems = [...baseItems, ...extraItems];
+  if ((hasItems || hasExtra) && hasRefresh) baseItems = [...baseItems, { type: 'divider' }];
+  baseItems = [...baseItems, ...refreshItem];
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8 }}>

@@ -5,9 +5,8 @@
   "description": "Unified Storybook for all iScheduler adapters",
   "type": "module",
   "scripts": {
-    "build:css": "tailwindcss -c tailwind.config.cjs -i src/styles/shadcn-input.css -o src/styles/shadcn-compiled.css --minify",
-    "storybook": "npm run build:css && storybook dev -p 6006",
-    "build-storybook": "npm run build:css && storybook build -o dist/storybook"
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o dist/storybook"
   },
   "dependencies": {
     "@teamco/ischeduler-antd": "*",
@@ -16,21 +15,22 @@
     "@teamco/ischeduler-shadcn": "*"
   },
   "devDependencies": {
-    "@ant-design/icons": "^6.1.0",
-    "@storybook/addon-docs": "^10.3.5",
+    "@ant-design/icons": "^6.3.1",
+    "@storybook/addon-docs": "^10.4.6",
     "@storybook/global": "^5.0.0",
-    "@storybook/react-vite": "^10.3.5",
-    "antd": "^6.3.3",
-    "autoprefixer": "^10.4.27",
-    "dayjs": "^1.11.20",
-    "eslint-plugin-storybook": "10.3.5",
-    "less": "^4.6.4",
-    "postcss": "^8.5.8",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "storybook": "^10.3.5",
-    "tailwindcss": "^3.4.19",
+    "@storybook/react-vite": "^10.4.6",
+    "@tailwindcss/vite": "^4.3.1",
+    "antd": "^6.4.5",
+    "autoprefixer": "^10.5.2",
+    "dayjs": "^1.11.21",
+    "eslint-plugin-storybook": "10.4.6",
+    "less": "^4.6.7",
+    "postcss": "^8.5.15",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "storybook": "^10.4.6",
+    "tailwindcss": "^4.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "vite": "^8.0.0"
+    "vite": "^8.1.0"
   }
 }

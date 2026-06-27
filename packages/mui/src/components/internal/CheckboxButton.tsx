@@ -18,6 +18,21 @@ type TCheckboxButtonProps = {
   helperText?: string;
 };
 
+const selectedToggleSx = {
+  '& .MuiToggleButton-root': {
+    borderColor: 'divider',
+    fontWeight: 500,
+    transition: 'all 150ms ease',
+    '&.Mui-selected': {
+      bgcolor: 'primary.main',
+      color: 'primary.contrastText',
+      borderColor: 'primary.main',
+      '&:hover': { bgcolor: 'primary.dark', borderColor: 'primary.dark' },
+    },
+    '&:hover:not(.Mui-selected)': { bgcolor: 'action.hover' },
+  },
+};
+
 export const CheckboxButton: React.FC<TCheckboxButtonProps> = (props) => {
   const { options, value = [], onChange, disabled, loading, label, error, helperText } = props;
 
@@ -28,7 +43,7 @@ export const CheckboxButton: React.FC<TCheckboxButtonProps> = (props) => {
   return (
     <Box>
       {label && (
-        <Typography variant="caption" color={error ? 'error' : 'textSecondary'} sx={{ mb: 0.5, display: 'block' }}>
+        <Typography variant="caption" color={error ? 'error' : 'text.secondary'} sx={{ mb: 0.75, display: 'block', fontWeight: 500 }}>
           {label}
         </Typography>
       )}
@@ -43,20 +58,20 @@ export const CheckboxButton: React.FC<TCheckboxButtonProps> = (props) => {
           gap: 0.5,
           '& .MuiToggleButtonGroup-grouped': {
             margin: 0,
-            border: '1px solid rgba(0, 0, 0, 0.12) !important',
-            borderRadius: '4px !important',
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: '6px !important',
           },
+          ...selectedToggleSx,
         }}
       >
         {options.map((option) => (
-          <ToggleButton key={option.key} value={option.value} sx={{ minWidth: 40, px: 1 }}>
+          <ToggleButton key={option.key} value={option.value} sx={{ minWidth: 44, px: 1.5, cursor: 'pointer' }}>
             {option.label}
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
-      {helperText && (
-        <FormHelperText error={error}>{helperText}</FormHelperText>
-      )}
+      {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
     </Box>
   );
 };

@@ -30,6 +30,7 @@ import { cn } from "../lib/utils"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 
+import { Separator } from "./ui/separator"
 import { Duration } from './internal/Duration';
 import { WeeklyBehavior } from './behaviors/WeeklyBehavior';
 import { MonthlyBehavior } from './behaviors/MonthlyBehavior';
@@ -186,12 +187,13 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
                 mode="single"
                 selected={scheduler.range?.startedAt ? dayjs(scheduler.range.startedAt).toDate() : undefined}
                 onSelect={(date) => handleFieldChange('range.startedAt', date ? dayjs(date).toISOString() : null)}
-                initialFocus
               />
             </PopoverContent>
           </Popover>
         </div>
       </div>
+
+      <Separator />
 
       {scheduler.duration?.type === 'WEEK' && (
         <WeeklyBehavior
@@ -226,6 +228,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
           onWeeklyChange={(days) => handleFieldChange('repeat.weekly.days', days)}
         />
       )}
+
+      <Separator />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
@@ -271,8 +275,8 @@ export const Scheduler: React.FC<TSchedulerProps> = (props) => {
         </div>
       </div>
 
-      <div 
-        className="text-sm text-muted-foreground"
+      <div
+        className="rounded-md bg-muted/50 border border-border px-4 py-3 text-sm text-foreground"
         dangerouslySetInnerHTML={{
           __html: t('scheduler.result', { occurs, startAt: startAt ?? '' }),
         }}

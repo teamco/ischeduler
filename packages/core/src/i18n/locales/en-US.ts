@@ -82,6 +82,7 @@ const enUS: SchedulerTranslations = {
   'scheduler.meta.period': 'Period',
   'scheduler.limited': 'The Scheduler is limited to: {{limit}}',
   'scheduler.info.helper': 'Set the scheduler to set a sale period.',
+  'table.noData': 'No data',
   'table.actions': 'Actions',
   'actions.edit': 'Edit',
   'actions.delete': 'Delete',

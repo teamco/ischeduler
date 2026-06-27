@@ -46,9 +46,9 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "peerDependencies": {
-    "dayjs": "^1.11.20",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "dayjs": "^1.11.21",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "dependencies": {
     "classnames": "^2.5.1"
@@ -57,11 +57,11 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "dayjs": "^1.11.20",
-    "jsdom": "^29.0.0",
-    "less": "^4.6.4",
-    "vite": "^8.0.9",
+    "dayjs": "^1.11.21",
+    "jsdom": "^29.1.1",
+    "less": "^4.6.7",
+    "vite": "^8.1.0",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.9"
   }
 }

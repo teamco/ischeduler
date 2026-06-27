@@ -34,6 +34,12 @@ import {
   useSchedulerContext,
 } from '@teamco/ischeduler-core';
 
+type TToolbarItem = {
+  label: React.ReactNode;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+};
+
 export type SchedulersListProps = {
   type: ESchedulerPrefix;
   title?: string;
@@ -41,6 +47,7 @@ export type SchedulersListProps = {
   readOnlyFields?: string[];
   currency?: keyof typeof ECurrency;
   onRefresh?: () => void;
+  extraItems?: TToolbarItem[];
 };
 
 export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
@@ -51,6 +58,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     readOnlyFields = [],
     currency,
     onRefresh,
+    extraItems = [],
   } = props;
 
   const {
@@ -170,6 +178,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 2 }}>
         <Toolbar
           onRefresh={onRefresh}
+          extraItems={extraItems}
           items={
             permissions.canCreate && !limited
               ? [

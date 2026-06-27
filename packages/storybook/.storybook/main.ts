@@ -1,6 +1,7 @@
 // This file has been automatically migrated to valid ESM format by Storybook.
 import type { StorybookConfig } from '@storybook/react-vite';
 import { mergeConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -15,6 +16,7 @@ const config: StorybookConfig = {
   },
   viteFinal: (config) =>
     mergeConfig(config, {
+      plugins: [tailwindcss()],
       resolve: {
         alias: {
           '@teamco/ischeduler-core': path.resolve(__dirname, '../../core/src/index.ts'),

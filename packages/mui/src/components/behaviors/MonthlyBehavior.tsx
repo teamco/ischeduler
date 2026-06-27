@@ -97,6 +97,22 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
     { value: 'LAST', label: t('scheduler.day.last') },
   ];
 
+  const toggleSx = {
+    '& .MuiToggleButton-root': {
+      borderColor: 'divider',
+      fontWeight: 500,
+      cursor: 'pointer',
+      transition: 'all 150ms ease',
+      '&.Mui-selected': {
+        bgcolor: 'primary.main',
+        color: 'primary.contrastText',
+        borderColor: 'primary.main',
+        '&:hover': { bgcolor: 'primary.dark' },
+      },
+      '&:hover:not(.Mui-selected)': { bgcolor: 'action.hover' },
+    },
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <ToggleButtonGroup
@@ -105,6 +121,7 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
         onChange={handleTypeChange}
         disabled={disabled || loading}
         size="small"
+        sx={toggleSx}
       >
         <ToggleButton value="DAY" aria-label="day">
           <CalendarMonthIcon fontSize="small" sx={{ mr: 1 }} />
@@ -135,7 +152,7 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
             onChange={handleWeekDayChange}
             disabled={disabled || loading}
             size="small"
-            sx={{ flexWrap: 'wrap' }}
+            sx={{ flexWrap: 'wrap', ...toggleSx }}
           >
             {periods.map((p) => (
               <ToggleButton key={p.value} value={p.value}>

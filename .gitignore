@@ -1,4 +1,6 @@
 **/**/.idea
+/.pnp.cjs
+/yarn.lock
 **/**/node_modules
 **/**/debug-storybook.log
 **/**/storybook-static
@@ -12,3 +14,6 @@
 /.env.test
 /.env.production
 **/**/.tmp
+.playwright-mcp/
+*.png
+/tmp/
