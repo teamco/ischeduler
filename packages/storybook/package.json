@@ -1,6 +1,6 @@
 {
   "name": "@teamco/ischeduler-storybook",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "private": true,
   "description": "Unified Storybook for all iScheduler adapters",
   "type": "module",
