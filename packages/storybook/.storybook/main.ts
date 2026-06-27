@@ -49,13 +49,9 @@ const config: StorybookConfig = {
         rollupOptions: {
           output: {
             manualChunks: (id) => {
-              if (
-                id.includes('@mui/') ||
-                id.includes('@emotion/') ||
-                id.includes('styled-engine')
-              ) {
-                return 'mui-vendor';
-              }
+              if (id.includes('@emotion/')) return 'emotion-vendor';
+              if (id.includes('@mui/system') || id.includes('styled-engine')) return 'mui-system-vendor';
+              if (id.includes('@mui/')) return 'mui-vendor';
             },
           },
         },
