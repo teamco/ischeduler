@@ -2,6 +2,8 @@ import { Form, type FormInstance, Tooltip } from 'antd';
 import React, {
   type Dispatch,
   type SetStateAction,
+  useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -44,6 +46,24 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     return Array.isArray(initial) && initial.length ? initial : [];
   });
 
+  const updateOccursText = useCallback(() => {
+    const scheduler = formRef.getFieldValue(prefix);
+    if (scheduler?.duration) {
+      handleDurationValueChange(
+        { type: scheduler.duration.type, period: scheduler.duration.period },
+        scheduler,
+        setOccurs,
+        t,
+      );
+    }
+  }, [formRef, prefix, setOccurs, t]);
+
+  useEffect(() => {
+    if (selectedMonths.length) {
+      updateOccursText();
+    }
+  }, [selectedMonths, updateOccursText]);
+
   const longMonths = useMemo(
     () =>
       Object.keys(EMonths).map((month) =>
@@ -73,14 +93,6 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
 
     setSelectedMonths(selected);
     setNestedDynamicFields(formRef, fieldNames.join('.'), selected);
-
-    const scheduler = formRef.getFieldValue(prefix);
-    handleDurationValueChange(
-      { type: scheduler.duration.type, period: scheduler.duration.period },
-      scheduler,
-      setOccurs,
-      t,
-    );
   };
 
   const months = Object.keys(EMonths).map((month, idx) => ({
