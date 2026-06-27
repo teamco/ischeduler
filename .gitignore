@@ -1,4 +1,6 @@
 **/**/.idea
+/.pnp.cjs
+/yarn.lock
 **/**/node_modules
 **/**/debug-storybook.log
 **/**/storybook-static

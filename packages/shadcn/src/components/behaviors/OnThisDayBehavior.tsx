@@ -48,7 +48,6 @@ export const OnThisDayBehavior: React.FC<TOnThisDayProps> = (props) => {
             selected={isValidDate ? dateValue : undefined}
             onSelect={(date) => onChange?.(date ? dayjs(date) : null)}
             disabled={(date) => date < minDate.toDate()}
-            initialFocus
           />
         </PopoverContent>
       </Popover>

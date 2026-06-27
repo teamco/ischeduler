@@ -22,12 +22,15 @@ type TToolbarItem = {
 type TToolbarProps = {
   children?: React.ReactNode;
   items?: TToolbarItem[];
+  extraItems?: TToolbarItem[];
   onRefresh?: () => void;
 };
 
 export const Toolbar: React.FC<TToolbarProps> = (props) => {
   const { loading, t } = useSchedulerContext();
-  const { children, items = [], onRefresh } = props;
+  const { children, items = [], extraItems = [], onRefresh } = props;
+
+  const hasExtra = extraItems.length > 0;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -81,14 +84,33 @@ export const Toolbar: React.FC<TToolbarProps> = (props) => {
             {typeof item.label === 'string' ? (
               <ListItemText>{item.label}</ListItemText>
             ) : (
-              // If it's a component (like SchedulerDrawerButton),
-              // we must render it as the label but avoid ListItemText padding issues
               <Box sx={{ flexGrow: 1, display: 'flex' }}>{item.label}</Box>
             )}
           </MenuItem>
         ))}
 
-        {items.length > 0 && onRefresh && <Divider />}
+        {items.length > 0 && hasExtra && <Divider />}
+
+        {extraItems.map((item, index) => (
+          <MenuItem
+            key={`extra-${index}`}
+            onClick={() => {
+              if (item.onClick) {
+                item.onClick();
+              }
+              handleClose();
+            }}
+          >
+            {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+            {typeof item.label === 'string' ? (
+              <ListItemText>{item.label}</ListItemText>
+            ) : (
+              <Box sx={{ flexGrow: 1, display: 'flex' }}>{item.label}</Box>
+            )}
+          </MenuItem>
+        ))}
+
+        {(items.length > 0 || hasExtra) && onRefresh && <Divider />}
 
         {onRefresh && (
           <MenuItem

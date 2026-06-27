@@ -39,6 +39,8 @@ export type SchedulersListProps = {
   currency?: keyof typeof ECurrency;
   /** Called after any CRUD operation completes (create, update, or delete) */
   onRefresh?: () => void;
+  /** Extra dropdown menu items shown after the "+ Scheduler" item (with divider). @default [] */
+  extraItems?: ItemType[];
 };
 
 export const SchedulersList = (props: SchedulersListProps): React.JSX.Element => {
@@ -49,6 +51,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
     readOnlyFields = [],
     currency,
     onRefresh,
+    extraItems = [],
   } = props;
 
   const ctx = useSchedulerContext();
@@ -182,6 +185,7 @@ export const SchedulersList = (props: SchedulersListProps): React.JSX.Element =>
       <div className={styles.gridHeader}>
         <Toolbar
           onRefresh={onRefresh}
+          extraItems={extraItems}
           items={
             permissions.canCreate && !limited
               ? ([

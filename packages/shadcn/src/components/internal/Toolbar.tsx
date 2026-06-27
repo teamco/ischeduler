@@ -19,17 +19,21 @@ type TToolbarItem = {
 type TToolbarProps = {
   children?: React.ReactNode;
   items?: TToolbarItem[];
+  extraItems?: TToolbarItem[];
   onRefresh?: () => void;
 };
 
 export const Toolbar: React.FC<TToolbarProps> = (props) => {
   const { loading, t } = useSchedulerContext();
-  const { children, items = [], onRefresh } = props;
+  const { children, items = [], extraItems = [], onRefresh } = props;
+
+  const hasExtra = extraItems.length > 0;
+  const hasRefreshSeparator = onRefresh && (items.length > 0 || hasExtra);
 
   return (
     <div className="flex items-center justify-end gap-2">
       {children}
-      
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="h-8 w-8 p-0">
@@ -43,9 +47,18 @@ export const Toolbar: React.FC<TToolbarProps> = (props) => {
               {item.label}
             </DropdownMenuItem>
           ))}
-          
-          {items.length > 0 && onRefresh && <DropdownMenuSeparator />}
-          
+
+          {items.length > 0 && hasExtra && <DropdownMenuSeparator />}
+
+          {extraItems.map((item, index) => (
+            <DropdownMenuItem key={`extra-${index}`} onClick={item.onClick} className="gap-2">
+              {item.icon}
+              {item.label}
+            </DropdownMenuItem>
+          ))}
+
+          {hasRefreshSeparator && <DropdownMenuSeparator />}
+
           {onRefresh && (
             <DropdownMenuItem onClick={onRefresh} className="gap-2">
               <RefreshCw className="h-4 w-4" />

@@ -115,9 +115,9 @@ export const MonthlyBehavior: React.FC<TMonthlyBehaviorProps> = (props) => {
             onValueChange={handleWeekDayChange} 
             className="w-full"
           >
-            <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-muted">
+            <TabsList className="flex flex-wrap h-auto gap-1 p-1 bg-muted w-fit">
               {periods.map((p) => (
-                <TabsTrigger key={p.value} value={p.value} className="flex-1 min-w-[80px]">
+                <TabsTrigger key={p.value} value={p.value} className="px-3 py-1 text-xs">
                   {p.label}
                 </TabsTrigger>
               ))}

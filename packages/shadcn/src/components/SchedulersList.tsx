@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 import { Button } from './ui/button';
-import { CalendarDays, X } from 'lucide-react';
+import { CalendarDays, Plus, X } from 'lucide-react';
 
 import { Scheduler } from './Scheduler';
 import { SaveButton } from './internal/SaveButton';
@@ -20,6 +20,12 @@ import {
   DEFAULT_SCHEDULERS_LIMIT,
 } from '@teamco/ischeduler-core';
 
+type TToolbarItem = {
+  label: React.ReactNode;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+};
+
 export type SchedulersListProps = {
   type: ESchedulerPrefix;
   title?: string;
@@ -27,6 +33,7 @@ export type SchedulersListProps = {
   readOnlyFields?: string[];
   currency?: keyof typeof ECurrency;
   onRefresh?: () => void;
+  extraItems?: TToolbarItem[];
 };
 
 export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
@@ -37,6 +44,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
     readOnlyFields = [],
     currency,
     onRefresh,
+    extraItems = [],
   } = props;
 
   const {
@@ -55,7 +63,9 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
 
   const [removedNewIds, setRemovedNewIds] = useState<Set<string>>(new Set());
   const [dirty, setDirty] = useState<boolean>(false);
+  const [createDirty, setCreateDirty] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [createDrawerOpen, setCreateDrawerOpen] = useState(false);
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
   const [editingEntity, setEditingEntity] = useState<IScheduler | null>(null);
 
@@ -140,22 +150,21 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
       <div className="flex items-center justify-between">
         {title && <h2 className="text-lg font-semibold">{title}</h2>}
         <div className="ml-auto flex items-center gap-2">
-          {permissions.canCreate && !limited && (
-            <SchedulerDrawerButton
-              setDirty={setDirty}
-              dirty={dirty}
-              isCreating={isCreating}
-              setIsCreating={setIsCreating}
-              schedulerType={schedulerType}
-              disabled={disabled || loading || limited || isCreating}
-              onSuccess={() => onRefresh?.()}
-              buttonProps={{
-                variant: 'outline',
-                size: 'sm',
-              }}
-            />
-          )}
-          <Toolbar onRefresh={onRefresh}>
+          <Toolbar
+            onRefresh={onRefresh}
+            extraItems={extraItems}
+            items={
+              permissions.canCreate && !limited
+                ? [
+                    {
+                      label: t('scheduler'),
+                      icon: <Plus className="h-4 w-4" />,
+                      onClick: () => setCreateDrawerOpen(true),
+                    },
+                  ]
+                : []
+            }
+          >
             <HideColumns
               columnsList={columnsList as any}
               selectedColumns={selectedColumns}
@@ -164,6 +173,21 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
           </Toolbar>
         </div>
       </div>
+
+      {permissions.canCreate && !limited && (
+        <SchedulerDrawerButton
+          showButton={false}
+          open={createDrawerOpen}
+          onOpenChange={setCreateDrawerOpen}
+          setDirty={setCreateDirty}
+          dirty={createDirty}
+          isCreating={isCreating}
+          setIsCreating={setIsCreating}
+          schedulerType={schedulerType}
+          disabled={disabled || loading || limited}
+          onSuccess={() => onRefresh?.()}
+        />
+      )}
 
       <div className="rounded-md border">
         <Table>
@@ -199,7 +223,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
             {visibleSchedulers.length === 0 && (
               <TableRow>
                 <TableCell colSpan={filteredColumns.length} className="h-24 text-center">
-                  {t('table.noData') || 'No items found'}
+                  {t('table.noData')}
                 </TableCell>
               </TableRow>
             )}
@@ -208,8 +232,8 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
       </div>
 
       <Sheet open={editDrawerOpen} onOpenChange={(open) => !open && setEditDrawerOpen(false)}>
-        <SheetContent className="w-full sm:max-w-[600px] overflow-y-auto">
-          <SheetHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
+        <SheetContent className="w-full sm:max-w-[600px] flex flex-col p-0">
+          <SheetHeader className="flex flex-row items-center justify-between space-y-0 px-6 py-4 border-b shrink-0">
             <div className="flex items-center gap-2">
               <CalendarDays className="h-5 w-5 text-primary" />
               <SheetTitle>{title ?? t('scheduler')}</SheetTitle>
@@ -234,7 +258,7 @@ export const SchedulersList: React.FC<SchedulersListProps> = (props) => {
             </div>
           </SheetHeader>
 
-          <div className="mt-6">
+          <div className="flex-1 overflow-y-auto px-6 py-6">
             {editDrawerOpen && editingEntity && (
               <Scheduler
                 schedulerType={schedulerType}
