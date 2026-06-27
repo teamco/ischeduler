@@ -124,7 +124,10 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
         </TooltipProvider>
       )}
 
-      <SheetContent className="w-full sm:max-w-[600px] flex flex-col p-0 border-l-2 border-l-primary">
+      <SheetContent
+        className="w-full sm:max-w-[600px] flex flex-col p-0 border-l-2 border-l-primary"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <SheetHeader className="flex flex-row items-center justify-between space-y-0 px-6 py-4 border-b shrink-0">
           <div className="flex items-center gap-2">
             <CalendarDays className="h-5 w-5 text-primary" />
