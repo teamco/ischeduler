@@ -46,6 +46,19 @@ const config: StorybookConfig = {
           include: [/node_modules/],
           transformMixedEsModules: true,
         },
+        rollupOptions: {
+          output: {
+            manualChunks: (id) => {
+              if (
+                id.includes('@mui/') ||
+                id.includes('@emotion/') ||
+                id.includes('styled-engine')
+              ) {
+                return 'mui-vendor';
+              }
+            },
+          },
+        },
       },
     }),
 };
