@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "../ui/button"
-import { Loader2, Save } from "lucide-react"
+import { CalendarDays, Loader2 } from "lucide-react"
 import { useSchedulerContext } from '@teamco/ischeduler-core';
 import { cn } from "../../lib/utils"
 
@@ -41,7 +41,7 @@ export const SaveButton: React.FC<TSaveButton> = (props) => {
       disabled={disabled || loading}
       onClick={onClick}
     >
-      {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+      {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarDays className="h-4 w-4" />}
       {label}
     </Button>
   );
