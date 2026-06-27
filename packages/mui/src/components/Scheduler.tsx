@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Typography,
-  Grid2 as Grid,
+  Grid,
   FormControl,
   InputLabel,
   Select,
