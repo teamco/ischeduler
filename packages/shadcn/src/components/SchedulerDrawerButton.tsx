@@ -104,7 +104,7 @@ export const SchedulerDrawerButton: React.FC<SchedulerDrawerButtonProps> = ({
   };
 
   return (
-    <Sheet open={open} onOpenChange={handleOpenChange}>
+    <Sheet modal={false} open={open} onOpenChange={handleOpenChange}>
       {showButton && (
         <TooltipProvider>
           <Tooltip>
