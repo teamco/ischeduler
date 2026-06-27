@@ -1,9 +1,11 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     dts({
       tsconfigPath: './tsconfig.build.json',
       rollupTypes: false,
@@ -21,6 +23,8 @@ export default defineConfig({
       // CJS output must use .cjs ext — package is "type": "module", so a
       // .js file would be parsed as ESM and break on `exports`.
       fileName: (format) => (format === 'es' ? 'index.es.js' : 'index.cjs'),
+      // Emit the compiled Tailwind bundle as dist/index.css.
+      cssFileName: 'index',
     },
     rolldownOptions: {
       external: [

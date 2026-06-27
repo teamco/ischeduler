@@ -60,6 +60,7 @@ export const HideColumns = (props: TProps): React.JSX.Element => {
               className="capitalize"
               checked={selectedColumns.includes(column.value)}
               onCheckedChange={(value) => handleCheckedChange(column.value, !!value)}
+              onSelect={(e) => e.preventDefault()}
               disabled={column.disabled}
             >
               {column.label}
