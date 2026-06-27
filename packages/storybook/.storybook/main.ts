@@ -31,31 +31,6 @@ const config: StorybookConfig = {
           less: { javascriptEnabled: true },
         },
       },
-      optimizeDeps: {
-        include: [
-          '@mui/material',
-          '@mui/icons-material',
-          '@mui/x-date-pickers',
-          '@emotion/react',
-          '@emotion/styled',
-          '@emotion/cache',
-        ],
-      },
-      build: {
-        commonjsOptions: {
-          include: [/node_modules/],
-          transformMixedEsModules: true,
-        },
-        rollupOptions: {
-          output: {
-            manualChunks: (id) => {
-              if (id.includes('@emotion/')) return 'emotion-vendor';
-              if (id.includes('@mui/system') || id.includes('styled-engine')) return 'mui-system-vendor';
-              if (id.includes('@mui/')) return 'mui-vendor';
-            },
-          },
-        },
-      },
     }),
 };
 
