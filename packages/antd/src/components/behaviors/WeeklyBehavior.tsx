@@ -48,7 +48,10 @@ export const WeeklyBehavior: React.FC<TWeeklyBehaviorProps> = (props) => {
     setOccurs,
   } = props;
 
-  const fieldNames = mergeNames([...prefix, ...namespaces], 'days');
+  const fieldNames = useMemo(
+    () => mergeNames([...prefix, ...namespaces], 'days'),
+    [prefix, namespaces],
+  );
   const prevSelectionRef = useRef<string[]>([]);
 
   const updateOccursText = useCallback(() => {
@@ -70,8 +73,7 @@ export const WeeklyBehavior: React.FC<TWeeklyBehaviorProps> = (props) => {
       prevSelectionRef.current = selected;
       updateOccursText();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formRef]);
+  }, [formRef, fieldNames, updateOccursText]);
 
   const longDays = useMemo(
     () =>

@@ -2,7 +2,6 @@ import { Form, type FormInstance, Tooltip } from 'antd';
 import React, {
   type Dispatch,
   type SetStateAction,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -39,8 +38,11 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
     disabled,
   } = props;
 
-  const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
   const fieldNames = mergeNames([...prefix, ...namespaces], 'months');
+  const [selectedMonths, setSelectedMonths] = useState<string[]>(() => {
+    const initial = formRef.getFieldValue(fieldNames);
+    return Array.isArray(initial) && initial.length ? initial : [];
+  });
 
   const longMonths = useMemo(
     () =>
@@ -80,16 +82,6 @@ export const YearlyBehavior: React.FC<TYearlyBehaviorProps> = (props) => {
       t,
     );
   };
-
-  useEffect(
-    () => {
-      const selected = formRef.getFieldValue(fieldNames);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (selected) onChangePeriod(selected);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formRef],
-  );
 
   const months = Object.keys(EMonths).map((month, idx) => ({
     key: `${month}-${idx}`,
