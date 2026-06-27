@@ -13,6 +13,12 @@
  *
  * Consumer requirement: a shadcn Tailwind v4 setup that defines the
  * --background/--foreground/--border/... custom properties. */
+/* Declare the canonical Tailwind cascade-layer order up front. Without this
+ * statement our partial imports would register `utilities` before `base`,
+ * and because cascade-layer order is GLOBAL (first appearance across all
+ * stylesheets wins), any consumer/Storybook sheet whose preflight lives in
+ * @layer base would then override our spacing/border/margin utilities. */
+@layer theme, base, components, utilities;
 @import 'tailwindcss/theme' layer(theme);
 @import 'tailwindcss/utilities' layer(utilities);
 
