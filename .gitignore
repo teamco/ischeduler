@@ -17,3 +17,4 @@
 .playwright-mcp/
 *.png
 /tmp/
+/.claude-flow/
